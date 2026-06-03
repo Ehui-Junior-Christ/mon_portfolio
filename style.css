@@ -1,0 +1,859 @@
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+    font-family: 'Raleway', sans-serif;
+    background-color: #f4f0e8;
+    color: #2a2a2a;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    background-image: url('assets/gemini_bg.png');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.15) 0%,
+        rgba(0,0,0,0.1) 50%,
+        rgba(0,0,0,0.65) 100%
+    );
+    z-index: 1;
+}
+
+/* --- NAVBAR --- */
+.navbar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 3rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    transition: opacity 0.2s;
+}
+
+.nav-links a:hover { opacity: 0.75; }
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: background 0.25s, transform 0.2s;
+}
+
+.social-icons a:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+}
+
+/* --- HERO CONTENT --- */
+.hero-content {
+    position: relative;
+    z-index: 10;
+    padding: 0 3rem 3.5rem;
+    max-width: 700px;
+}
+
+.greeting {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.05em;
+}
+
+.name {
+    font-family: 'Gochi Hand', cursive;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+    text-shadow: 2px 3px 12px rgba(0,0,0,0.5);
+}
+
+.description {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.85rem, 1.8vw, 1rem);
+    color: rgba(255,255,255,0.9);
+    line-height: 1.8;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+}
+
+/* ============================================
+   PAGE CONTENT
+   ============================================ */
+.page-content { background-color: #f4f0e8; }
+
+
+/* Octopus placeholder */
+.octopus-illustration {
+    position: absolute;
+    right: -30px;
+    top: -20px;
+    z-index: 2;
+    font-size: 10rem;
+    color: rgba(200, 80, 60, 0.8);
+    transform: rotate(-15deg);
+    pointer-events: none;
+    filter: drop-shadow(0 10px 30px rgba(200, 80, 60, 0.4));
+}
+
+/* ============================================
+   SERVICES INTRO
+   ============================================ */
+.services-intro {
+    background: #f4f0e8;
+    text-align: center;
+    padding: 4rem 2rem 2rem;
+}
+
+.intro-text {
+    font-family: 'Raleway', sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: #3a3a3a;
+    line-height: 1.8;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.intro-text strong { font-weight: 700; }
+
+/* ============================================
+   SERVICES GRID
+   ============================================ */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0;
+    padding: 3rem 4rem 4rem;
+    background: #f4f0e8;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.service-item {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-right: 1px solid rgba(0,0,0,0.08);
+    transition: transform 0.25s;
+}
+
+.service-item:last-child { border-right: none; }
+.service-item:hover { transform: translateY(-4px); }
+
+.service-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid #c8bfa8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    color: #8a7d66;
+    font-size: 1.5rem;
+    transition: border-color 0.25s, color 0.25s;
+}
+
+.service-item:hover .service-icon {
+    border-color: #6a9955;
+    color: #6a9955;
+}
+
+.service-title {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #2a2a2a;
+    margin-bottom: 0.85rem;
+}
+
+.service-desc {
+    font-size: 0.88rem;
+    color: #6a6a6a;
+    line-height: 1.7;
+}
+
+/* ============================================
+   ABOUT SECTION
+   ============================================ */
+.about-section {
+    background: #eae5d8;
+    padding: 5rem 4rem;
+}
+
+.about-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.image-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, #c8bfa8 0%, #a8997e 100%);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.placeholder-icon {
+    font-size: 6rem;
+    color: rgba(255,255,255,0.4);
+}
+
+.hand-title-small {
+    font-family: 'Gochi Hand', cursive;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #c85a2a;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+
+.about-text {
+    font-size: 0.9rem;
+    color: #4a4a4a;
+    line-height: 1.9;
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   PARCOURS (Education & Skills)
+   ============================================ */
+.parcours-section {
+    background: #f4f0e8;
+    padding: 5rem 4rem;
+}
+
+.section-title {
+    font-family: 'Gochi Hand', cursive;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #c85a2a;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.timeline {
+    max-width: 700px;
+    margin: 0 auto 4rem;
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #c8bfa8;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+    padding-left: 1.5rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #c85a2a;
+    border: 2px solid #f4f0e8;
+    transform: translateX(50%);
+}
+
+.timeline-date {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.78rem;
+    color: #c85a2a;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
+}
+
+.timeline-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #2a2a2a;
+    margin-bottom: 0.2rem;
+}
+
+.timeline-desc {
+    font-size: 0.85rem;
+    color: #6a6a6a;
+}
+
+/* Skills */
+.skills-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.skills-group {
+    margin-bottom: 2.5rem;
+}
+
+.skills-group-title {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8a7d66;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #c8bfa8;
+}
+
+.skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.skill-tag {
+    background: #fff;
+    border: 1px solid #c8bfa8;
+    border-radius: 3px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.82rem;
+    color: #4a4a4a;
+    font-family: 'Share Tech Mono', monospace;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.skill-tag:hover {
+    border-color: #c85a2a;
+    color: #c85a2a;
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   PROJECTS SECTION
+   ============================================ */
+.projects-section {
+    background: #eae5d8;
+    padding: 5rem 4rem;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.project-card {
+    background: #fff;
+    border: 1px solid #d4c9b4;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+}
+
+.project-card-header {
+    background: linear-gradient(135deg, #3a3a3a, #1a1a1a);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.project-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.3rem;
+}
+
+.project-card-header h3 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.project-card-header p {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.6);
+}
+
+.project-card-body {
+    padding: 1.5rem;
+}
+
+.project-card-body p {
+    font-size: 0.87rem;
+    color: #5a5a5a;
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+}
+
+.project-tag {
+    font-size: 0.73rem;
+    font-family: 'Share Tech Mono', monospace;
+    background: #f4f0e8;
+    border: 1px solid #c8bfa8;
+    border-radius: 2px;
+    padding: 0.2rem 0.6rem;
+    color: #6a6a6a;
+}
+
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #c85a2a;
+    letter-spacing: 0.04em;
+    transition: gap 0.2s;
+}
+
+.project-link:hover { gap: 0.7rem; }
+
+.project-links-row {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.project-link-live {
+    color: #2e7d32;
+}
+
+.project-link-live:hover {
+    color: #1b5e20;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+    background: #2a2a2a;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.quote-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.5rem;
+    color: rgba(255,255,255,0.6);
+}
+
+.footer-quote {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.7);
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+    font-style: italic;
+}
+
+.follow-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #c85a2a;
+    transition: opacity 0.2s;
+}
+
+.follow-link:hover { opacity: 0.75; }
+
+/* ============================================
+   GAME SECTION
+   ============================================ */
+.game-section {
+    background: #f4f0e8;
+    padding: 5rem 4rem;
+    text-align: center;
+}
+
+.game-section .section-title { margin-bottom: 0.5rem; }
+
+.game-section .section-subtitle {
+    font-size: 0.9rem;
+    color: #8a7d66;
+    margin-bottom: 2rem;
+}
+
+.game-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+#snake-canvas {
+    width: min(400px, 90vw);
+    aspect-ratio: 1 / 1;
+    border: 2px solid #c8bfa8;
+    background: #1a1a1a;
+    border-radius: 4px;
+    display: block;
+}
+
+.game-controls { display: flex; gap: 1rem; align-items: center; }
+
+.score-display {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    color: #4a4a4a;
+}
+
+.game-btn {
+    background: #2a2a2a;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 3px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.game-btn:hover { background: #c85a2a; }
+
+.mobile-dpad {
+    display: none;
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(3, 44px);
+    gap: 4px;
+}
+
+.dpad-btn {
+    background: #2a2a2a;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    touch-action: manipulation;
+}
+
+.dpad-btn:hover { background: #c85a2a; }
+.dpad-up    { grid-area: 1 / 2; }
+.dpad-left  { grid-area: 2 / 1; }
+.dpad-center{ grid-area: 2 / 2; background: #3a3a3a; cursor: default; }
+.dpad-right { grid-area: 2 / 3; }
+.dpad-down  { grid-area: 3 / 2; }
+
+/* ============================================
+   HAMBURGER (Mobile Nav)
+   ============================================ */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 20;
+}
+
+.hamburger span {
+    display: block;
+    width: 26px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up { animation: fadeUp 0.8s ease forwards; }
+.delay-1 { animation-delay: 0.15s; opacity: 0; }
+.delay-2 { animation-delay: 0.3s;  opacity: 0; }
+.delay-3 { animation-delay: 0.45s; opacity: 0; }
+
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ============================================
+   HERO CTA BUTTONS
+   ============================================ */
+.hero-cta {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.cta-btn {
+    display: inline-block;
+    padding: 0.7rem 1.6rem;
+    border-radius: 3px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+.cta-btn:not(.cta-outline) {
+    background: #c85a2a;
+    color: #fff;
+}
+
+.cta-outline {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.4);
+}
+
+/* ============================================
+   SERVICES GRID SECTION WRAPPER
+   ============================================ */
+.services-grid-section {
+    background: #f4f0e8;
+    padding: 0 0 2rem;
+}
+
+/* ============================================
+   ABOUT IMAGE
+   ============================================ */
+.about-img {
+    width: 100%;
+    border-radius: 4px;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+}
+
+/* ============================================
+   ABOUT DETAILS
+   ============================================ */
+.about-details {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.detail-item {
+    font-size: 0.85rem;
+    color: #6a6a6a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.detail-item i { color: #c85a2a; width: 16px; }
+
+/* ============================================
+   PARCOURS GRID
+   ============================================ */
+.parcours-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+.parcours-subtitle {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8a7d66;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ============================================
+   CERTIFICATIONS PLACEHOLDER
+   ============================================ */
+.certif-placeholder {
+    background: #fff;
+    border: 2px dashed #c8bfa8;
+    border-radius: 4px;
+    padding: 2rem;
+    text-align: center;
+    color: #a0967e;
+    font-size: 0.87rem;
+    line-height: 1.7;
+}
+
+.certif-placeholder i {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #c8bfa8;
+}
+
+/* ============================================
+   GAME SUBTITLE
+   ============================================ */
+.game-subtitle {
+    font-size: 0.9rem;
+    color: #8a7d66;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* ============================================
+   FOOTER COPYRIGHT
+   ============================================ */
+.footer-copy {
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Raleway', sans-serif;
+}
+
+/* ============================================
+   NAV ACTIVE LINK
+   ============================================ */
+.nav-links a.active {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+    .about-container { grid-template-columns: 1fr; gap: 2.5rem; }
+    .services-grid   { padding: 2.5rem 2rem; }
+    .stand-out-content { padding: 2rem 2rem; }
+    .parcours-section,
+    .projects-section,
+    .about-section,
+    .game-section { padding: 4rem 2rem; }
+    .octopus-illustration { font-size: 6rem; }
+}
+
+@media (max-width: 680px) {
+    .navbar { padding: 1rem 1.5rem; flex-wrap: wrap; gap: 1rem; }
+    .nav-links { display: none; flex-direction: column; width: 100%; gap: 1rem; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    .hero-content { padding: 0 1.5rem 2.5rem; }
+    .services-grid { padding: 2rem 1.5rem; }
+    .stand-out-content { padding: 2rem 1.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .mobile-dpad { display: grid; }
+}

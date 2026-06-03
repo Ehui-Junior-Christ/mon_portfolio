@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio de Ehui Junior Christ Emmanuel, Développeur Web Full-Stack étudiant à l'UPB.">
+    <title>Ehui Junior Christ | Portfolio</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Gochi+Hand&family=Raleway:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==================== HERO ==================== -->
+    <header class="hero" id="accueil">
+        <nav class="navbar">
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#apropos">À Propos</a></li>
+                <li><a href="#parcours">Parcours et Compétences</a></li>
+                <li><a href="#projets">Projets</a></li>
+            </ul>
+            <div class="social-icons">
+                <a href="https://www.linkedin.com/in/ehui-junior-christ/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://github.com/Ehui-Junior-Christ" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="mailto:juniorehui15@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                <a href="https://wa.me/2250556388833" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <p class="greeting fade-up">Salut, Moi c'est</p>
+            <h1 class="name fade-up delay-1">Ehui junior christ emmanuel</h1>
+            <p class="description fade-up delay-2">
+                Bienvenue sur mon portfolio interactif.<br>
+                Découvrez mon parcours, mes réalisations et mon univers créatif qui est le l'informatique.
+            </p>
+            <div class="hero-cta fade-up delay-3">
+                <a href="#projets" class="cta-btn">Voir mes projets</a>
+                <a href="#apropos" class="cta-btn cta-outline">En savoir plus</a>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- ==================== SERVICES INTRO ==================== -->
+    <section class="services-intro">
+        <p class="intro-text reveal">
+            Salut, je suis <strong>Ehui Junior Christ</strong>. Je crée des applications &amp; sites web <strong>beaux</strong> et <strong>fonctionnels</strong>.<br>
+            Voici quelques-unes de mes compétences :
+        </p>
+    </section>
+
+    <!-- ==================== SERVICES GRID ==================== -->
+    <section class="services-grid-section">
+        <div class="services-grid">
+            <div class="service-item reveal">
+                <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3 class="service-title">DÉVELOPPEMENT WEB</h3>
+                <p class="service-desc">Conception front-end réactive avec HTML, CSS, JavaScript et ReactJS pour guider le layout et le contenu.</p>
+            </div>
+            <div class="service-item reveal">
+                <div class="service-icon"><i class="fas fa-server"></i></div>
+                <h3 class="service-title">BACK-END</h3>
+                <p class="service-desc">Développement robuste avec Spring Boot et PHP. Création d'API RESTful et logique serveur efficace.</p>
+            </div>
+            <div class="service-item reveal">
+                <div class="service-icon"><i class="fas fa-database"></i></div>
+                <h3 class="service-title">BASES DE DONNÉES</h3>
+                <p class="service-desc">Conception et gestion de bases de données relationnelles avec SQL pour une structure de données optimale.</p>
+            </div>
+            <div class="service-item reveal">
+                <div class="service-icon"><i class="fas fa-tools"></i></div>
+                <h3 class="service-title">OUTILS & DEVOPS</h3>
+                <p class="service-desc">Git, GitHub, VSCode, IntelliJ, PyCharm, Postman — pour garder le code propre et collaboratif.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ABOUT ==================== -->
+    <section class="about-section" id="apropos">
+        <div class="about-container">
+            <div class="about-image-wrapper reveal">
+                <img src="assets/1771219749805.png" alt="Ehui Junior Christ – Développeur Web" class="about-img">
+            </div>
+            <div class="about-text-wrapper reveal">
+                <h2 class="hand-title-small">À Propos de moi</h2>
+                <p class="about-text">
+                    Né le 30 novembre 2004 à Gagnoa, en Côte d'Ivoire, je suis actuellement étudiant en <strong>Licence 2</strong> à l'Université Polytechnique de Bingerville (UPB). Passionné d'informatique depuis un jeune âge, j'ai fait du développement web ma vocation.
+                </p>
+                <p class="about-text">
+                    J'ai travaillé sur des projets formateurs comme <strong>Medibook</strong> (carnet médical et suivi en ligne) et <strong>Food-Command</strong> (plateforme de livraison de nourriture). J'ai aussi effectué un bénévolat en entreprise pour acquérir de l'expérience professionnelle.
+                </p>
+                <p class="about-text">
+                    En dehors du code, je suis passionné par le <strong>basketball</strong> et les <strong>jeux vidéo</strong>. Mon objectif : allier esthétique et fonctionnalité pour créer des expériences utilisateur mémorables.
+                </p>
+                <div class="about-details">
+                    <div class="detail-item"><i class="fas fa-map-marker-alt"></i> Abidjan, Yopougon, Côte d'Ivoire</div>
+                    <div class="detail-item"><i class="fas fa-envelope"></i> juniorehui15@gmail.com</div>
+                    <div class="detail-item"><i class="fas fa-phone"></i> 05-56-38-88-33</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PARCOURS & COMPÉTENCES ==================== -->
+    <section class="parcours-section" id="parcours">
+        <h2 class="section-title reveal">Parcours &amp; Compétences</h2>
+
+        <div class="parcours-grid">
+            <!-- Education timeline -->
+            <div class="reveal">
+                <h3 class="parcours-subtitle"><i class="fas fa-graduation-cap"></i> Formation</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <p class="timeline-date">2024 – 2025</p>
+                        <p class="timeline-title">Licence 2 — Informatique</p>
+                        <p class="timeline-desc">Université Polytechnique de Bingerville (UPB)</p>
+                    </div>
+                    <div class="timeline-item">
+                        <p class="timeline-date">2023 – 2024</p>
+                        <p class="timeline-title">Licence 1 — Informatique</p>
+                        <p class="timeline-desc">Université Polytechnique de Bingerville (UPB)</p>
+                    </div>
+                    <div class="timeline-item">
+                        <p class="timeline-date">2022 – 2023</p>
+                        <p class="timeline-title">Baccalauréat</p>
+                        <p class="timeline-desc">Collège Catholique Roger Duquense (CCRD)</p>
+                    </div>
+                    <div class="timeline-item">
+                        <p class="timeline-date">2018 – 2019</p>
+                        <p class="timeline-title">BEPC</p>
+                        <p class="timeline-desc">Collège Catholique Roger Duquense (CCRD)</p>
+                    </div>
+                    <div class="timeline-item">
+                        <p class="timeline-date">2014 – 2015</p>
+                        <p class="timeline-title">CEPE</p>
+                        <p class="timeline-desc">École Méthodiste Gagnoa</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="reveal">
+                <h3 class="parcours-subtitle"><i class="fas fa-code"></i> Compétences</h3>
+                <div class="skills-container">
+                    <div class="skills-group">
+                        <p class="skills-group-title">Développement Web</p>
+                        <div class="skills-tags">
+                            <span class="skill-tag">HTML / CSS</span>
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">ReactJS</span>
+                            <span class="skill-tag">PHP</span>
+                            <span class="skill-tag">Spring Boot</span>
+                            <span class="skill-tag">Python</span>
+                        </div>
+                    </div>
+                    <div class="skills-group">
+                        <p class="skills-group-title">Bases de Données</p>
+                        <div class="skills-tags">
+                            <span class="skill-tag">SQL</span>
+                            <span class="skill-tag">MySQL</span>
+                            <span class="skill-tag">PostgreSQL</span>
+                        </div>
+                    </div>
+                    <div class="skills-group">
+                        <p class="skills-group-title">Outils & Environnements</p>
+                        <div class="skills-tags">
+                            <span class="skill-tag">Git &amp; GitHub</span>
+                            <span class="skill-tag">VSCode</span>
+                            <span class="skill-tag">IntelliJ</span>
+                            <span class="skill-tag">PyCharm</span>
+                            <span class="skill-tag">Postman</span>
+                            <span class="skill-tag">UML</span>
+                            <span class="skill-tag">Canva</span>
+                        </div>
+                    </div>
+                    <div class="skills-group">
+                        <p class="skills-group-title">Bureautique &amp; Langues</p>
+                        <div class="skills-tags">
+                            <span class="skill-tag">Microsoft Word</span>
+                            <span class="skill-tag">PowerPoint</span>
+                            <span class="skill-tag">Français (courant)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="parcours-subtitle" style="margin-top:2rem;"><i class="fas fa-certificate"></i> Certifications</h3>
+                <div class="certif-placeholder">
+                    <i class="fas fa-plus-circle"></i>
+                    <p>Certifications à venir — espace réservé</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PROJETS ==================== -->
+    <section class="projects-section" id="projets">
+        <h2 class="section-title reveal">Mes Projets</h2>
+        <div class="projects-grid">
+            <article class="project-card reveal">
+                <div class="project-card-header">
+                    <div class="project-card-icon"><i class="fas fa-heartbeat"></i></div>
+                    <div>
+                        <h3>Medibook</h3>
+                        <p>Projet de fin d'année</p>
+                    </div>
+                </div>
+                <div class="project-card-body">
+                    <p>Carnet médical et suivi médical en ligne. Plateforme web sécurisée pour gérer son historique médical, prescriptions et consultations.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">HTML/CSS</span>
+                        <span class="project-tag">JavaScript</span>
+                        <span class="project-tag">Spring Boot</span>
+                        <span class="project-tag">SQL</span>
+                    </div>
+                    <a href="https://github.com/Ehui-Junior-Christ/Medibook_projects.git" target="_blank" class="project-link">
+                        <i class="fab fa-github"></i> Code Source →
+                    </a>
+                </div>
+            </article>
+
+            <article class="project-card reveal">
+                <div class="project-card-header">
+                    <div class="project-card-icon"><i class="fas fa-utensils"></i></div>
+                    <div>
+                        <h3>Food-Command</h3>
+                        <p>Site de Livraison</p>
+                    </div>
+                </div>
+                <div class="project-card-body">
+                    <p>Plateforme de commande et de livraison de nourriture en ligne, permettant une interaction fluide entre clients et restaurateurs.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">HTML/CSS</span>
+                        <span class="project-tag">JavaScript</span>
+                        <span class="project-tag">SQL</span>
+                    </div>
+                    <a href="https://github.com/Ehui-Junior-Christ/Food-Command.git" target="_blank" class="project-link">
+                        <i class="fab fa-github"></i> Code Source →
+                    </a>
+                </div>
+            </article>
+
+            <article class="project-card reveal">
+                <div class="project-card-header">
+                    <div class="project-card-icon"><i class="fas fa-handshake"></i></div>
+                    <div>
+                        <h3>Bénévolat</h3>
+                        <p>Expérience en entreprise</p>
+                    </div>
+                </div>
+                <div class="project-card-body">
+                    <p>Participation active au sein d'une entreprise pour acquérir de l'expérience professionnelle, comprendre les dynamiques d'équipe et participer à des projets concrets.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Travail d'équipe</span>
+                        <span class="project-tag">Gestion de projet</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card reveal">
+                <div class="project-card-header" style="background: linear-gradient(135deg, #1a1035, #2d1b69);">
+                    <div class="project-card-icon"><i class="fas fa-share-alt"></i></div>
+                    <div>
+                        <h3>Prisme</h3>
+                        <p>Réseau social — Full Stack</p>
+                    </div>
+                </div>
+                <div class="project-card-body">
+                    <p>Plateforme sociale full-stack avec authentification, gestion de profils, publications, commentaires et interface "Liquid Glass" premium. Déployé en production sur Railway.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">ReactJS</span>
+                        <span class="project-tag">Spring Boot</span>
+                        <span class="project-tag">SQL</span>
+                        <span class="project-tag">REST API</span>
+                        <span class="project-tag">Railway</span>
+                    </div>
+                    <div class="project-links-row">
+                        <a href="https://github.com/Ehui-Junior-Christ/PRODIGY_FS_05.git" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> Code →
+                        </a>
+                        <a href="https://prisme-s.up.railway.app" target="_blank" class="project-link project-link-live">
+                            <i class="fas fa-external-link-alt"></i> Live →
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card reveal">
+                <div class="project-card-header" style="background: linear-gradient(135deg, #0a2a1a, #1a5c38);">
+                    <div class="project-card-icon"><i class="fas fa-comments"></i></div>
+                    <div>
+                        <h3>PRODIGY_FS_04</h3>
+                        <p>Application Web — Full Stack</p>
+                    </div>
+                </div>
+                <div class="project-card-body">
+                    <p>Application web full-stack développée dans le cadre du programme Prodigy. Interface interactive, back-end robuste et déploiement continu sur Railway.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">React</span>
+                        <span class="project-tag">Spring Boot</span>
+                        <span class="project-tag">SQL</span>
+                        <span class="project-tag">Railway</span>
+                    </div>
+                    <div class="project-links-row">
+                        <a href="https://github.com/Ehui-Junior-Christ/PRODIGY_FS_04.git" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> Code →
+                        </a>
+                        <a href="https://prodigyfs04-production.up.railway.app" target="_blank" class="project-link project-link-live">
+                            <i class="fas fa-external-link-alt"></i> Live →
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- ==================== MINI-JEU ==================== -->
+    <section class="game-section" id="jeu">
+        <h2 class="section-title reveal">Chasseur de Tech</h2>
+        <p class="game-subtitle reveal">Aide le serpent à collecter les technologies ! Utilise les flèches ou le D-pad.</p>
+
+        <div class="game-wrapper reveal">
+            <div class="game-controls">
+                <span class="score-display">Score : <strong id="score">0</strong></span>
+                <button class="game-btn" id="startBtn">▶ Démarrer</button>
+                <button class="game-btn" id="resetBtn">↺ Réinitialiser</button>
+            </div>
+            <canvas id="snake-canvas" width="400" height="400"></canvas>
+            <div class="mobile-dpad">
+                <button class="dpad-btn dpad-up"    id="upBtn">▲</button>
+                <button class="dpad-btn dpad-left"  id="leftBtn">◀</button>
+                <div   class="dpad-btn dpad-center">·</div>
+                <button class="dpad-btn dpad-right" id="rightBtn">▶</button>
+                <button class="dpad-btn dpad-down"  id="downBtn">▼</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer" id="contact">
+        <div class="quote-icon"><i class="fab fa-github"></i></div>
+        <p class="footer-quote">
+            "Les personnes passionnées par le code et le basketball sont des créateurs. Voilà, je l'ai dit."
+        </p>
+        <a href="https://github.com/Ehui-Junior-Christ" target="_blank" class="follow-link">
+            ME SUIVRE SUR GITHUB <i class="fab fa-github"></i>
+        </a>
+        <p class="footer-copy">© 2025 Ehui Junior Christ Emmanuel — Tous droits réservés.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
