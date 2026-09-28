@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https:; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <title>Administration · Portfolio</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ===================== Connexion ===================== -->
+<main id="view-login" class="login" hidden>
+    <div class="login-card">
+        <p class="mono eyebrow">Portfolio · Administration</p>
+        <h1 class="login-title">Connexion</h1>
+        <p class="muted">Collez votre token GitHub pour modifier le contenu du site. Il ne quitte jamais votre navigateur, sauf pour parler à GitHub.</p>
+
+        <form id="login-form" class="stack" autocomplete="off" novalidate>
+            <div class="field">
+                <label for="login-token">Token GitHub (fine-grained)</label>
+                <div class="input-row">
+                    <input id="login-token" type="password" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="github_pat_..." required>
+                    <button type="button" class="btn icon" id="login-toggle" aria-label="Afficher le token" title="Afficher / masquer"><i class="fa-solid fa-eye"></i></button>
+                </div>
+            </div>
+            <label class="check">
+                <input type="checkbox" id="login-remember">
+                <span>Se souvenir sur cet appareil</span>
+            </label>
+            <p class="hint">Sans cette case, le token est oublié à la fermeture de l'onglet. Ne la cochez pas sur un ordinateur partagé.</p>
+            <p id="login-error" class="alert error" role="alert" hidden></p>
+            <p class="mono small muted" id="login-target"></p>
+            <div class="row wrap">
+                <button type="submit" class="btn primary" id="login-submit"><i class="fa-solid fa-right-to-bracket"></i> Se connecter</button>
+                <button type="button" class="btn" id="login-demo"><i class="fa-solid fa-flask"></i> Essayer sans connexion</button>
+            </div>
+            <div class="row wrap login-links">
+                <button type="button" class="link" data-open="dlg-help"><i class="fa-solid fa-circle-question"></i> Comment obtenir un token ?</button>
+                <button type="button" class="link" data-open="dlg-settings"><i class="fa-solid fa-gear"></i> Paramètres du dépôt</button>
+                <a class="link" href="../" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Voir le site</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<!-- ===================== Chargement ===================== -->
+<div id="view-loading" class="loading" hidden>
+    <i class="fa-solid fa-circle-notch fa-spin"></i>
+    <span class="mono" id="loading-text">Chargement...</span>
+</div>
+
+<!-- ===================== Application ===================== -->
+<div id="view-app" class="app" hidden>
+    <header class="topbar">
+        <div class="brand">
+            <span class="brand-mark mono">EJC</span>
+            <div>
+                <strong>Administration</strong>
+                <span class="mono small muted" id="mode-label"></span>
+            </div>
+        </div>
+        <nav class="top-actions" aria-label="Actions">
+            <a class="btn ghost" id="btn-site" href="../" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i><span>Voir le site</span></a>
+            <button class="btn ghost" id="btn-import" type="button"><i class="fa-solid fa-file-import"></i><span>Importer</span></button>
+            <button class="btn ghost" id="btn-export" type="button"><i class="fa-solid fa-file-export"></i><span>Exporter le JSON</span></button>
+            <button class="btn ghost" type="button" data-open="dlg-settings"><i class="fa-solid fa-gear"></i><span>Paramètres</span></button>
+            <button class="btn ghost" type="button" data-open="dlg-help"><i class="fa-solid fa-circle-question"></i><span>Aide</span></button>
+            <button class="btn ghost" id="btn-logout" type="button"><i class="fa-solid fa-right-from-bracket"></i><span>Se déconnecter</span></button>
+        </nav>
+    </header>
+
+    <div id="banners" class="banners"></div>
+
+    <div class="layout">
+        <aside class="sidebar" aria-label="Sections">
+            <ul id="nav" class="nav"></ul>
+        </aside>
+        <main id="editor" class="editor" tabindex="-1"></main>
+    </div>
+
+    <footer class="actionbar">
+        <div class="status" id="status" aria-live="polite">
+            <span class="dot"></span>
+            <span id="status-text">Tout est publié</span>
+        </div>
+        <div class="row">
+            <button class="btn" id="btn-revert" type="button" disabled><i class="fa-solid fa-rotate-left"></i><span>Annuler les modifications</span></button>
+            <button class="btn primary" id="btn-publish" type="button"><i class="fa-solid fa-cloud-arrow-up"></i><span>Publier</span></button>
+        </div>
+    </footer>
+</div>
+
+<input type="file" id="import-file" accept="application/json,.json" hidden>
+
+<!-- ===================== Paramètres ===================== -->
+<dialog id="dlg-settings" class="dialog">
+    <form method="dialog" id="settings-form" class="stack">
+        <header class="dialog-head">
+            <h2>Paramètres du dépôt</h2>
+            <button class="btn icon ghost" value="cancel" formnovalidate aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
+        </header>
+        <p class="muted small">Le dépôt GitHub qui contient le site. Les valeurs par défaut conviennent si vous n'avez rien renommé.</p>
+        <div class="field">
+            <label for="set-owner">Propriétaire (compte GitHub)</label>
+            <input id="set-owner" type="text" spellcheck="false" autocapitalize="off" required>
+        </div>
+        <div class="field">
+            <label for="set-repo">Nom du dépôt</label>
+            <input id="set-repo" type="text" spellcheck="false" autocapitalize="off" required>
+        </div>
+        <div class="field">
+            <label for="set-branch">Branche</label>
+            <input id="set-branch" type="text" spellcheck="false" autocapitalize="off" required>
+        </div>
+        <div class="row end wrap">
+            <button type="button" class="btn ghost" id="set-reset">Valeurs par défaut</button>
+            <button type="submit" class="btn primary" value="save">Enregistrer</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- ===================== Aide ===================== -->
+<dialog id="dlg-help" class="dialog wide">
+    <div class="stack">
+        <header class="dialog-head">
+            <h2>Aide</h2>
+            <button class="btn icon ghost" type="button" data-close aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
+        </header>
+
+        <section class="help">
+            <h3>Comment ça marche</h3>
+            <p>Tout le contenu du site (profil, projets, parcours...) est rangé dans un seul fichier : <code>data/content.json</code>. Cette page le lit sur GitHub, vous le modifiez avec les formulaires, puis « Publier » l'enregistre sur GitHub. GitHub Pages met ensuite environ une minute à mettre le site à jour.</p>
+
+            <h3>Créer votre token (une seule fois)</h3>
+            <ol>
+                <li>Connectez-vous à GitHub, puis ouvrez directement <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">la page de création de token</a>.<br><span class="muted small">Chemin manuel : photo de profil → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token.</span></li>
+                <li><strong>Token name</strong> : par exemple « Admin portfolio ».</li>
+                <li><strong>Expiration</strong> : choisissez une durée (90 jours par exemple). À l'expiration, il suffit d'en créer un nouveau.</li>
+                <li><strong>Repository access</strong> : <em>Only select repositories</em>, puis sélectionnez <code>mon_portfolio</code>.</li>
+                <li><strong>Permissions</strong> → Repository permissions → <strong>Contents</strong> : <em>Read and write</em>. Ne touchez à rien d'autre (« Metadata : Read-only » s'ajoute tout seul).</li>
+                <li>Cliquez sur <strong>Generate token</strong>, copiez le token (il commence par <code>github_pat_</code>) et collez-le sur l'écran de connexion. GitHub ne l'affiche qu'une fois.</li>
+            </ol>
+
+            <h3>Sécurité</h3>
+            <ul>
+                <li>Cette page d'administration est publique (n'importe qui peut l'ouvrir), mais elle est <strong>inutilisable sans token</strong>. Elle n'est pas indexée par les moteurs de recherche.</li>
+                <li><strong>Ne partagez jamais votre token</strong> : c'est une clé qui permet de modifier votre dépôt. Ne l'envoyez à personne, ne le collez nulle part ailleurs.</li>
+                <li>Le token n'est limité qu'au dépôt <code>mon_portfolio</code> et au contenu des fichiers : même perdu, il ne donne pas accès à votre compte.</li>
+                <li>En cas de doute, supprimez-le sur GitHub (Settings → Developer settings → Fine-grained tokens → Revoke) et créez-en un autre.</li>
+                <li>« Se souvenir sur cet appareil » garde le token dans ce navigateur. Sur un appareil partagé, laissez la case décochée et cliquez sur « Se déconnecter » à la fin.</li>
+            </ul>
+
+            <h3>Astuces</h3>
+            <ul>
+                <li>Dans les textes : <code>**gras**</code> et <code>*italique*</code>.</li>
+                <li>Vos modifications sont gardées en brouillon dans ce navigateur tant qu'elles ne sont pas publiées.</li>
+                <li>Les images envoyées sont réduites automatiquement (1600 px de large maximum) et rangées dans <code>assets/uploads/</code>. Elles apparaissent sur le site après publication.</li>
+                <li>« Exporter le JSON » télécharge une copie de sauvegarde de tout le contenu. « Importer » la recharge.</li>
+                <li>Si vous voyez une erreur de conflit, c'est que le fichier a été modifié ailleurs (par exemple directement sur GitHub) : rechargez la version en ligne.</li>
+            </ul>
+        </section>
+    </div>
+</dialog>
+
+<!-- ===================== Boîte de confirmation ===================== -->
+<dialog id="dlg-ask" class="dialog">
+    <div class="stack">
+        <h2 id="ask-title"></h2>
+        <div id="ask-body" class="ask-body"></div>
+        <div class="row end wrap" id="ask-buttons"></div>
+    </div>
+</dialog>
+
+<div id="toasts" class="toasts" aria-live="polite" aria-atomic="false"></div>
+
+<script src="admin.js"></script>
+</body>
+</html>

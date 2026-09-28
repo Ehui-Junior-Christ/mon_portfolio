@@ -1,0 +1,218 @@
+/* ============================================
+   CHASSEUR DE TECH — mini-jeu
+   ============================================ */
+.game-wrapper {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+}
+
+/* ============================================
+   HUD : score, record, boutons
+   ============================================ */
+.game-hud {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line, rgba(20, 20, 18, .14));
+    font-family: 'Share Tech Mono', ui-monospace, monospace;
+}
+
+.game-score,
+.game-best {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted, #6b675e);
+    white-space: nowrap;
+}
+
+.game-score strong,
+.game-best strong {
+    font-family: 'Archivo', sans-serif;
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--ink, #141412);
+    font-variant-numeric: tabular-nums;
+    min-width: 2ch;
+}
+
+.game-best strong { color: var(--muted, #6b675e); }
+
+.game-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+/* ============================================
+   BOUTONS
+   ============================================ */
+.game-btn {
+    appearance: none;
+    font-family: 'Share Tech Mono', ui-monospace, monospace;
+    font-size: .74rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    min-width: 7.5em;
+    padding: 10px 14px;
+    border: 1px solid var(--ink, #141412);
+    border-radius: 3px;
+    background: var(--ink, #141412);
+    color: var(--paper, #f3efe6);
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.game-btn:hover {
+    background: var(--accent, #c8502a);
+    border-color: var(--accent, #c8502a);
+}
+
+.game-btn--ghost {
+    background: transparent;
+    color: var(--ink, #141412);
+    border-color: var(--line, rgba(20, 20, 18, .14));
+}
+
+.game-btn--ghost:hover {
+    background: transparent;
+    color: var(--accent, #c8502a);
+    border-color: var(--accent, #c8502a);
+}
+
+.game-btn:focus-visible,
+.dpad-btn:focus-visible,
+#snake-canvas:focus-visible {
+    outline: 2px solid var(--accent, #c8502a);
+    outline-offset: 3px;
+}
+
+/* ============================================
+   SCÈNE / CANVAS
+   ============================================ */
+.game-stage {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 14px;
+    border: 1px solid var(--line, rgba(20, 20, 18, .14));
+    border-radius: 4px;
+}
+
+.game-stage::before {
+    content: 'fig. 04 — snake.canvas';
+    position: absolute;
+    top: -.6em;
+    left: 12px;
+    padding: 0 6px;
+    background: var(--paper, #f3efe6);
+    font-family: 'Share Tech Mono', ui-monospace, monospace;
+    font-size: .66rem;
+    line-height: 1.2;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted, #6b675e);
+}
+
+#snake-canvas {
+    display: block;
+    width: min(440px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+    background: var(--ink, #141412);
+    border-radius: 2px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+/* Bloque le scroll tactile uniquement pendant une partie */
+#snake-canvas.is-playing {
+    touch-action: none;
+}
+
+/* ============================================
+   D-PAD MOBILE
+   ============================================ */
+.mobile-dpad {
+    display: none;
+    grid-template-columns: repeat(3, 52px);
+    grid-template-rows: repeat(3, 52px);
+    gap: 6px;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.dpad-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border: 1px solid var(--ink, #141412);
+    border-radius: 4px;
+    background: var(--ink, #141412);
+    color: var(--paper, #f3efe6);
+    font-size: 1rem;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: background-color .15s ease, border-color .15s ease;
+}
+
+.dpad-btn:hover,
+.dpad-btn:active {
+    background: var(--accent, #c8502a);
+    border-color: var(--accent, #c8502a);
+}
+
+.dpad-up     { grid-area: 1 / 2; }
+.dpad-left   { grid-area: 2 / 1; }
+.dpad-right  { grid-area: 2 / 3; }
+.dpad-down   { grid-area: 3 / 2; }
+.dpad-center {
+    grid-area: 2 / 2;
+    background: transparent;
+    border: 1px dashed var(--line, rgba(20, 20, 18, .14));
+    cursor: default;
+}
+.dpad-center:hover { background: transparent; border-color: var(--line, rgba(20, 20, 18, .14)); }
+
+@media (hover: none), (max-width: 680px) {
+    .mobile-dpad { display: grid; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 520px) {
+    .game-hud {
+        flex-wrap: wrap;
+        row-gap: 12px;
+    }
+    .game-buttons {
+        width: 100%;
+        margin-left: 0;
+    }
+    .game-btn { flex: 1; }
+    .game-stage { padding: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .game-btn,
+    .dpad-btn { transition: none; }
+}

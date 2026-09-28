@@ -1,0 +1,219 @@
+/* ==========================================================================
+   motion.css — états d'animation pilotés par js/main.js
+   --------------------------------------------------------------------------
+   Classes posées sur <html> :
+     .js              : JS actif (posé dans le <head>)
+     .motion-ready    : main.js a démarré (désactive le garde-fou)
+     .motion-gsap     : animations GSAP + ScrollTrigger
+     .motion-fallback : GSAP absent -> IntersectionObserver + transitions CSS
+     .motion-off      : mouvement réduit / erreur -> tout visible, statique
+     .has-lenis       : défilement doux actif
+     .bg-driven       : fond de page piloté au scroll (html.is-ink)
+     .has-curtain     : footer révélé "en rideau"
+     .has-cursor / .has-magnetic / .has-preview : pointeur précis
+   Sur les éléments : .is-in = état final (révélé).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   00. Lenis (styles recommandés)
+   -------------------------------------------------------------------------- */
+html.lenis,
+html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+/* --------------------------------------------------------------------------
+   01. Ancres : décalage de la hauteur du header
+   -------------------------------------------------------------------------- */
+section[id],
+footer[id] {
+    scroll-margin-top: var(--header-offset, var(--header-h, 76px));
+}
+
+/* --------------------------------------------------------------------------
+   02. États initiaux (cachés) — uniquement avec JS
+   -------------------------------------------------------------------------- */
+.js [data-anim="reveal"]:not(.is-in) {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+}
+.js [data-anim="fade"]:not(.is-in) {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+}
+.js [data-anim="clip"]:not(.is-in) {
+    clip-path: inset(100% 0 0 0);
+}
+
+/* Nom du hero : lettres découpées par main.js, masquées par le bas du mot */
+.hero-name .fit-w { clip-path: inset(-40% -20% 0 -20%); }
+.char { display: inline-block; }
+.js .hero-name:not(.is-in) .char { transform: translate3d(0, 105%, 0); }
+
+.js [data-anim="portrait"]:not(.is-in) .portrait-frame { clip-path: inset(100% 0 0 0); }
+.js [data-anim="portrait"]:not(.is-in) .portrait-img { transform: scale(1.2); }
+.js [data-anim="portrait"]:not(.is-in) .portrait-note,
+.js [data-anim="portrait"]:not(.is-in) .portrait-arrow,
+.js [data-anim="portrait"]:not(.is-in) .badge { opacity: 0; }
+
+/* Titres découpés en lettres */
+.split-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    white-space: nowrap;
+    padding: .14em 0 .06em;
+    margin: -.14em 0 -.06em;
+}
+.split-char { display: inline-block; }
+.js [data-anim="title"]:not(.is-in) .split-char { transform: translate3d(0, 110%, 0); }
+
+/* Titre du footer : lettres qui montent quand le rideau s'ouvre */
+.footer-title .fit-w { clip-path: inset(-40% -20% 0 -20%); }
+.js .footer-title.is-armed:not(.is-in) .char { transform: translate3d(0, 105%, 0); }
+
+/* Énoncé découpé en mots : l'opacité est pilotée au scroll */
+.js [data-anim="words"] .split-w { opacity: .15; }
+.motion-off [data-anim="words"] .split-w { opacity: 1 !important; }
+
+/* --------------------------------------------------------------------------
+   03. Fallback sans GSAP : transitions déclenchées par .is-in
+   -------------------------------------------------------------------------- */
+.motion-fallback [data-anim="reveal"],
+.motion-fallback [data-anim="fade"] {
+    transition:
+        opacity .9s var(--ease) var(--d, 0s),
+        transform 1s var(--ease) var(--d, 0s);
+}
+.motion-fallback [data-anim="clip"] { transition: clip-path 1.3s var(--ease-in-out) var(--d, 0s); }
+.motion-fallback .hero-name .char,
+.motion-fallback .footer-title .char {
+    transition: transform 1s var(--ease) calc(var(--i, 0) * 35ms);
+}
+.motion-fallback [data-anim="portrait"] .portrait-frame { transition: clip-path 1.3s var(--ease-in-out) .1s; }
+.motion-fallback [data-anim="portrait"] .portrait-img { transition: transform 1.8s var(--ease) .35s, filter .8s var(--ease); }
+.motion-fallback [data-anim="portrait"] .portrait-note,
+.motion-fallback [data-anim="portrait"] .portrait-arrow,
+.motion-fallback [data-anim="portrait"] .badge { transition: opacity .8s ease 1.05s; }
+.motion-fallback [data-anim="title"] .split-char {
+    transition: transform 1s var(--ease) calc(var(--d, 0s) + var(--i, 0) * 25ms);
+}
+.motion-fallback [data-anim="words"] .split-w { transition: opacity .25s linear; }
+
+/* --------------------------------------------------------------------------
+   04. Garde-fou : si main.js n'a pas démarré après 4s, tout devient visible
+   -------------------------------------------------------------------------- */
+@keyframes motion-failsafe {
+    to { opacity: 1; transform: none; clip-path: inset(-40% -20% 0 -20%); }
+}
+@keyframes motion-failsafe-preloader {
+    to { opacity: 0; visibility: hidden; }
+}
+html.js:not(.motion-ready) [data-anim="reveal"],
+html.js:not(.motion-ready) [data-anim="fade"],
+html.js:not(.motion-ready) [data-anim="clip"],
+html.js:not(.motion-ready) .hero-name .char,
+html.js:not(.motion-ready) [data-anim="title"] .split-char,
+html.js:not(.motion-ready) [data-anim="portrait"] .portrait-frame,
+html.js:not(.motion-ready) [data-anim="portrait"] .portrait-img,
+html.js:not(.motion-ready) [data-anim="portrait"] .portrait-note,
+html.js:not(.motion-ready) [data-anim="portrait"] .portrait-arrow,
+html.js:not(.motion-ready) [data-anim="portrait"] .badge {
+    animation: motion-failsafe .6s ease 4s forwards;
+}
+/* Nom du hero masqué jusqu'à son découpage (évite un flash) */
+html.js:not(.motion-ready) .hero-name .fit-row {
+    opacity: 0;
+    animation: motion-failsafe .6s ease 4s forwards;
+}
+html.js:not(.motion-ready) .preloader {
+    animation: motion-failsafe-preloader .4s ease 4s forwards;
+}
+
+/* --------------------------------------------------------------------------
+   05. Préchargeur
+   -------------------------------------------------------------------------- */
+html:not(.js) .preloader,
+.preloader.is-skipped { display: none !important; }
+
+/* --------------------------------------------------------------------------
+   06. Marquee
+   -------------------------------------------------------------------------- */
+.marquee-track.is-driven { will-change: transform; }
+@keyframes marquee-loop {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(calc(-1 * var(--marquee-period, 50%)), 0, 0); }
+}
+.marquee-track.is-css { animation: marquee-loop 38s linear infinite; }
+.marquee:hover .marquee-track.is-css { animation-play-state: paused; }
+
+/* --------------------------------------------------------------------------
+   07. Menu mobile : liens en cascade
+   -------------------------------------------------------------------------- */
+.js .mobile-menu-links li,
+.js .mobile-menu-footer {
+    opacity: 0;
+    transform: translate3d(0, 36px, 0);
+    transition: opacity .3s ease, transform .3s ease;
+}
+body.menu-open .mobile-menu-links li,
+body.menu-open .mobile-menu-footer {
+    opacity: 1;
+    transform: none;
+    transition:
+        opacity .7s var(--ease) var(--menu-delay, .2s),
+        transform .9s var(--ease) var(--menu-delay, .2s);
+}
+body.menu-open .mobile-menu-links li:nth-child(1) { --menu-delay: .18s; }
+body.menu-open .mobile-menu-links li:nth-child(2) { --menu-delay: .24s; }
+body.menu-open .mobile-menu-links li:nth-child(3) { --menu-delay: .30s; }
+body.menu-open .mobile-menu-links li:nth-child(4) { --menu-delay: .36s; }
+body.menu-open .mobile-menu-links li:nth-child(5) { --menu-delay: .42s; }
+body.menu-open .mobile-menu-footer               { --menu-delay: .5s; }
+
+/* --------------------------------------------------------------------------
+   08. Curseur
+   -------------------------------------------------------------------------- */
+html:not(.has-cursor) .cursor { display: none; }
+.has-cursor .cursor { opacity: 0; }
+.has-cursor .cursor.is-active { opacity: 1; }
+
+/* --------------------------------------------------------------------------
+   09. Mouvement désactivé : tout visible, rien ne bouge
+   -------------------------------------------------------------------------- */
+.motion-off .split-char,
+.motion-off .char { transform: none !important; }
+.motion-off .marquee-track { animation: none; }
+.motion-off .badge-ring { animation: none; }
+
+/* --------------------------------------------------------------------------
+   10. prefers-reduced-motion : même chose, même sans JS
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .js [data-anim="reveal"]:not(.is-in),
+    .js [data-anim="fade"]:not(.is-in),
+    .js .hero-name:not(.is-in) .char,
+    .js .footer-title .char,
+    .js [data-anim="title"]:not(.is-in) .split-char,
+    .js [data-anim="portrait"]:not(.is-in) .portrait-img {
+        opacity: 1;
+        transform: none;
+    }
+    .js [data-anim="clip"]:not(.is-in),
+    .js [data-anim="portrait"]:not(.is-in) .portrait-frame { clip-path: none; }
+    .js [data-anim="portrait"]:not(.is-in) .portrait-note,
+    .js [data-anim="portrait"]:not(.is-in) .portrait-arrow,
+    .js [data-anim="portrait"]:not(.is-in) .badge,
+    .js [data-anim="words"] .split-w { opacity: 1; }
+    .preloader { display: none !important; }
+    .marquee-track { animation: none !important; transform: none !important; }
+    .cursor, .preview { display: none !important; }
+    .js .mobile-menu-links li,
+    .js .mobile-menu-footer {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}

@@ -3,367 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Portfolio de Ehui Junior Christ Emmanuel, Développeur Web Full-Stack étudiant à l'UPB.">
-    <title>Ehui Junior Christ | Portfolio</title>
+    <title>Ehui Junior Christ — Développeur Web Full-Stack</title>
+    <meta name="description" content="Ehui Junior Christ Emmanuel, développeur web full-stack basé à Abidjan. Diplômé d'une Licence MIAGE à l'Université Polytechnique de Bingerville. React, Next.js, Spring Boot, SQL.">
+    <meta name="theme-color" content="#141412">
 
-    <!-- Google Fonts -->
+    <meta name="author" content="Ehui Junior Christ Emmanuel">
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <link rel="preload" as="image" href="assets/img/portrait.webp" type="image/webp">
+
+    <!-- Open Graph / partage : remplacer les chemins relatifs par l'URL absolue une fois le domaine connu -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="Ehui Junior Christ">
+    <meta property="og:title" content="Ehui Junior Christ — Développeur Web Full-Stack">
+    <meta property="og:description" content="Développeur web full-stack basé à Abidjan, diplômé d'une Licence MIAGE à l'Université Polytechnique de Bingerville. React, Next.js, Spring Boot, SQL.">
+    <meta property="og:image" content="assets/img/og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Ehui Junior Christ, développeur web full-stack à Abidjan">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ehui Junior Christ — Développeur Web Full-Stack">
+    <meta name="twitter:description" content="Développeur web full-stack basé à Abidjan. React, Spring Boot, PHP, SQL.">
+    <meta name="twitter:image" content="assets/img/og.jpg">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Ehui Junior Christ Emmanuel",
+        "alternateName": "Ehui Junior Christ",
+        "jobTitle": "Développeur web full-stack",
+        "email": "mailto:juniorehui15@gmail.com",
+        "image": "assets/img/portrait.jpg",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Abidjan",
+            "addressCountry": "CI"
+        },
+        "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Université Polytechnique de Bingerville"
+        },
+        "affiliation": {
+            "@type": "CollegeOrUniversity",
+            "name": "Université Polytechnique de Bingerville"
+        },
+        "knowsAbout": ["HTML", "CSS", "JavaScript", "React", "Spring Boot", "PHP", "SQL"],
+        "sameAs": [
+            "https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/",
+            "https://github.com/Ehui-Junior-Christ"
+        ]
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Gochi+Hand&family=Raleway:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Gochi+Hand&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/motion.css">
+    <link rel="stylesheet" href="css/game.css">
 
-    <link rel="stylesheet" href="style.css">
+    <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-    <!-- ==================== HERO ==================== -->
-    <header class="hero" id="accueil">
-        <nav class="navbar">
-            <button class="hamburger" id="hamburger" aria-label="Menu">
-                <span></span><span></span><span></span>
-            </button>
+    <a class="skip-link" href="#main">Aller au contenu</a>
+
+    <!-- ==================== PRÉCHARGEUR ==================== -->
+    <div class="preloader" id="preloader" aria-hidden="true">
+        <div class="preloader-top mono">
+            <span>Ehui Junior Christ</span>
+            <span>Portfolio — Abidjan</span>
+        </div>
+        <p class="preloader-mark"><span>E</span><span>J</span><span>C</span><span class="accent">.</span></p>
+        <div class="preloader-bottom">
+            <span class="preloader-line"><i></i></span>
+            <span class="preloader-count" id="preloaderCount">0</span>
+        </div>
+    </div>
+
+    <!-- Couches globales -->
+    <div class="grain" aria-hidden="true"></div>
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+    <div class="cursor" id="cursor" aria-hidden="true"><span class="cursor-label" id="cursorLabel"></span></div>
+    <div class="preview" id="preview" aria-hidden="true"><div class="preview-inner" id="previewInner"></div></div>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <header class="site-header" id="siteHeader">
+        <nav class="navbar" aria-label="Navigation principale">
+            <a href="#accueil" class="logo" aria-label="Retour en haut">
+                <span class="logo-mark">EJC</span><span class="logo-dot">.</span>
+            </a>
+
             <ul class="nav-links" id="navLinks">
-                <li><a href="#accueil">Accueil</a></li>
-                <li><a href="#apropos">À Propos</a></li>
-                <li><a href="#parcours">Parcours et Compétences</a></li>
-                <li><a href="#projets">Projets</a></li>
+                <li><a href="#apropos"><span class="nav-num">01</span><span data-roll>À propos</span></a></li>
+                <li><a href="#parcours"><span class="nav-num">02</span><span data-roll>Parcours</span></a></li>
+                <li><a href="#projets"><span class="nav-num">03</span><span data-roll>Projets</span></a></li>
+                <li><a href="#jeu"><span class="nav-num">04</span><span data-roll>Jeu</span></a></li>
+                <li><a href="#contact"><span class="nav-num">05</span><span data-roll>Contact</span></a></li>
             </ul>
-            <div class="social-icons">
-                <a href="https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://github.com/Ehui-Junior-Christ" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                <a href="mailto:juniorehui15@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                <a href="https://wa.me/2250556388833" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+
+            <div class="nav-right">
+                <span class="status"><span class="status-dot"></span><span data-c="status">Diplômé · ouvert aux opportunités</span></span>
+                <button class="hamburger" id="hamburger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileMenu">
+                    <span></span><span></span>
+                </button>
             </div>
         </nav>
-
-        <div class="hero-content">
-            <p class="greeting fade-up">Salut, Moi c'est</p>
-            <h1 class="name fade-up delay-1">Ehui junior christ emmanuel</h1>
-            <p class="description fade-up delay-2">
-                Bienvenue sur mon portfolio interactif.<br>
-                Découvrez mon parcours, mes réalisations et mon univers créatif qui est le l'informatique.
-            </p>
-            <div class="hero-cta fade-up delay-3">
-                <a href="#projets" class="cta-btn">Voir mes projets</a>
-                <a href="#apropos" class="cta-btn cta-outline">En savoir plus</a>
-            </div>
-        </div>
     </header>
 
-
-    <!-- ==================== SERVICES INTRO ==================== -->
-    <section class="services-intro">
-        <p class="intro-text reveal">
-            Salut, je suis <strong>Ehui Junior Christ</strong>. Je crée des applications &amp; sites web <strong>beaux</strong> et <strong>fonctionnels</strong>.<br>
-            Voici quelques-unes de mes compétences :
-        </p>
-    </section>
-
-    <!-- ==================== SERVICES GRID ==================== -->
-    <section class="services-grid-section">
-        <div class="services-grid">
-            <div class="service-item reveal">
-                <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
-                <h3 class="service-title">DÉVELOPPEMENT WEB</h3>
-                <p class="service-desc">Conception front-end réactive avec HTML, CSS, JavaScript et ReactJS pour guider le layout et le contenu.</p>
-            </div>
-            <div class="service-item reveal">
-                <div class="service-icon"><i class="fas fa-server"></i></div>
-                <h3 class="service-title">BACK-END</h3>
-                <p class="service-desc">Développement robuste avec Spring Boot et PHP. Création d'API RESTful et logique serveur efficace.</p>
-            </div>
-            <div class="service-item reveal">
-                <div class="service-icon"><i class="fas fa-database"></i></div>
-                <h3 class="service-title">BASES DE DONNÉES</h3>
-                <p class="service-desc">Conception et gestion de bases de données relationnelles avec SQL pour une structure de données optimale.</p>
-            </div>
-            <div class="service-item reveal">
-                <div class="service-icon"><i class="fas fa-tools"></i></div>
-                <h3 class="service-title">OUTILS & DEVOPS</h3>
-                <p class="service-desc">Git, GitHub, VSCode, IntelliJ, PyCharm, Postman — pour garder le code propre et collaboratif.</p>
+    <!-- Menu mobile plein écran -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <ul class="mobile-menu-links">
+            <li><a href="#apropos"><span class="nav-num">01</span>À propos</a></li>
+            <li><a href="#parcours"><span class="nav-num">02</span>Parcours</a></li>
+            <li><a href="#projets"><span class="nav-num">03</span>Projets</a></li>
+            <li><a href="#jeu"><span class="nav-num">04</span>Jeu</a></li>
+            <li><a href="#contact"><span class="nav-num">05</span>Contact</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            <a href="mailto:juniorehui15@gmail.com" data-c="email-link">juniorehui15@gmail.com</a>
+            <div class="social-row" data-c="socials">
+                <a href="https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                <a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+                <a href="https://wa.me/2250556388833" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- ==================== ABOUT ==================== -->
-    <section class="about-section" id="apropos">
-        <div class="about-container">
-            <div class="about-image-wrapper reveal">
-                <img src="assets/1771219749805.png" alt="Ehui Junior Christ – Développeur Web" class="about-img">
+    <main id="main">
+
+        <!-- ==================== HERO ==================== -->
+        <section class="hero" id="accueil">
+            <div class="hero-meta mono">
+                <span>(Portfolio) Édition <span data-c="edition">2026</span></span>
+                <span class="hero-meta-role" data-c="role">Développeur web full-stack</span>
+                <span><span data-c="city">Abidjan</span> · <time class="js-time" data-tz="Africa/Abidjan">--:--</time></span>
             </div>
-            <div class="about-text-wrapper reveal">
-                <h2 class="hand-title-small">À Propos de moi</h2>
-                <p class="about-text">
-                    Né le 30 novembre 2004 à Gagnoa, en Côte d'Ivoire, je suis actuellement étudiant en <strong>Licence 2</strong> à l'Université Polytechnique de Bingerville (UPB). Passionné d'informatique depuis un jeune âge, j'ai fait du développement web ma vocation.
-                </p>
-                <p class="about-text">
-                    J'ai travaillé sur des projets formateurs comme <strong>Medibook</strong> (carnet médical et suivi en ligne) et <strong>Food-Command</strong> (plateforme de livraison de nourriture). J'ai aussi effectué un bénévolat en entreprise pour acquérir de l'expérience professionnelle.
-                </p>
-                <p class="about-text">
-                    En dehors du code, je suis passionné par le <strong>basketball</strong> et les <strong>jeux vidéo</strong>. Mon objectif : allier esthétique et fonctionnalité pour créer des expériences utilisateur mémorables.
-                </p>
-                <div class="about-details">
-                    <div class="detail-item"><i class="fas fa-map-marker-alt"></i> Abidjan, Yopougon, Côte d'Ivoire</div>
-                    <div class="detail-item"><i class="fas fa-envelope"></i> juniorehui15@gmail.com</div>
-                    <div class="detail-item"><i class="fas fa-phone"></i> 05-56-38-88-33</div>
+
+            <h1 class="hero-name fit" id="heroName" aria-label="Ehui Junior Christ">
+                <span class="fit-row" data-c="hero-name"><span class="fit-w">Ehui</span> <span class="fit-w">Junior</span> <span class="fit-w">Christ<span class="accent">.</span></span></span>
+            </h1>
+
+            <div class="hero-body">
+                <div class="hero-lead">
+                    <p class="hero-greeting mono" data-anim="fade">Salut, moi c'est Junior —</p>
+                    <p class="hero-tagline" data-anim="fade" data-c="tagline">Développeur web <strong>full-stack</strong>, diplômé d'une <strong>Licence MIAGE</strong> à l'UPB. Je conçois des interfaces soignées et des back-ends solides.</p>
+                    <div class="hero-cta" data-anim="fade">
+                        <a href="#projets" class="btn btn-primary magnetic" data-cursor="Voir">
+                            <span>Voir mes projets</span><i class="fas fa-arrow-down" aria-hidden="true"></i>
+                        </a>
+                        <a href="#contact" class="btn btn-ghost magnetic">
+                            <span>Me contacter</span>
+                        </a>
+                    </div>
                 </div>
+
+                <figure class="hero-portrait" data-anim="portrait">
+                    <div class="portrait-frame">
+                        <img src="assets/img/portrait.webp" alt="Portrait d'Ehui Junior Christ" class="portrait-img" data-c="photo" width="864" height="1184" fetchpriority="high">
+                    </div>
+                    <figcaption class="portrait-note hand">c'est moi&nbsp;!</figcaption>
+                    <svg class="portrait-arrow" viewBox="0 0 80 60" aria-hidden="true"><path d="M5 8 C 30 5, 60 20, 70 50 M70 50 L58 44 M70 50 L73 37" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    <div class="badge" aria-hidden="true">
+                        <svg viewBox="0 0 200 200" class="badge-ring">
+                            <defs><path id="badgeCircle" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"/></defs>
+                            <text><textPath href="#badgeCircle" data-c="badge">DIPLÔMÉ · LICENCE MIAGE · PROMO 2026 · </textPath></text>
+                        </svg>
+                        <svg viewBox="0 0 40 40" class="badge-star"><path d="M20 4v32M4 20h32M8.7 8.7l22.6 22.6M31.3 8.7L8.7 31.3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+                    </div>
+                </figure>
+
+                <dl class="hero-facts" data-anim="fade">
+                    <div><dt class="mono">Statut</dt><dd data-c="status">Diplômé · ouvert aux opportunités</dd></div>
+                    <div><dt class="mono">Diplôme</dt><dd data-c="degree">Licence MIAGE, 2026</dd></div>
+                    <div><dt class="mono">Basé à</dt><dd data-c="location">Yopougon, Abidjan</dd></div>
+                    <div class="hero-facts-social"><dt class="visually-hidden">Réseaux</dt><dd>
+                        <div class="social-row" data-c="socials">
+                            <a href="https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                            <a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+                            <a href="mailto:juniorehui15@gmail.com" aria-label="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+                            <a href="https://wa.me/2250556388833" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                        </div>
+                    </dd></div>
+                </dl>
             </div>
+        </section>
+
+        <p class="content-note mono" id="contentNote" role="status" hidden></p>
+
+        <!-- ==================== MARQUEE ==================== -->
+        <div class="marquee t-dark" aria-hidden="true" data-section="content">
+            <div class="marquee-track" data-c="marquee"></div>
         </div>
-    </section>
 
-    <!-- ==================== PARCOURS & COMPÉTENCES ==================== -->
-    <section class="parcours-section" id="parcours">
-        <h2 class="section-title reveal">Parcours &amp; Compétences</h2>
+        <!-- ==================== INTRO ==================== -->
+        <section class="intro" id="intro" data-section="content" aria-label="En bref">
+            <p class="intro-label mono">(Ce que je fais)</p>
+            <p class="intro-statement" data-anim="words" data-c="intro"></p>
+        </section>
 
-        <div class="parcours-grid">
-            <!-- Education timeline -->
-            <div class="reveal">
-                <h3 class="parcours-subtitle"><i class="fas fa-graduation-cap"></i> Formation</h3>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <p class="timeline-date">2025 – 2026</p>
-                        <p class="timeline-title">Licence 3 — MIAGE (Methodes Informatiques Appliquées à la Gestion des Entreprises)</p>
-                        <p class="timeline-desc">Université Polytechnique de Bingerville (UPB)</p>
+        <!-- ==================== SERVICES ==================== -->
+        <section class="services" aria-labelledby="servicesTitle" data-section="content">
+            <div class="services-head">
+                <p class="mono services-kicker">(Services)</p>
+                <h2 class="services-title" id="servicesTitle" data-anim="title">Ce que je construis</h2>
+            </div>
+            <ol class="stack" data-c="services"></ol>
+        </section>
+
+        <!-- ==================== À PROPOS ==================== -->
+        <section class="about t-light-2" id="apropos" data-section="content">
+            <header class="section-head">
+                <span class="section-num mono">01</span>
+                <h2 class="section-title" data-anim="title">À propos</h2>
+            </header>
+
+            <div class="about-grid">
+                <figure class="about-photo" data-anim="clip">
+                    <div class="about-photo-frame">
+                        <img src="assets/img/portrait.webp" alt="Ehui Junior Christ en tenue de l'Université Polytechnique de Bingerville" data-c="photo" loading="lazy" decoding="async" width="864" height="1184">
                     </div>
-                    <div class="timeline-item">
-                        <p class="timeline-date">2024 – 2025</p>
-                        <p class="timeline-title">Licence 2 — MIAGE (Methodes Informatiques Appliquées à la Gestion des Entreprises)</p>
-                        <p class="timeline-desc">Université Polytechnique de Bingerville (UPB)</p>
-                    </div>
-                    <div class="timeline-item">
-                        <p class="timeline-date">2023 – 2024</p>
-                        <p class="timeline-title">Licence 1 — MIAGE (Methodes Informatiques Appliquées à la Gestion des Entreprises)</p>
-                        <p class="timeline-desc">Université Polytechnique de Bingerville (UPB)</p>
-                    </div>
-                    <div class="timeline-item">
-                        <p class="timeline-date">2022 – 2023</p>
-                        <p class="timeline-title">Baccalauréat</p>
-                        <p class="timeline-desc">Collège Catholique Roger Duquense (CCRD)</p>
-                    </div>
-                    <div class="timeline-item">
-                        <p class="timeline-date">2018 – 2019</p>
-                        <p class="timeline-title">BEPC</p>
-                        <p class="timeline-desc">Collège Catholique Roger Duquense (CCRD)</p>
-                    </div>
-                    <div class="timeline-item">
-                        <p class="timeline-date">2014 – 2015</p>
-                        <p class="timeline-title">CEPE</p>
-                        <p class="timeline-desc">École Méthodiste Gagnoa</p>
-                    </div>
+                    <span class="about-tape mono" data-c="promo">Promo 2026</span>
+                    <figcaption class="mono">Fig. 01 — <span data-c="place">Abidjan, Côte d'Ivoire</span></figcaption>
+                </figure>
+
+                <div class="about-body" data-c="about"></div>
+            </div>
+        </section>
+
+        <!-- ==================== PARCOURS ==================== -->
+        <section class="parcours" id="parcours" data-section="content">
+            <header class="section-head">
+                <span class="section-num mono">02</span>
+                <h2 class="section-title" data-anim="title">Parcours &amp; compétences</h2>
+            </header>
+
+            <div class="parcours-grid">
+                <div class="parcours-col">
+                    <h3 class="col-title mono"><i class="fas fa-graduation-cap" aria-hidden="true"></i> Formation</h3>
+                    <ol class="timeline" id="timeline" data-c="education"></ol>
+                </div>
+                <div class="parcours-col">
+                    <h3 class="col-title mono"><i class="fas fa-briefcase" aria-hidden="true"></i> Expérience</h3>
+                    <ol class="xp" data-c="experience"></ol>
                 </div>
             </div>
 
-            <!-- Skills -->
-            <div class="reveal">
-                <h3 class="parcours-subtitle"><i class="fas fa-code"></i> Compétences</h3>
-                <div class="skills-container">
-                    <div class="skills-group">
-                        <p class="skills-group-title">Développement Web</p>
-                        <div class="skills-tags">
-                            <span class="skill-tag">HTML / CSS</span>
-                            <span class="skill-tag">JavaScript</span>
-                            <span class="skill-tag">ReactJS</span>
-                            <span class="skill-tag">PHP</span>
-                            <span class="skill-tag">Spring Boot</span>
-                            <span class="skill-tag">Python</span>
-                        </div>
-                    </div>
-                    <div class="skills-group">
-                        <p class="skills-group-title">Bases de Données</p>
-                        <div class="skills-tags">
-                            <span class="skill-tag">SQL</span>
-                            <span class="skill-tag">MySQL</span>
-                            <span class="skill-tag">PostgreSQL</span>
-                        </div>
-                    </div>
-                    <div class="skills-group">
-                        <p class="skills-group-title">Outils & Environnements</p>
-                        <div class="skills-tags">
-                            <span class="skill-tag">Git &amp; GitHub</span>
-                            <span class="skill-tag">VSCode</span>
-                            <span class="skill-tag">IntelliJ</span>
-                            <span class="skill-tag">PyCharm</span>
-                            <span class="skill-tag">Postman</span>
-                            <span class="skill-tag">UML</span>
-                            <span class="skill-tag">Canva</span>
-                        </div>
-                    </div>
-                    <div class="skills-group">
-                        <p class="skills-group-title">Bureautique &amp; Langues</p>
-                        <div class="skills-tags">
-                            <span class="skill-tag">Microsoft Word</span>
-                            <span class="skill-tag">PowerPoint</span>
-                            <span class="skill-tag">Français (courant)</span>
-                        </div>
+            <div class="skills-block">
+                <h3 class="col-title mono"><i class="fas fa-code" aria-hidden="true"></i> Compétences</h3>
+                <div class="skills" data-c="skills"></div>
+            </div>
+
+            <div class="certs-block" data-c="certs-block">
+                <h3 class="col-title mono"><i class="fas fa-certificate" aria-hidden="true"></i> Certifications &amp; diplômes</h3>
+                <ul class="certs" data-c="certifications"></ul>
+            </div>
+        </section>
+
+        <!-- ==================== PROJETS ==================== -->
+        <section class="projects" id="projets">
+            <header class="section-head">
+                <span class="section-num mono">03</span>
+                <h2 class="section-title" data-anim="title">Projets choisis</h2>
+                <p class="section-sub" data-c="projects-sub">Mes projets sont publiés sur <a class="link-arrow" href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener">GitHub</a>.</p>
+            </header>
+            <div data-c="projects"></div>
+        </section>
+
+        <!-- ==================== MINI-JEU ==================== -->
+        <section class="game t-light-2" id="jeu">
+            <header class="section-head">
+                <span class="section-num mono">04</span>
+                <h2 class="section-title" data-anim="title">Chasseur de Tech</h2>
+                <p class="section-sub">Une pause ? Aide le serpent à attraper les technologies. Flèches ou ZQSD au clavier, glisser ou D-pad sur mobile. Espace pour mettre en pause.</p>
+            </header>
+
+            <div class="game-wrapper" data-anim="reveal">
+                <div class="game-hud">
+                    <span class="game-score mono">Score <strong id="score" aria-live="polite">0</strong></span>
+                    <span class="game-best mono">Record <strong id="bestScore">0</strong></span>
+                    <div class="game-buttons">
+                        <button class="game-btn" id="startBtn" type="button">Démarrer</button>
+                        <button class="game-btn game-btn--ghost" id="resetBtn" type="button">Réinitialiser</button>
                     </div>
                 </div>
-
-                <h3 class="parcours-subtitle" style="margin-top:2rem;"><i class="fas fa-certificate"></i> Certifications</h3>
-                <div class="certif-placeholder">
-                    <i class="fas fa-plus-circle"></i>
-                    <p>Certifications à venir — espace réservé</p>
+                <div class="game-stage">
+                    <canvas id="snake-canvas" width="400" height="400" role="img" aria-label="Jeu du serpent : dirige le serpent pour attraper les technologies sans toucher les bords"></canvas>
+                </div>
+                <div class="mobile-dpad">
+                    <button class="dpad-btn dpad-up" id="upBtn" type="button" aria-label="Haut"><i class="fas fa-chevron-up"></i></button>
+                    <button class="dpad-btn dpad-left" id="leftBtn" type="button" aria-label="Gauche"><i class="fas fa-chevron-left"></i></button>
+                    <span class="dpad-btn dpad-center" aria-hidden="true"></span>
+                    <button class="dpad-btn dpad-right" id="rightBtn" type="button" aria-label="Droite"><i class="fas fa-chevron-right"></i></button>
+                    <button class="dpad-btn dpad-down" id="downBtn" type="button" aria-label="Bas"><i class="fas fa-chevron-down"></i></button>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ==================== PROJETS ==================== -->
-    <section class="projects-section" id="projets">
-        <h2 class="section-title reveal">Mes Projets</h2>
-        <div class="projects-grid">
-            <article class="project-card reveal">
-                <div class="project-card-header">
-                    <div class="project-card-icon"><i class="fas fa-heartbeat"></i></div>
-                    <div>
-                        <h3>Medibook</h3>
-                        <p>Projet de fin d'année</p>
-                    </div>
-                </div>
-                <div class="project-card-body">
-                    <p>Carnet médical et suivi médical en ligne. Plateforme web sécurisée pour gérer son historique médical, prescriptions et consultations.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">HTML/CSS</span>
-                        <span class="project-tag">JavaScript</span>
-                        <span class="project-tag">Spring Boot</span>
-                        <span class="project-tag">SQL</span>
-                    </div>
-                    <a href="https://github.com/Ehui-Junior-Christ/Medibook_projects.git" target="_blank" class="project-link">
-                        <i class="fab fa-github"></i> Code Source →
+    </main>
+
+    <!-- ==================== CONTACT / FOOTER (rideau) ==================== -->
+    <footer class="footer t-dark" id="contact">
+        <div class="footer-inner" id="footerInner">
+            <div class="footer-top mono">
+                <span>(05) Contact</span>
+                <span><span data-c="city">Abidjan</span> — <time class="js-time" data-tz="Africa/Abidjan">--:--</time></span>
+                <span class="footer-status"><span class="status-dot"></span><span data-c="status">Diplômé · ouvert aux opportunités</span></span>
+            </div>
+
+            <h2 class="footer-title fit" id="footerTitle" data-fit-stack aria-label="Travaillons ensemble.">
+                <span class="fit-row"><span class="fit-w">Travaillons</span> <span class="fit-w">ensemble<span class="accent">.</span></span></span>
+            </h2>
+
+            <div class="footer-cta">
+                <p class="footer-text">Stage, emploi, projet ou simple échange : je réponds rapidement.</p>
+                <div class="footer-actions">
+                    <a href="mailto:juniorehui15@gmail.com" class="btn btn-light btn-lg magnetic" data-cursor="Écrire" data-c="email-btn">
+                        <span>juniorehui15@gmail.com</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
                     </a>
+                    <button type="button" class="btn btn-ghost-light btn-lg copy-email" id="copyEmail" data-email="juniorehui15@gmail.com">
+                        <i class="far fa-copy" aria-hidden="true"></i><span>Copier l'email</span>
+                    </button>
                 </div>
-            </article>
-
-            <article class="project-card reveal">
-                <div class="project-card-header">
-                    <div class="project-card-icon"><i class="fas fa-utensils"></i></div>
-                    <div>
-                        <h3>Food-Command</h3>
-                        <p>Site de Livraison</p>
-                    </div>
-                </div>
-                <div class="project-card-body">
-                    <p>Plateforme de commande et de livraison de nourriture en ligne, permettant une interaction fluide entre clients et restaurateurs.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">HTML/CSS</span>
-                        <span class="project-tag">JavaScript</span>
-                        <span class="project-tag">SQL</span>
-                    </div>
-                    <a href="https://github.com/Ehui-Junior-Christ/Food-Command.git" target="_blank" class="project-link">
-                        <i class="fab fa-github"></i> Code Source →
-                    </a>
-                </div>
-            </article>
-
-            <article class="project-card reveal">
-                <div class="project-card-header">
-                    <div class="project-card-icon"><i class="fas fa-handshake"></i></div>
-                    <div>
-                        <h3>Bénévolat</h3>
-                        <p>Expérience en entreprise</p>
-                    </div>
-                </div>
-                <div class="project-card-body">
-                    <p>Participation active au sein d'une entreprise pour acquérir de l'expérience professionnelle, comprendre les dynamiques d'équipe et participer à des projets concrets.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">Travail d'équipe</span>
-                        <span class="project-tag">Gestion de projet</span>
-                    </div>
-                </div>
-            </article>
-
-            <article class="project-card reveal">
-                <div class="project-card-header" style="background: linear-gradient(135deg, #1a1035, #2d1b69);">
-                    <div class="project-card-icon"><i class="fas fa-share-alt"></i></div>
-                    <div>
-                        <h3>Prisme</h3>
-                        <p>Réseau social — Full Stack</p>
-                    </div>
-                </div>
-                <div class="project-card-body">
-                    <p>Plateforme sociale full-stack avec authentification, gestion de profils, publications, commentaires et interface "Liquid Glass" premium. Déployé en production sur Railway.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">ReactJS</span>
-                        <span class="project-tag">Spring Boot</span>
-                        <span class="project-tag">SQL</span>
-                        <span class="project-tag">REST API</span>
-                        <span class="project-tag">Railway</span>
-                    </div>
-                    <div class="project-links-row">
-                        <a href="https://github.com/Ehui-Junior-Christ/PRODIGY_FS_05.git" target="_blank" class="project-link">
-                            <i class="fab fa-github"></i> Code →
-                        </a>
-                        <a href="https://prisme-s.up.railway.app" target="_blank" class="project-link project-link-live">
-                            <i class="fas fa-external-link-alt"></i> Live →
-                        </a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="project-card reveal">
-                <div class="project-card-header" style="background: linear-gradient(135deg, #0a2a1a, #1a5c38);">
-                    <div class="project-card-icon"><i class="fas fa-comments"></i></div>
-                    <div>
-                        <h3>PRODIGY Chat App</h3>
-                        <p>Application Web — Full Stack</p>
-                    </div>
-                </div>
-                <div class="project-card-body">
-                    <p>Application web full-stack développée dans le cadre du programme Prodigy. Interface interactive, back-end robuste et déploiement continu sur Railway.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">React</span>
-                        <span class="project-tag">Spring Boot</span>
-                        <span class="project-tag">SQL</span>
-                        <span class="project-tag">Railway</span>
-                    </div>
-                    <div class="project-links-row">
-                        <a href="https://github.com/Ehui-Junior-Christ/PRODIGY_FS_04.git" target="_blank" class="project-link">
-                            <i class="fab fa-github"></i> Code →
-                        </a>
-                        <a href="https://prodigyfs04-production.up.railway.app" target="_blank" class="project-link project-link-live">
-                            <i class="fas fa-external-link-alt"></i> Live →
-                        </a>
-                    </div>
-                </div>
-            </article>
-        </div>
-    </section>
-
-    <!-- ==================== MINI-JEU ==================== -->
-    <section class="game-section" id="jeu">
-        <h2 class="section-title reveal">Chasseur de Tech</h2>
-        <p class="game-subtitle reveal">Aide le serpent à collecter les technologies ! Utilise les flèches ou le D-pad.</p>
-
-        <div class="game-wrapper reveal">
-            <div class="game-controls">
-                <span class="score-display">Score : <strong id="score">0</strong></span>
-                <button class="game-btn" id="startBtn">▶ Démarrer</button>
-                <button class="game-btn" id="resetBtn">↺ Réinitialiser</button>
             </div>
-            <canvas id="snake-canvas" width="400" height="400"></canvas>
-            <div class="mobile-dpad">
-                <button class="dpad-btn dpad-up"    id="upBtn">▲</button>
-                <button class="dpad-btn dpad-left"  id="leftBtn">◀</button>
-                <div   class="dpad-btn dpad-center">·</div>
-                <button class="dpad-btn dpad-right" id="rightBtn">▶</button>
-                <button class="dpad-btn dpad-down"  id="downBtn">▼</button>
+
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <p class="footer-label mono">Réseaux</p>
+                    <ul class="footer-links" data-c="social-links">
+                        <li><a href="https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/" target="_blank" rel="noopener"><span data-roll>LinkedIn</span></a></li>
+                        <li><a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener"><span data-roll>GitHub</span></a></li>
+                        <li><a href="https://wa.me/2250556388833" target="_blank" rel="noopener"><span data-roll>WhatsApp</span></a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <p class="footer-label mono">Basé à</p>
+                    <p data-c="address">Yopougon, Abidjan<br>Côte d'Ivoire</p>
+                    <p class="footer-phone" data-c="phone"><a href="tel:+2250556388833">05 56 38 88 33</a></p>
+                </div>
+                <div class="footer-col footer-quote">
+                    <p class="hand" data-c="quote">« Les passionnés de code et de basket sont des créateurs. Voilà, je l'ai dit. »</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom mono">
+                <p>© <span id="year">2026</span> <span data-c="fullname">Ehui Junior Christ Emmanuel</span></p>
+                <a href="#accueil" class="back-top"><span data-roll>Haut de page</span> <i class="fas fa-arrow-up" aria-hidden="true"></i></a>
             </div>
         </div>
-    </section>
-
-    <!-- ==================== FOOTER ==================== -->
-    <footer class="footer" id="contact">
-        <div class="quote-icon"><i class="fab fa-github"></i></div>
-        <p class="footer-quote">
-            "Les personnes passionnées par le code et le basketball sont des créateurs. Voilà, je l'ai dit."
-        </p>
-        <a href="https://github.com/Ehui-Junior-Christ" target="_blank" class="follow-link">
-            ME SUIVRE SUR GITHUB <i class="fab fa-github"></i>
-        </a>
-        <p class="footer-copy">© 2025 Ehui Junior Christ Emmanuel — Tous droits réservés.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js" defer></script>
+    <script src="js/content.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <script src="js/game.js" defer></script>
 </body>
 </html>

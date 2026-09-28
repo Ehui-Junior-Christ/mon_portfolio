@@ -1,0 +1,152 @@
+{
+  "profile": {
+    "firstName": "Ehui",
+    "middleName": "Junior",
+    "lastName": "Christ",
+    "fullName": "Ehui Junior Christ Emmanuel",
+    "role": "Développeur web full-stack",
+    "tagline": "Diplômé d'une **Licence MIAGE** à l'UPB. Je conçois des interfaces soignées et des back-ends solides, du croquis à la mise en production.",
+    "status": "Diplômé · ouvert aux opportunités",
+    "available": true,
+    "location": "Yopougon, Abidjan",
+    "country": "Côte d'Ivoire",
+    "timezone": "Africa/Abidjan",
+    "email": "juniorehui15@gmail.com",
+    "phone": "+2250556388833",
+    "phoneDisplay": "05 56 38 88 33",
+    "whatsapp": "https://wa.me/2250556388833",
+    "linkedin": "https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/",
+    "github": "https://github.com/Ehui-Junior-Christ",
+    "photo": "assets/img/portrait.webp",
+    "cv": "",
+    "intro": "Je crée des applications et des sites web *beaux* et *fonctionnels*, du premier croquis jusqu'à la mise en production.",
+    "about": [
+      "Né le 30 novembre 2004 à Gagnoa, je viens d'obtenir ma **Licence MIAGE** (Méthodes Informatiques Appliquées à la Gestion des Entreprises) à l'Université Polytechnique de Bingerville. L'informatique me passionne depuis l'enfance, et le développement web est devenu ma vocation.",
+      "De **Medibook** à **SimpleTaff**, mon projet de soutenance, j'ai construit des applications complètes : back-ends Spring Boot, interfaces React, bases SQL, déploiement. J'ai aussi fait du bénévolat en entreprise pour me confronter au travail en équipe.",
+      "En dehors du code : **basketball** et **jeux vidéo**. Mon objectif est simple : allier esthétique et fonctionnalité pour créer des expériences dont on se souvient."
+    ],
+    "quote": "Les passionnés de code et de basket sont des créateurs. Voilà, je l'ai dit."
+  },
+  "stats": [
+    { "value": 8, "label": "Projets réalisés" },
+    { "value": 1, "label": "Licence MIAGE" },
+    { "value": 3, "label": "Années à l'UPB" }
+  ],
+  "marquee": ["HTML", "CSS", "JavaScript", "React", "Next.js", "Spring Boot", "PHP", "SQL", "PostgreSQL", "Python", "Kotlin", "Git"],
+  "services": [
+    { "title": "Front-end", "desc": "Interfaces réactives avec HTML, CSS, JavaScript, React et Next.js. Mise en page précise, animations soignées.", "icon": "fa-laptop-code" },
+    { "title": "Back-end", "desc": "API REST avec Spring Boot, Node.js et PHP. Logique serveur fiable, authentification, déploiement.", "icon": "fa-server" },
+    { "title": "Bases de données", "desc": "Modélisation relationnelle et requêtes SQL sur MySQL, PostgreSQL et libSQL.", "icon": "fa-database" },
+    { "title": "Mobile & outils", "desc": "Applications Android (Kotlin, Capacitor), Git, Docker, Postman, UML. Du code propre et versionné.", "icon": "fa-mobile-screen" }
+  ],
+  "education": [
+    { "period": "2023 — 2026", "title": "Licence MIAGE — Diplômé", "school": "Université Polytechnique de Bingerville", "highlight": true },
+    { "period": "2022 — 2023", "title": "Baccalauréat", "school": "Collège Catholique Roger Duquense", "highlight": false },
+    { "period": "2018 — 2019", "title": "BEPC", "school": "Collège Catholique Roger Duquense", "highlight": false },
+    { "period": "2014 — 2015", "title": "CEPE", "school": "École Méthodiste de Gagnoa", "highlight": false }
+  ],
+  "skills": [
+    { "group": "Développement", "items": ["HTML / CSS", "JavaScript", "TypeScript", "React", "Next.js", "PHP", "Spring Boot", "Node.js", "Python", "Kotlin"] },
+    { "group": "Bases de données", "items": ["SQL", "MySQL", "PostgreSQL", "IndexedDB"] },
+    { "group": "Outils", "items": ["Git & GitHub", "Docker", "VSCode", "IntelliJ", "Postman", "UML", "Canva"] },
+    { "group": "Bureautique & langues", "items": ["Word", "PowerPoint", "Français (courant)"] }
+  ],
+  "certifications": [
+    { "title": "Licence MIAGE", "issuer": "Université Polytechnique de Bingerville", "year": "2026", "url": "" }
+  ],
+  "projects": [
+    {
+      "title": "Aurora",
+      "kind": "Lecteur de musique génératif · PWA",
+      "year": "2026",
+      "desc": "Lecteur de musique offline-first : fichiers locaux, recherche en ligne, fonds WebGL qui réagissent au son et paroles synchronisées. Disponible sur le web, Android et Windows.",
+      "tags": ["Next.js", "React", "Three.js", "GSAP", "Capacitor", "Electron"],
+      "image": "assets/img/projects/aurora.webp",
+      "live": "https://aurora-theta-rust.vercel.app",
+      "code": "https://github.com/Ehui-Junior-Christ/aurora",
+      "featured": true
+    },
+    {
+      "title": "SimpleTaff",
+      "kind": "Projet de soutenance · Licence MIAGE",
+      "year": "2026",
+      "desc": "Plateforme de gestion du personnel déployé sur le terrain : dossiers des agents, affectations, pointages, requêtes et génération de contrats, avec des espaces dédiés à la direction, aux coordonnateurs et aux clients.",
+      "tags": ["Spring Boot", "Java", "JavaScript", "SQL", "Docker"],
+      "image": "",
+      "live": "",
+      "code": "https://github.com/Ehui-Junior-Christ/SimpleTaff",
+      "featured": true
+    },
+    {
+      "title": "FestiConnect",
+      "kind": "Plateforme SaaS événementielle",
+      "year": "2026",
+      "desc": "Billetterie et boutique pour les événements en Côte d'Ivoire : recherche, panier, paiement, espaces client, organisateur et administrateur.",
+      "tags": ["Node.js", "JavaScript", "libSQL", "HTML/CSS"],
+      "image": "",
+      "live": "",
+      "code": "https://github.com/Ehui-Junior-Christ/FestiConnect",
+      "featured": true
+    },
+    {
+      "title": "Prisme",
+      "kind": "Réseau social · Full-stack",
+      "year": "2026",
+      "desc": "Plateforme sociale complète : authentification, profils, publications et commentaires. API REST Spring Boot et déploiement sur Railway.",
+      "tags": ["React", "Spring Boot", "SQL", "REST API"],
+      "image": "",
+      "live": "",
+      "code": "https://github.com/Ehui-Junior-Christ/PRODIGY_FS_05",
+      "featured": false
+    },
+    {
+      "title": "PRODIGY Chat",
+      "kind": "Messagerie web · Full-stack",
+      "year": "2026",
+      "desc": "Messagerie web développée pendant le programme Prodigy : interface interactive, back-end Spring Boot et déploiement continu.",
+      "tags": ["React", "Spring Boot", "SQL"],
+      "image": "",
+      "live": "",
+      "code": "https://github.com/Ehui-Junior-Christ/PRODIGY_FS_04",
+      "featured": false
+    },
+    {
+      "title": "College Alert",
+      "kind": "Application Android",
+      "year": "2026",
+      "desc": "Application mobile d'alertes pour les étudiants d'un établissement, réalisée pendant le stage CodeAlpha.",
+      "tags": ["Kotlin", "Android"],
+      "image": "",
+      "live": "",
+      "code": "https://github.com/Ehui-Junior-Christ/CodeAlpha_TASK-1-College-Alert-Application",
+      "featured": false
+    },
+    {
+      "title": "Medibook",
+      "kind": "Carnet médical en ligne",
+      "year": "2025",
+      "desc": "Historique, prescriptions et consultations au même endroit, avec un accès sécurisé.",
+      "tags": ["JavaScript", "Spring Boot", "SQL"],
+      "image": "",
+      "live": "",
+      "code": "https://github.com/Ehui-Junior-Christ/Medibook_projects",
+      "featured": false
+    },
+    {
+      "title": "Food-Command",
+      "kind": "Site de livraison",
+      "year": "2025",
+      "desc": "Commande et livraison de repas en ligne, avec un parcours simple entre clients et restaurateurs.",
+      "tags": ["HTML/CSS", "JavaScript", "SQL"],
+      "image": "",
+      "live": "",
+      "code": "https://github.com/Ehui-Junior-Christ/Food-Command",
+      "featured": false
+    }
+  ],
+  "experience": [
+    { "period": "2026", "title": "Stage développeur Android", "org": "CodeAlpha", "desc": "Développement d'une application Kotlin d'alertes pour étudiants." },
+    { "period": "2026", "title": "Stage développeur full-stack", "org": "Prodigy InfoTech", "desc": "Cinq projets full-stack livrés, dont Prisme et PRODIGY Chat." },
+    { "period": "2025", "title": "Bénévolat en entreprise", "org": "Expérience professionnelle", "desc": "Immersion en équipe et participation à des projets concrets." }
+  ]
+}
