@@ -63,11 +63,11 @@ gh secret set FTP_PASSWORD --repo Ehui-Junior-Christ/mon_portfolio
 
 ### HTTPS sur InfinityFree
 
-1. Panneau InfinityFree → *SSL/TLS* → demander le certificat gratuit pour `ehui-christ-dev.gt.tc`, l'installer.
-2. Vérifier que `https://ehui-christ-dev.gt.tc` s'ouvre sans alerte.
-3. Dans `.htaccess`, décommenter le bloc « Redirection HTTPS », puis la ligne `upgrade-insecure-requests`, puis HSTS avec `max-age=300`.
-4. Après quelques jours sans problème, passer HSTS à `max-age=31536000`.
-5. Penser à renouveler le certificat (les certificats gratuits expirent vite) : un certificat expiré + HSTS = site inaccessible.
+Le sous-domaine gratuit `ehui-christ-dev.gt.tc` reçoit automatiquement un certificat (ZeroSSL, `*.gt.tc`) géré et renouvelé par InfinityFree : aucune démarche n'est nécessaire (le panneau refuse d'ailleurs les certificats personnalisés pour ces sous-domaines).
+
+Actif dans `.htaccess` depuis le 2026-09-28 : redirection `http://` → `https://`, `upgrade-insecure-requests` et HSTS à `max-age=300`.
+
+Après quelques jours sans problème, passer HSTS à `max-age=31536000` (ligne déjà prête, commentée). Ne jamais ajouter `includeSubDomains` ni `preload` : le domaine parent `gt.tc` n'appartient pas au propriétaire.
 
 ### Compte GitHub
 
