@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <meta name="referrer" content="no-referrer">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https:; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <!-- CSP : même politique (plus frame-ancestors) envoyée en en-tête par admin/.htaccess sur InfinityFree -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https:; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/; media-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
     <title>Administration · Portfolio</title>
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
@@ -45,7 +46,7 @@
             <div class="row wrap login-links">
                 <button type="button" class="link" data-open="dlg-help"><i class="fa-solid fa-circle-question"></i> Comment obtenir un token ?</button>
                 <button type="button" class="link" data-open="dlg-settings"><i class="fa-solid fa-gear"></i> Paramètres du dépôt</button>
-                <a class="link" href="../" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Voir le site</a>
+                <a class="link" href="../" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Voir le site</a>
             </div>
         </form>
     </div>
@@ -68,7 +69,7 @@
             </div>
         </div>
         <nav class="top-actions" aria-label="Actions">
-            <a class="btn ghost" id="btn-site" href="../" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i><span>Voir le site</span></a>
+            <a class="btn ghost" id="btn-site" href="../" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i><span>Voir le site</span></a>
             <button class="btn ghost" id="btn-import" type="button"><i class="fa-solid fa-file-import"></i><span>Importer</span></button>
             <button class="btn ghost" id="btn-export" type="button"><i class="fa-solid fa-file-export"></i><span>Exporter le JSON</span></button>
             <button class="btn ghost" type="button" data-open="dlg-settings"><i class="fa-solid fa-gear"></i><span>Paramètres</span></button>
@@ -141,7 +142,7 @@
 
             <h3>Créer votre token (une seule fois)</h3>
             <ol>
-                <li>Connectez-vous à GitHub, puis ouvrez directement <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">la page de création de token</a>.<br><span class="muted small">Chemin manuel : photo de profil → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token.</span></li>
+                <li>Connectez-vous à GitHub, puis ouvrez directement <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">la page de création de token</a>.<br><span class="muted small">Chemin manuel : photo de profil → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token.</span></li>
                 <li><strong>Token name</strong> : par exemple « Admin portfolio ».</li>
                 <li><strong>Expiration</strong> : choisissez une durée (90 jours par exemple). À l'expiration, il suffit d'en créer un nouveau.</li>
                 <li><strong>Repository access</strong> : <em>Only select repositories</em>, puis sélectionnez <code>mon_portfolio</code>.</li>

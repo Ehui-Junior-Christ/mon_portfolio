@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page autonome (styles et script intégrés) : elle peut être servie à n'importe quelle profondeur d'URL,
+         sur GitHub Pages (/mon_portfolio/...) comme sur InfinityFree (ErrorDocument). Les hash sha256 de la CSP
+         correspondent EXACTEMENT au contenu des balises style et script intégrées (chacune sur une seule ligne) : à recalculer après modification. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-gjY+aLfhf4bA8NbvqLXFjM9i4Lbc9rgwSRTVitfY19Y='; script-src 'sha256-dSvqMunLC6Vbjy41ZrCcqGLxRQ2Fx95EiiM3WPRBQrc='; img-src data:; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#141412">
+    <title>Page introuvable — Ehui Junior Christ</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23141412'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23c8502a'/%3E%3C/svg%3E">
+    <style>:root { --ink: #141412; --paper: #f3efe6; --accent: #c8502a; --muted: rgba(243, 239, 230, .64); --line: rgba(243, 239, 230, .16); } * { box-sizing: border-box; } html, body { height: 100%; } body { margin: 0; background: var(--ink); color: var(--paper); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; } .mono { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); } header, footer { display: flex; justify-content: space-between; gap: 1rem; padding: 1.25rem clamp(16px, 4vw, 64px); border-bottom: 1px solid var(--line); } footer { border-bottom: 0; border-top: 1px solid var(--line); } main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 3rem clamp(16px, 4vw, 64px); } .code { color: var(--paper); max-width: none; font-size: clamp(6rem, 26vw, 20rem); font-weight: 900; line-height: .85; letter-spacing: -.04em; margin: 0; } .code span { color: var(--accent); } h1 { font-size: clamp(1.4rem, 3.2vw, 2.4rem); font-weight: 700; margin: 1.5rem 0 .5rem; } p { max-width: 38rem; line-height: 1.6; color: var(--muted); margin: 0 0 2rem; } .btn { align-self: flex-start; display: inline-flex; align-items: center; gap: .6rem; padding: .95rem 1.4rem; border-radius: 999px; background: var(--paper); color: var(--ink); font-weight: 700; text-decoration: none; transition: background .25s, color .25s; } .btn:hover, .btn:focus-visible { background: var(--accent); color: var(--paper); } .btn:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }</style>
+</head>
+<body>
+    <header class="mono"><span>Ehui Junior Christ</span><span>Erreur 404</span></header>
+    <main>
+        <p class="code" aria-hidden="true">404<span>.</span></p>
+        <h1>Cette page n'existe pas (ou plus).</h1>
+        <p>Le lien est peut-être incorrect, ou la page a été déplacée. Le portfolio vous attend sur la page d'accueil.</p>
+        <a class="btn" id="home" href="/">Retour à l'accueil <span aria-hidden="true">&rarr;</span></a>
+    </main>
+    <footer class="mono"><span>Développeur web full-stack</span><span>Abidjan</span></footer>
+    <script>(function(){var a=document.getElementById('home');if(a&&/\.github\.io$/i.test(location.hostname)){a.href='/mon_portfolio/';}})();</script>
+</body>
+</html>

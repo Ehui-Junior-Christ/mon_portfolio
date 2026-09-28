@@ -1,10 +1,14 @@
 /* ============================================
-   CHASSEUR DE TECH — mini-jeu Snake
+   CHASSEUR DE TECH — mini-jeu Snake (cartouche 01 de l'Arcade)
    Canvas net (devicePixelRatio), boucle rAF à pas fixe,
    file de directions, pause, record local, swipe tactile.
+   Clavier, visibilité et succès passent par js/games/arcade.js.
    ============================================ */
 (function () {
     'use strict';
+
+    const Arcade = window.Arcade;
+    if (!Arcade) return;
 
     // ============================================
     // ÉLÉMENTS
@@ -15,6 +19,7 @@
     if (!ctx) return;
 
     const scoreEl  = document.getElementById('score');
+    const statusEl = document.getElementById('snakeStatus');
     const bestEl   = document.getElementById('bestScore');
     const startBtn = document.getElementById('startBtn');
     const resetBtn = document.getElementById('resetBtn');
@@ -121,7 +126,6 @@
     let best = loadBest();
     let effects = [];             // particules et "+1"
     let accumulator = 0, lastTime = 0, rafId = 0;
-    let inView = false;
 
     // ============================================
     // CANVAS NET (devicePixelRatio)
@@ -190,6 +194,8 @@
         if (eating) {
             score++;
             updateScore();
+            if (score >= 10) Arcade.unlock('serpent-affame');
+            if (score >= 25) Arcade.unlock('anaconda');
             burst(food.x, food.y);
             spawnFood();
             if (!food) { endGame(); return; }   // plateau rempli
@@ -218,6 +224,8 @@
     // ============================================
     function setState(next) {
         state = next;
+        if (scoreEl) scoreEl.setAttribute('aria-live', state === 'running' ? 'off' : 'polite');
+        if (statusEl) statusEl.textContent = state === 'over' ? `Partie terminée. Score ${score}, record ${best}.` : (state === 'paused' ? 'Jeu en pause.' : '');
         if (startBtn) {
             startBtn.textContent = LABELS[state];
             startBtn.setAttribute('aria-pressed', state === 'paused' ? 'true' : 'false');
@@ -231,6 +239,8 @@
 
     function startGame() {
         if (state === 'over') initGame();
+        Arcade.markPlayed('snake');
+        Arcade.focusStage(canvas);
         accumulator = 0;
         lastTime = 0;
         setState('running');
@@ -515,25 +525,19 @@
         return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable;
     }
 
-    document.addEventListener('keydown', e => {
-        if (e.ctrlKey || e.metaKey || e.altKey || isTyping(e.target)) return;
-
-        // Espace : pause / reprise (seulement si une partie existe et que le jeu est visible)
-        if (e.key === ' ' || e.code === 'Space') {
-            if (!inView || (state !== 'running' && state !== 'paused')) return;
-            if (e.target && e.target.tagName === 'BUTTON') return;   // le clic natif s'en charge
-            e.preventDefault();
+    /** Relayé par l'Arcade uniquement quand le jeu est actif et visible. */
+    function onKey(e, down) {
+        if (!down) return false;
+        if (e.key === ' ' || e.code === 'Space' || e.key === 'p' || e.key === 'P') {
+            if (state !== 'running' && state !== 'paused') return false;
             toggle();
-            return;
+            return true;
         }
-
         const name = KEYMAP[e.key.toLowerCase()];
-        if (!name) return;
-        if (state === 'running' && inView) {
-            e.preventDefault();
-            queueDir(name);
-        }
-    });
+        if (!name || state !== 'running') return false;
+        queueDir(name);
+        return true;
+    }
 
     // ============================================
     // BOUTONS
@@ -588,36 +592,26 @@
     canvas.addEventListener('touchcancel', () => { touch = null; });
 
     // ============================================
-    // PAUSE AUTOMATIQUE (onglet masqué / hors écran)
-    // ============================================
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) pauseGame();
-    });
-
-    if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                inView = entry.isIntersecting && entry.intersectionRatio >= 0.35;
-                if (!inView) pauseGame();
-            });
-        }, { threshold: [0, 0.35, 0.6, 1] });
-        io.observe(canvas);
-    } else {
-        inView = true;
-    }
-
-    // ============================================
     // INIT
     // ============================================
     readTokens();
     initGame();
-    setState('idle');
+    state = 'idle';
+    if (startBtn) startBtn.textContent = LABELS.idle;
 
     if ('ResizeObserver' in window) {
-        new ResizeObserver(resizeCanvas).observe(canvas);
+        new ResizeObserver(() => { if (canvas.offsetParent) resizeCanvas(); }).observe(canvas);
     }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    window.addEventListener('resize', () => { if (canvas.offsetParent) resizeCanvas(); });
+
+    Arcade.register({
+        id: 'snake',
+        stage: canvas.closest('.game-stage') || canvas,
+        activate() { resizeCanvas(); },
+        deactivate() { pauseGame(); if (rafId) { cancelAnimationFrame(rafId); rafId = 0; } },
+        pause: pauseGame,
+        onKey
+    });
 
     // Redessine quand les polices sont prêtes (le canvas ne se met pas à jour seul)
     if (document.fonts && document.fonts.load) {

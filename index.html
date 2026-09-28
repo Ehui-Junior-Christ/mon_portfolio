@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Sécurité : CSP aussi en meta pour GitHub Pages (pas d'en-têtes HTTP). Même politique dans .htaccess.
+         Le hash sha256 correspond EXACTEMENT au script inline « document.documentElement.classList.add('js'); » :
+         toute modification de ce script impose de recalculer le hash (voir SECURITY.md). -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/; style-src-elem 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/; style-src-attr 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/; connect-src 'self'; media-src 'self'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Ehui Junior Christ — Développeur Web Full-Stack</title>
     <meta name="description" content="Ehui Junior Christ Emmanuel, développeur web full-stack basé à Abidjan. Diplômé d'une Licence MIAGE à l'Université Polytechnique de Bingerville. React, Next.js, Spring Boot, SQL.">
     <meta name="theme-color" content="#141412">
@@ -61,7 +66,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Gochi+Hand&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/motion.css">
@@ -103,7 +108,7 @@
                 <li><a href="#apropos"><span class="nav-num">01</span><span data-roll>À propos</span></a></li>
                 <li><a href="#parcours"><span class="nav-num">02</span><span data-roll>Parcours</span></a></li>
                 <li><a href="#projets"><span class="nav-num">03</span><span data-roll>Projets</span></a></li>
-                <li><a href="#jeu"><span class="nav-num">04</span><span data-roll>Jeu</span></a></li>
+                <li><a href="#jeu"><span class="nav-num">04</span><span data-roll>Arcade</span></a></li>
                 <li><a href="#contact"><span class="nav-num">05</span><span data-roll>Contact</span></a></li>
             </ul>
 
@@ -122,15 +127,15 @@
             <li><a href="#apropos"><span class="nav-num">01</span>À propos</a></li>
             <li><a href="#parcours"><span class="nav-num">02</span>Parcours</a></li>
             <li><a href="#projets"><span class="nav-num">03</span>Projets</a></li>
-            <li><a href="#jeu"><span class="nav-num">04</span>Jeu</a></li>
+            <li><a href="#jeu"><span class="nav-num">04</span>Arcade</a></li>
             <li><a href="#contact"><span class="nav-num">05</span>Contact</a></li>
         </ul>
         <div class="mobile-menu-footer">
             <a href="mailto:juniorehui15@gmail.com" data-c="email-link">juniorehui15@gmail.com</a>
             <div class="social-row" data-c="socials">
-                <a href="https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
-                <a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
-                <a href="https://wa.me/2250556388833" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                <a href="https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                <a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+                <a href="https://wa.me/2250556388833" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
             </div>
         </div>
     </div>
@@ -184,10 +189,10 @@
                     <div><dt class="mono">Basé à</dt><dd data-c="location">Yopougon, Abidjan</dd></div>
                     <div class="hero-facts-social"><dt class="visually-hidden">Réseaux</dt><dd>
                         <div class="social-row" data-c="socials">
-                            <a href="https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
-                            <a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+                            <a href="https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                            <a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
                             <a href="mailto:juniorehui15@gmail.com" aria-label="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
-                            <a href="https://wa.me/2250556388833" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                            <a href="https://wa.me/2250556388833" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
                         </div>
                     </dd></div>
                 </dl>
@@ -270,38 +275,162 @@
             <header class="section-head">
                 <span class="section-num mono">03</span>
                 <h2 class="section-title" data-anim="title">Projets choisis</h2>
-                <p class="section-sub" data-c="projects-sub">Mes projets sont publiés sur <a class="link-arrow" href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener">GitHub</a>.</p>
+                <p class="section-sub" data-c="projects-sub">Mes projets sont publiés sur <a class="link-arrow" href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
             </header>
             <div data-c="projects"></div>
         </section>
 
-        <!-- ==================== MINI-JEU ==================== -->
-        <section class="game t-light-2" id="jeu">
+        <!-- ==================== ARCADE (3 mini-jeux, js/games/) ==================== -->
+        <section class="game t-light-2" id="jeu" aria-labelledby="jeuTitle">
             <header class="section-head">
                 <span class="section-num mono">04</span>
-                <h2 class="section-title" data-anim="title">Chasseur de Tech</h2>
-                <p class="section-sub">Une pause ? Aide le serpent à attraper les technologies. Flèches ou ZQSD au clavier, glisser ou D-pad sur mobile. Espace pour mettre en pause.</p>
+                <h2 class="section-title" id="jeuTitle" data-anim="title">Arcade</h2>
+                <p class="section-sub">Trois cartouches pour faire une pause, et découvrir mon parcours autrement. Les succès se débloquent au fil des parties.</p>
             </header>
 
-            <div class="game-wrapper" data-anim="reveal">
-                <div class="game-hud">
-                    <span class="game-score mono">Score <strong id="score" aria-live="polite">0</strong></span>
-                    <span class="game-best mono">Record <strong id="bestScore">0</strong></span>
-                    <div class="game-buttons">
-                        <button class="game-btn" id="startBtn" type="button">Démarrer</button>
-                        <button class="game-btn game-btn--ghost" id="resetBtn" type="button">Réinitialiser</button>
+            <div class="arcade" id="arcade" data-anim="reveal">
+                <div class="arcade-top">
+                    <div class="arcade-tabs" role="tablist" aria-label="Choisir un jeu">
+                        <button class="arcade-tab" type="button" role="tab" id="tab-snake" aria-selected="true" aria-controls="panel-snake" data-game="snake">
+                            <span class="arcade-tab-num mono">01</span>
+                            <span class="arcade-tab-title">Chasseur de Tech</span>
+                            <span class="arcade-tab-kind mono">Snake · arcade</span>
+                        </button>
+                        <button class="arcade-tab" type="button" role="tab" id="tab-parcours" aria-selected="false" aria-controls="panel-parcours" data-game="parcours" tabindex="-1">
+                            <span class="arcade-tab-num mono">02</span>
+                            <span class="arcade-tab-title">Le Parcours</span>
+                            <span class="arcade-tab-kind mono">Plateforme · récit</span>
+                        </button>
+                        <button class="arcade-tab" type="button" role="tab" id="tab-recrutement" aria-selected="false" aria-controls="panel-recrutement" data-game="recrutement" tabindex="-1">
+                            <span class="arcade-tab-num mono">03</span>
+                            <span class="arcade-tab-title">Mission&nbsp;: Recrutement</span>
+                            <span class="arcade-tab-kind mono">Exploration · énigmes</span>
+                        </button>
+                    </div>
+                    <button class="arcade-trophy-btn" type="button" id="trophyBtn" aria-expanded="false" aria-controls="trophyPanel">
+                        <span class="mono">Succès</span> <strong data-trophy-count>0/14</strong>
+                    </button>
+                </div>
+
+                <div class="arcade-trophies" id="trophyPanel" hidden>
+                    <div class="arcade-trophies-head">
+                        <p class="mono">Succès débloqués <strong data-trophy-count>0/14</strong></p>
+                        <button class="game-btn game-btn--ghost game-btn--small" type="button" id="trophyReset">Effacer la progression</button>
+                    </div>
+                    <ol class="arcade-trophy-list" id="trophyList"></ol>
+                </div>
+
+                <!-- 01 — Snake -->
+                <div class="arcade-panel" role="tabpanel" id="panel-snake" aria-labelledby="tab-snake" data-game="snake">
+                    <div class="arcade-screen">
+                        <div class="game-stage game-stage--square" data-fig="fig. 04a — snake.canvas">
+                            <canvas id="snake-canvas" width="400" height="400" tabindex="0" role="img" aria-label="Jeu du serpent : dirige le serpent pour attraper les technologies sans toucher les bords" aria-describedby="snakeDesc"></canvas>
+                        </div>
+                        <div class="mobile-dpad" aria-label="Croix directionnelle" role="group">
+                            <button class="dpad-btn dpad-up" id="upBtn" type="button" aria-label="Haut"><svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                            <button class="dpad-btn dpad-left" id="leftBtn" type="button" aria-label="Gauche"><svg class="chev chev--left" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                            <span class="dpad-btn dpad-center" aria-hidden="true"></span>
+                            <button class="dpad-btn dpad-right" id="rightBtn" type="button" aria-label="Droite"><svg class="chev chev--right" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                            <button class="dpad-btn dpad-down" id="downBtn" type="button" aria-label="Bas"><svg class="chev chev--down" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                        </div>
+                    </div>
+                    <div class="arcade-side">
+                        <h3 class="arcade-side-title">Chasseur de Tech</h3>
+                        <p class="arcade-desc" id="snakeDesc">Le serpent grandit à chaque technologie attrapée, et accélère. Évite les bords et ta propre queue.</p>
+                        <div class="game-hud">
+                            <span class="game-score mono">Score <strong id="score" aria-live="polite">0</strong></span>
+                            <span class="game-best mono">Record <strong id="bestScore">0</strong></span>
+                        </div>
+                        <div class="game-buttons">
+                            <button class="game-btn" id="startBtn" type="button">Démarrer</button>
+                            <button class="game-btn game-btn--ghost" id="resetBtn" type="button">Réinitialiser</button>
+                        </div>
+                        <p class="arcade-keys mono">Flèches ou ZQSD : diriger · Espace : pause · Mobile : glisser ou croix</p>
+                        <p class="visually-hidden" id="snakeStatus" aria-live="polite"></p>
                     </div>
                 </div>
-                <div class="game-stage">
-                    <canvas id="snake-canvas" width="400" height="400" role="img" aria-label="Jeu du serpent : dirige le serpent pour attraper les technologies sans toucher les bords"></canvas>
+
+                <!-- 02 — Le Parcours -->
+                <div class="arcade-panel" role="tabpanel" id="panel-parcours" aria-labelledby="tab-parcours" data-game="parcours" hidden>
+                    <div class="arcade-screen">
+                        <div class="game-stage game-stage--wide" data-fig="fig. 04b — parcours.canvas">
+                            <canvas id="parcours-canvas" width="640" height="270" tabindex="0" role="img" aria-label="Le Parcours : jeu de plateforme, le personnage court de Gagnoa à l'université puis au monde professionnel" aria-describedby="pcDesc"></canvas>
+                            <div class="game-card" id="pcCard" role="dialog" aria-labelledby="pcCardTitle" hidden>
+                                <p class="game-card-kicker mono" id="pcCardKicker"></p>
+                                <h4 class="game-card-title" id="pcCardTitle"></h4>
+                                <p class="game-card-sub mono" id="pcCardSub"></p>
+                                <p class="game-card-text" id="pcCardText"></p>
+                                <div class="game-card-actions" id="pcCardActions"></div>
+                            </div>
+                        </div>
+                        <div class="touch-row">
+                            <button class="touch-btn" id="pcJump" type="button" aria-label="Sauter (maintenir pour sauter plus haut)">Sauter</button>
+                        </div>
+                    </div>
+                    <div class="arcade-side">
+                        <h3 class="arcade-side-title">Le Parcours</h3>
+                        <p class="arcade-desc" id="pcDesc">Mon parcours en quatre étapes : Gagnoa, le collège, l'UPB, puis le monde pro. Saute par-dessus les bugs, les deadlines et les examens, ramasse les matières, les technos et les projets. Chaque étape franchie débloque une carte.</p>
+                        <dl class="arcade-hud">
+                            <div><dt class="mono">Étape</dt><dd id="pcStep">1/4 · Gagnoa</dd></div>
+                            <div><dt class="mono">Énergie</dt><dd class="pc-energy" id="pcEnergy"></dd></div>
+                            <div><dt class="mono">Objets</dt><dd id="pcItems">0/0</dd></div>
+                        </dl>
+                        <div class="game-buttons">
+                            <button class="game-btn" id="pcStart" type="button">Démarrer</button>
+                            <button class="game-btn game-btn--ghost" id="pcReset" type="button">Recommencer</button>
+                        </div>
+                        <p class="arcade-keys mono">Espace, ↑ ou Z : sauter (maintenir = plus haut) · ↓ ou S : retomber vite · P : pause · Mobile : toucher l'écran</p>
+                        <ol class="game-log" id="pcLog" aria-label="Cartes débloquées"></ol>
+                        <p class="visually-hidden" id="pcStatus" aria-live="polite"></p>
+                    </div>
                 </div>
-                <div class="mobile-dpad">
-                    <button class="dpad-btn dpad-up" id="upBtn" type="button" aria-label="Haut"><i class="fas fa-chevron-up"></i></button>
-                    <button class="dpad-btn dpad-left" id="leftBtn" type="button" aria-label="Gauche"><i class="fas fa-chevron-left"></i></button>
-                    <span class="dpad-btn dpad-center" aria-hidden="true"></span>
-                    <button class="dpad-btn dpad-right" id="rightBtn" type="button" aria-label="Droite"><i class="fas fa-chevron-right"></i></button>
-                    <button class="dpad-btn dpad-down" id="downBtn" type="button" aria-label="Bas"><i class="fas fa-chevron-down"></i></button>
+
+                <!-- 03 — Mission : Recrutement -->
+                <div class="arcade-panel" role="tabpanel" id="panel-recrutement" aria-labelledby="tab-recrutement" data-game="recrutement" hidden>
+                    <div class="arcade-screen">
+                        <div class="game-stage game-stage--plan" data-fig="fig. 04c — bureau.plan">
+                            <canvas id="recrutement-canvas" width="500" height="340" tabindex="0" role="img" aria-label="Mission Recrutement : plan du bureau vu de dessus, avec quatre salles à explorer" aria-describedby="rcDesc"></canvas>
+                            <div class="game-dialog" id="rcDialog" role="dialog" aria-labelledby="rcSpeaker" hidden>
+                                <p class="game-dialog-speaker mono" id="rcSpeaker"></p>
+                                <p class="game-dialog-text" id="rcText"></p>
+                                <div class="game-dialog-extra" id="rcExtra"></div>
+                                <div class="game-dialog-actions" id="rcActions"></div>
+                            </div>
+                        </div>
+                        <div class="touch-row touch-row--rc">
+                            <div class="mobile-dpad mobile-dpad--rc" role="group" aria-label="Croix directionnelle">
+                                <button class="dpad-btn dpad-up" type="button" data-rc-dir="up" aria-label="Haut"><svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                                <button class="dpad-btn dpad-left" type="button" data-rc-dir="left" aria-label="Gauche"><svg class="chev chev--left" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                                <span class="dpad-btn dpad-center" aria-hidden="true"></span>
+                                <button class="dpad-btn dpad-right" type="button" data-rc-dir="right" aria-label="Droite"><svg class="chev chev--right" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                                <button class="dpad-btn dpad-down" type="button" data-rc-dir="down" aria-label="Bas"><svg class="chev chev--down" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                            </div>
+                            <button class="touch-btn" id="rcAct" type="button" aria-label="Examiner ou parler">Examiner</button>
+                        </div>
+                    </div>
+                    <div class="arcade-side">
+                        <h3 class="arcade-side-title">Mission&nbsp;: Recrutement</h3>
+                        <p class="arcade-desc" id="rcDesc">Vous êtes recruteur et visitez mon bureau. Examinez les objets, parlez aux occupants, résolvez trois petites énigmes et réunissez les quatre badges pour ouvrir mon dossier de candidature.</p>
+                        <dl class="arcade-hud">
+                            <div><dt class="mono">Salle</dt><dd id="rcRoom">Accueil</dd></div>
+                            <div><dt class="mono">Examinés</dt><dd id="rcSeen">0/0</dd></div>
+                        </dl>
+                        <ul class="rc-badges" id="rcBadges" aria-label="Badges">
+                            <li data-badge="formation"><span class="rc-badge-mark" aria-hidden="true"></span>Formation <span class="rc-badge-state mono">à trouver</span></li>
+                            <li data-badge="projets"><span class="rc-badge-mark" aria-hidden="true"></span>Projets <span class="rc-badge-state mono">à trouver</span></li>
+                            <li data-badge="competences"><span class="rc-badge-mark" aria-hidden="true"></span>Compétences <span class="rc-badge-state mono">à trouver</span></li>
+                            <li data-badge="trophees"><span class="rc-badge-mark" aria-hidden="true"></span>Trophées <span class="rc-badge-state mono">à trouver</span></li>
+                        </ul>
+                        <div class="game-buttons">
+                            <button class="game-btn" id="rcStart" type="button">Démarrer</button>
+                            <button class="game-btn game-btn--ghost" id="rcReset" type="button">Recommencer</button>
+                        </div>
+                        <p class="arcade-keys mono">Flèches ou ZQSD : marcher · E, Entrée ou Espace : examiner · Échap : fermer · Clic ou toucher : aller à</p>
+                        <p class="visually-hidden" id="rcStatus" aria-live="polite"></p>
+                    </div>
                 </div>
+
+                <div class="arcade-toast" id="arcadeToast" role="status" aria-live="polite" aria-atomic="true"></div>
             </div>
         </section>
 
@@ -336,9 +465,9 @@
                 <div class="footer-col">
                     <p class="footer-label mono">Réseaux</p>
                     <ul class="footer-links" data-c="social-links">
-                        <li><a href="https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/" target="_blank" rel="noopener"><span data-roll>LinkedIn</span></a></li>
-                        <li><a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener"><span data-roll>GitHub</span></a></li>
-                        <li><a href="https://wa.me/2250556388833" target="_blank" rel="noopener"><span data-roll>WhatsApp</span></a></li>
+                        <li><a href="https://www.linkedin.com/in/junior-christ-emmanuel-ehui-4362572b2/" target="_blank" rel="noopener noreferrer"><span data-roll>LinkedIn</span></a></li>
+                        <li><a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener noreferrer"><span data-roll>GitHub</span></a></li>
+                        <li><a href="https://wa.me/2250556388833" target="_blank" rel="noopener noreferrer"><span data-roll>WhatsApp</span></a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -358,11 +487,14 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js" defer></script>
+    <script src="js/vendor/gsap.min.js" defer></script>
+    <script src="js/vendor/ScrollTrigger.min.js" defer></script>
+    <script src="js/vendor/lenis.min.js" defer></script>
     <script src="js/content.js" defer></script>
     <script src="js/main.js" defer></script>
-    <script src="js/game.js" defer></script>
+    <script src="js/games/arcade.js" defer></script>
+    <script src="js/games/snake.js" defer></script>
+    <script src="js/games/parcours.js" defer></script>
+    <script src="js/games/recrutement.js" defer></script>
 </body>
 </html>

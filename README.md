@@ -10,6 +10,8 @@ Mon portfolio personnel. Je suis développeur web full-stack, diplômé d'une Li
 - [GSAP](https://gsap.com/) et ScrollTrigger pour les animations au défilement
 - [Lenis](https://lenis.darkroom.engineering/) pour le défilement fluide
 
+Ces bibliothèques sont hébergées avec le site (`js/vendor/`) : aucun script externe n'est chargé.
+
 Aucune étape de build : le site est entièrement statique.
 
 ## Structure
@@ -20,7 +22,7 @@ Aucune étape de build : le site est entièrement statique.
 ├── data/content.json   tout le contenu du site (profil, parcours, projets...)
 ├── admin/              portail d'administration
 ├── css/                feuilles de style (mise en page, animations, jeu)
-├── js/                 scripts (rendu du contenu, animations, jeu du serpent)
+├── js/                 scripts (rendu du contenu, animations, jeux, bibliothèques)
 └── assets/             images, favicon, image de partage, uploads
 ```
 

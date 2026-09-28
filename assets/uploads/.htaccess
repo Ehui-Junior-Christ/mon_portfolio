@@ -1,0 +1,21 @@
+# ==========================================================================
+#  Fichiers envoyés depuis le portail admin (InfinityFree / Apache)
+#  Seuls les formats attendus (images, PDF) sont servis ; tout le reste
+#  (HTML, SVG, JS, PHP...) est refusé, même s'il arrivait dans le dépôt.
+# ==========================================================================
+<FilesMatch "^(?!.*\.(?i:webp|avif|jpe?g|png|gif|pdf)$)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    # Image ouverte directement : aucun script ni chargement possible
+    <FilesMatch "\.(?i:webp|avif|jpe?g|png|gif)$">
+        Header always set Content-Security-Policy "default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; sandbox"
+    </FilesMatch>
+</IfModule>

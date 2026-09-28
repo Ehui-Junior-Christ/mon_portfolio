@@ -1,0 +1,6 @@
+# Politique de divulgation : voir SECURITY.md du dépôt
+Contact: mailto:juniorehui15@gmail.com
+Expires: 2027-09-28T00:00:00Z
+Preferred-Languages: fr, en
+Canonical: https://ehui-christ-dev.gt.tc/.well-known/security.txt
+Policy: https://github.com/Ehui-Junior-Christ/mon_portfolio/blob/main/SECURITY.md

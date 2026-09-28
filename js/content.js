@@ -50,10 +50,12 @@
             return allowed.includes(scheme) ? s : '';
         }
         if (s.startsWith('/')) s = s.replace(/^\/+/, '');
+        // "/\\hote" ou "/\/hote" : les navigateurs lisent "\" comme "/" -> lien vers un autre domaine
+        if (s.startsWith('\\') || s.startsWith('/')) return '';
         return s;
     }
     const isExternal = (url) => /^https?:/i.test(url);
-    const linkAttrs = (url) => `href="${esc(url)}"${isExternal(url) ? ' target="_blank" rel="noopener"' : ''}`;
+    const linkAttrs = (url) => `href="${esc(url)}"${isExternal(url) ? ' target="_blank" rel="noopener noreferrer"' : ''}`;
 
     /** Hash stable (FNV-1a) et PRNG (mulberry32) pour les couvertures. */
     function hash(text) {
@@ -554,7 +556,7 @@
         $$('[data-section="content"]').forEach((s) => { s.hidden = true; });
         const note = $('#contentNote');
         if (note) {
-            note.innerHTML = 'Le contenu détaillé n\'a pas pu être chargé. Projets et code : <a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener">github.com/Ehui-Junior-Christ</a>';
+            note.innerHTML = 'Le contenu détaillé n\'a pas pu être chargé. Projets et code : <a href="https://github.com/Ehui-Junior-Christ" target="_blank" rel="noopener noreferrer">github.com/Ehui-Junior-Christ</a>';
             note.hidden = false;
         }
         const projects = $('[data-c="projects"]');

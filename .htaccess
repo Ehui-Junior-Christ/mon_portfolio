@@ -1,0 +1,139 @@
+# ==========================================================================
+#  Portfolio — Ehui Junior Christ : durcissement Apache (InfinityFree)
+#  --------------------------------------------------------------------------
+#  - Ignoré par GitHub Pages (qui ne permet aucun en-tête HTTP : la CSP y est
+#    fournie par les balises <meta> des pages HTML).
+#  - Tout ce qui dépend d'un module est entouré de <IfModule> : si un module
+#    manque, la directive est ignorée au lieu de provoquer une erreur 500.
+#  - Voir SECURITY.md (section « Pour le propriétaire ») avant d'activer
+#    HTTPS forcé / HSTS.
+# ==========================================================================
+
+# ---------- Listing des dossiers désactivé ----------
+Options -Indexes
+
+# ---------- Pages d'erreur ----------
+# 403 affiche aussi la page 404 : on ne révèle pas l'existence d'un fichier protégé.
+ErrorDocument 404 /404.html
+ErrorDocument 403 /404.html
+
+# ---------- Types MIME et encodage (indispensable avec nosniff) ----------
+AddDefaultCharset UTF-8
+<IfModule mod_mime.c>
+    AddType application/json .json
+    AddType image/webp .webp
+    AddType image/avif .avif
+    AddType image/svg+xml .svg
+    AddType text/plain .txt
+    AddCharset UTF-8 .html .css .js .json .txt .svg
+</IfModule>
+
+# ---------- Fichiers sensibles ou inutiles en ligne : accès refusé ----------
+# Fichiers cachés (.htaccess, .gitignore, .ftp-deploy-sync-state.json créé par
+# l'action de déploiement FTP...), docs, journaux, sauvegardes, scripts, config.
+<FilesMatch "(^\.|\.(md|markdown|log|bak|backup|old|orig|save|swp|swo|tmp|dist|sh|bash|ps1|bat|cmd|ya?ml|toml|ini|conf|cfg|env|lock|sql|sqlite|db|zip|tar|gz|tgz|rar|7z)$|~$)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Aucun script serveur dans ce site statique : s'il en apparaît un (fichier
+# envoyé par erreur, compte FTP compromis...), il n'est jamais exécuté.
+<FilesMatch "\.(php[0-9]?|phtml|phar|pht|cgi|pl|py|rb|asp|aspx|jsp|shtml)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Dossiers cachés (.git/, .github/, .vscode/...) : réponse 404.
+# Seule exception : /.well-known/ (security.txt, validation du certificat SSL).
+<IfModule mod_alias.c>
+    RedirectMatch 404 "/\.(?!well-known(/|$))"
+</IfModule>
+
+# ---------- Redirection HTTPS (DÉSACTIVÉE pour l'instant) ----------
+# À décommenter UNIQUEMENT quand le certificat SSL gratuit est installé dans
+# le panneau InfinityFree et que https://ehui-christ-dev.gt.tc s'ouvre sans
+# alerte. Sinon le site devient inaccessible.
+# InfinityFree termine le TLS en amont : on teste aussi X-Forwarded-Proto.
+#<IfModule mod_rewrite.c>
+#    RewriteEngine On
+#    RewriteCond %{HTTPS} off
+#    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+#    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#</IfModule>
+
+# ---------- En-têtes de sécurité ----------
+<IfModule mod_headers.c>
+    # Content-Security-Policy : même politique que la <meta> d'index.html, plus
+    # frame-ancestors (ignoré en <meta>). Les hash sha256 autorisent :
+    #   - le script inline d'index.html : document.documentElement.classList.add('js');
+    #   - le script et le style intégrés de 404.html (servie aussi comme ErrorDocument).
+    # Toute modification de ces blocs inline impose de recalculer les hash (SECURITY.md).
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw=' 'sha256-dSvqMunLC6Vbjy41ZrCcqGLxRQ2Fx95EiiM3WPRBQrc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/; style-src-elem 'self' 'sha256-gjY+aLfhf4bA8NbvqLXFjM9i4Lbc9rgwSRTVitfY19Y=' https://fonts.googleapis.com https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/; style-src-attr 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/; connect-src 'self'; media-src 'self'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+
+    # upgrade-insecure-requests : à activer AVEC HSTS (sinon, tant que le site est
+    # en http://, le navigateur demanderait les CSS/JS en https:// et tout casserait).
+    # Header always add Content-Security-Policy "upgrade-insecure-requests"
+
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+    Header always set Permissions-Policy "accelerometer=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), serial=(), hid=(), bluetooth=(), browsing-topics=()"
+    Header always unset X-Powered-By
+    Header unset X-Powered-By
+
+    # HSTS (DÉSACTIVÉ pour l'instant) : à décommenter seulement quand HTTPS
+    # fonctionne (certificat installé ET redirection HTTPS ci-dessus active).
+    # Commencer par une courte durée (300 s), vérifier, puis passer à 1 an.
+    # Pas de « preload » ni « includeSubDomains » : le domaine parent gt.tc
+    # n'est pas à vous.
+    # Header always set Strict-Transport-Security "max-age=300"
+    # Header always set Strict-Transport-Security "max-age=31536000"
+
+    # Contenu du site (modifié depuis l'admin) et HTML : toujours revalidés.
+    <FilesMatch "\.(html|json)$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+    # security.txt : texte brut
+    <FilesMatch "^security\.txt$">
+        Header set Cache-Control "max-age=86400"
+    </FilesMatch>
+</IfModule>
+
+# ---------- Cache navigateur ----------
+# CSS/JS ne sont pas versionnés dans leur nom : cache court pour que les mises
+# à jour arrivent vite. Images et polices : cache long.
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 hour"
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType application/json "access plus 0 seconds"
+    ExpiresByType text/css "access plus 1 hour"
+    ExpiresByType application/javascript "access plus 1 hour"
+    ExpiresByType text/javascript "access plus 1 hour"
+    ExpiresByType image/webp "access plus 30 days"
+    ExpiresByType image/avif "access plus 30 days"
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/gif "access plus 30 days"
+    ExpiresByType image/svg+xml "access plus 7 days"
+    ExpiresByType image/x-icon "access plus 30 days"
+    ExpiresByType application/pdf "access plus 1 day"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# ---------- Signature du serveur ----------
+# ServerSignature n'est autorisé en .htaccess que si l'hébergeur le permet
+# (AllowOverride All) ; sinon erreur 500. Laissé commenté par prudence : nos
+# pages d'erreur sont personnalisées, la signature n'apparaît donc pas.
+# ServerSignature Off

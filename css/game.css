@@ -1,28 +1,205 @@
-/* ============================================
-   CHASSEUR DE TECH — mini-jeu
-   ============================================ */
-.game-wrapper {
+/* ==========================================================================
+   ARCADE — section #jeu : sélecteur, 3 mini-jeux, succès
+   (Chasseur de Tech, Le Parcours, Mission : Recrutement — js/games/)
+   ========================================================================== */
+.arcade {
+    position: relative;
     width: 100%;
-    max-width: 480px;
+    max-width: 1240px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
+    gap: clamp(18px, 2.4vw, 28px);
 }
 
-/* ============================================
-   HUD : score, record, boutons
-   ============================================ */
+/* ------------------------------------------------------------------
+   Barre du haut : cartouches + compteur de succès
+   ------------------------------------------------------------------ */
+.arcade-top {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+}
+
+.arcade-tabs {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.arcade-tab {
+    appearance: none;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: "num title" "num kind";
+    align-items: baseline;
+    column-gap: 12px;
+    row-gap: 4px;
+    padding: 14px 16px;
+    text-align: left;
+    background: transparent;
+    color: var(--ink, #141412);
+    border: 1px solid var(--line-strong, rgba(20, 20, 18, .32));
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+.arcade-tab:hover { border-color: var(--ink, #141412); }
+.arcade-tab-num { grid-area: num; color: var(--accent, #c8502a); font-size: .72rem; }
+.arcade-tab-title {
+    grid-area: title;
+    font-family: var(--font-sans, "Archivo", sans-serif);
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: clamp(1.05rem, 1.7vw, 1.45rem);
+    line-height: 1;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+}
+.arcade-tab-kind { grid-area: kind; font-size: .66rem; color: var(--muted, #5f5b53); }
+.arcade-tab[aria-selected="true"] {
+    background: var(--ink, #141412);
+    border-color: var(--ink, #141412);
+    color: var(--paper, #f3efe6);
+}
+.arcade-tab[aria-selected="true"] .arcade-tab-kind { color: rgba(243, 239, 230, .62); }
+
+.arcade-trophy-btn {
+    appearance: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 108px;
+    padding: 12px 16px;
+    background: transparent;
+    color: var(--ink, #141412);
+    border: 1px dashed var(--line-strong, rgba(20, 20, 18, .32));
+    border-radius: 3px;
+    cursor: pointer;
+}
+.arcade-trophy-btn .mono { font-size: .66rem; color: var(--muted, #5f5b53); }
+.arcade-trophy-btn strong {
+    font-family: var(--font-sans, "Archivo", sans-serif);
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: 1.5rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+.arcade-trophy-btn:hover,
+.arcade-trophy-btn[aria-expanded="true"] { border-style: solid; border-color: var(--accent, #c8502a); }
+
+/* ------------------------------------------------------------------
+   Panneau des succès
+   ------------------------------------------------------------------ */
+.arcade-trophies {
+    border: 1px solid var(--line-strong, rgba(20, 20, 18, .32));
+    border-radius: 3px;
+    padding: 18px;
+    background: var(--paper, #f3efe6);
+}
+.arcade-trophies-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--line, rgba(20, 20, 18, .14));
+}
+.arcade-trophies-head strong { color: var(--accent, #c8502a); font-weight: 400; }
+.arcade-trophy-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 28px;
+}
+.trophy {
+    display: grid;
+    grid-template-columns: 2.2em 1fr auto;
+    gap: 10px;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line, rgba(20, 20, 18, .14));
+    color: var(--muted, #5f5b53);
+}
+.trophy-num { font-size: .68rem; }
+.trophy-body { display: flex; flex-direction: column; gap: 2px; }
+.trophy-title {
+    font-family: var(--font-sans, "Archivo", sans-serif);
+    font-stretch: 75%;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    line-height: 1.05;
+}
+.trophy-desc { font-size: .85rem; line-height: 1.35; }
+.trophy-state { font-size: .62rem; }
+.trophy.is-got { color: var(--ink, #141412); }
+.trophy.is-got .trophy-num,
+.trophy.is-got .trophy-state { color: var(--accent, #c8502a); }
+.trophy:not(.is-got) .trophy-title::after { content: " ?"; color: var(--line-strong, rgba(20, 20, 18, .32)); }
+.trophy.is-fresh .trophy-title { color: var(--accent-ink, #ad4320); }
+
+/* ------------------------------------------------------------------
+   Panneaux de jeu
+   ------------------------------------------------------------------ */
+.arcade-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+    gap: clamp(20px, 3vw, 40px);
+    align-items: start;
+}
+
+.arcade-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+}
+
+.arcade-side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+.arcade-side-title {
+    font-family: var(--font-sans, "Archivo", sans-serif);
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    line-height: .92;
+    letter-spacing: -.02em;
+    text-transform: uppercase;
+    padding-top: 12px;
+    border-top: 1px solid var(--line-strong, rgba(20, 20, 18, .32));
+}
+.arcade-desc {
+    font-size: .98rem;
+    line-height: 1.5;
+    color: var(--muted, #5f5b53);
+}
+.arcade-keys {
+    font-size: .66rem;
+    line-height: 1.7;
+    color: var(--muted, #5f5b53);
+    padding-top: 12px;
+    border-top: 1px dashed var(--line, rgba(20, 20, 18, .14));
+}
+
+/* HUD (Snake) */
 .game-hud {
     display: flex;
     align-items: center;
-    gap: 18px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--line, rgba(20, 20, 18, .14));
-    font-family: 'Share Tech Mono', ui-monospace, monospace;
+    gap: 22px;
+    font-family: var(--font-mono, "Share Tech Mono", monospace);
 }
-
 .game-score,
 .game-best {
     display: inline-flex;
@@ -31,42 +208,71 @@
     font-size: .72rem;
     letter-spacing: .12em;
     text-transform: uppercase;
-    color: var(--muted, #6b675e);
+    color: var(--muted, #5f5b53);
     white-space: nowrap;
 }
-
 .game-score strong,
 .game-best strong {
-    font-family: 'Archivo', sans-serif;
+    font-family: var(--font-sans, "Archivo", sans-serif);
     font-stretch: 75%;
     font-weight: 800;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     line-height: 1;
     letter-spacing: 0;
     color: var(--ink, #141412);
     font-variant-numeric: tabular-nums;
     min-width: 2ch;
 }
+.game-best strong { color: var(--muted, #5f5b53); }
 
-.game-best strong { color: var(--muted, #6b675e); }
-
-.game-buttons {
-    margin-left: auto;
-    display: flex;
-    gap: 8px;
+/* HUD (Parcours / Recrutement) */
+.arcade-hud {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 0;
+    margin: 0;
+    border-top: 1px solid var(--line, rgba(20, 20, 18, .14));
+    border-bottom: 1px solid var(--line, rgba(20, 20, 18, .14));
 }
+.arcade-hud > div { padding: 10px 12px 10px 0; }
+.arcade-hud > div + div { padding-left: 12px; border-left: 1px solid var(--line, rgba(20, 20, 18, .14)); }
+.arcade-hud dt { font-size: .62rem; color: var(--muted, #5f5b53); margin-bottom: 4px; }
+.arcade-hud dd {
+    margin: 0;
+    font-family: var(--font-sans, "Archivo", sans-serif);
+    font-stretch: 75%;
+    font-weight: 700;
+    font-size: 1.15rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+}
+.pc-energy { display: flex; gap: 5px; padding-top: 3px; }
+.pc-pip {
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid var(--ink, #141412);
+    background: transparent;
+}
+.pc-pip.is-on { background: var(--accent, #c8502a); border-color: var(--accent, #c8502a); }
 
-/* ============================================
-   BOUTONS
-   ============================================ */
+/* ------------------------------------------------------------------
+   Boutons
+   ------------------------------------------------------------------ */
+.game-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+
 .game-btn {
     appearance: none;
-    font-family: 'Share Tech Mono', ui-monospace, monospace;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono, "Share Tech Mono", monospace);
     font-size: .74rem;
     letter-spacing: .1em;
     text-transform: uppercase;
+    text-decoration: none;
     min-width: 7.5em;
-    padding: 10px 14px;
+    padding: 11px 14px;
     border: 1px solid var(--ink, #141412);
     border-radius: 3px;
     background: var(--ink, #141412);
@@ -74,87 +280,314 @@
     cursor: pointer;
     transition: background-color .2s ease, border-color .2s ease, color .2s ease;
 }
+.game-btn:hover { background: var(--accent-ink, #ad4320); border-color: var(--accent-ink, #ad4320); color: var(--paper, #f3efe6); }
+.game-btn--ghost { background: transparent; color: var(--ink, #141412); border-color: var(--line-strong, rgba(20, 20, 18, .32)); }
+.game-btn--ghost:hover { background: transparent; color: var(--accent-ink, #ad4320); border-color: var(--accent, #c8502a); }
+.game-btn--accent { background: var(--accent-ink, #ad4320); border-color: var(--accent-ink, #ad4320); }
+.game-btn--accent:hover { background: var(--ink, #141412); border-color: var(--ink, #141412); }
+.game-btn--small { min-width: 0; padding: 7px 10px; font-size: .64rem; }
+.arcade-side .game-buttons .game-btn { flex: 1; }
 
-.game-btn:hover {
-    background: var(--accent, #c8502a);
-    border-color: var(--accent, #c8502a);
-}
-
-.game-btn--ghost {
-    background: transparent;
-    color: var(--ink, #141412);
-    border-color: var(--line, rgba(20, 20, 18, .14));
-}
-
-.game-btn--ghost:hover {
-    background: transparent;
-    color: var(--accent, #c8502a);
-    border-color: var(--accent, #c8502a);
-}
-
+.arcade-tab:focus-visible,
+.arcade-trophy-btn:focus-visible,
 .game-btn:focus-visible,
 .dpad-btn:focus-visible,
-#snake-canvas:focus-visible {
+.touch-btn:focus-visible,
+.rc-choice:focus-visible,
+.rc-chip:focus-visible,
+.rc-next:focus-visible,
+.rc-link:focus-visible,
+.arcade canvas:focus-visible {
     outline: 2px solid var(--accent, #c8502a);
     outline-offset: 3px;
 }
 
-/* ============================================
-   SCÈNE / CANVAS
-   ============================================ */
+/* ------------------------------------------------------------------
+   Scène / canvas
+   ------------------------------------------------------------------ */
 .game-stage {
     position: relative;
     display: flex;
     justify-content: center;
     padding: 14px;
-    border: 1px solid var(--line, rgba(20, 20, 18, .14));
-    border-radius: 4px;
+    border: 1px solid var(--line-strong, rgba(20, 20, 18, .32));
+    border-radius: 3px;
 }
-
 .game-stage::before {
-    content: 'fig. 04 — snake.canvas';
+    content: attr(data-fig);
     position: absolute;
     top: -.6em;
     left: 12px;
     padding: 0 6px;
-    background: var(--paper, #f3efe6);
-    font-family: 'Share Tech Mono', ui-monospace, monospace;
+    background: var(--bg, #e9e3d6);
+    font-family: var(--font-mono, "Share Tech Mono", monospace);
     font-size: .66rem;
     line-height: 1.2;
     letter-spacing: .1em;
     text-transform: uppercase;
-    color: var(--muted, #6b675e);
+    color: var(--muted, #5f5b53);
 }
 
-#snake-canvas {
+.arcade canvas {
     display: block;
-    width: min(440px, 100%);
     height: auto;
-    aspect-ratio: 1;
-    background: var(--ink, #141412);
     border-radius: 2px;
-    cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+    -webkit-user-select: none;
+}
+#snake-canvas {
+    width: min(480px, 100%);
+    aspect-ratio: 1;
+    background: var(--ink, #141412);
+    cursor: pointer;
+}
+#parcours-canvas {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--paper, #f3efe6);
+    cursor: pointer;
+    box-shadow: 0 0 0 1px var(--ink, #141412);
+}
+#recrutement-canvas {
+    width: 100%;
+    aspect-ratio: 25 / 17;
+    background: var(--paper, #f3efe6);
+    cursor: pointer;
+    box-shadow: 0 0 0 1px var(--ink, #141412);
 }
 
-/* Bloque le scroll tactile uniquement pendant une partie */
-#snake-canvas.is-playing {
-    touch-action: none;
+/* Le défilement tactile n'est bloqué que pendant une partie */
+.arcade canvas.is-playing { touch-action: none; }
+
+/* ------------------------------------------------------------------
+   Carte « accomplissement » (Le Parcours)
+   ------------------------------------------------------------------ */
+.game-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(400px, calc(100% - 40px));
+    max-height: calc(100% - 28px);
+    overflow: auto;
+    transform: translate(-50%, -50%);
+    padding: 18px 20px 18px;
+    background: var(--paper, #f3efe6);
+    color: var(--ink, #141412);
+    border: 1.5px solid var(--ink, #141412);
+    box-shadow: 6px 6px 0 var(--ink, #141412);
+    animation: game-pop .35s cubic-bezier(.22, 1, .36, 1) both;
+}
+.game-card-kicker { font-size: .66rem; color: var(--accent-ink, #ad4320); margin-bottom: 8px; }
+.game-card-title {
+    font-family: var(--font-sans, "Archivo", sans-serif);
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+    line-height: .92;
+    letter-spacing: -.02em;
+    text-transform: uppercase;
+}
+.game-card-sub { margin-top: 8px; font-size: .7rem; color: var(--muted, #5f5b53); }
+.game-card-text {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line, rgba(20, 20, 18, .14));
+    font-size: .92rem;
+    line-height: 1.45;
+}
+.game-card-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.game-card.is-final { border-color: var(--accent, #c8502a); box-shadow: 6px 6px 0 var(--accent, #c8502a); }
+
+@keyframes game-pop {
+    from { opacity: 0; transform: translate(-50%, calc(-50% + 12px)); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
 }
 
-/* ============================================
-   D-PAD MOBILE
-   ============================================ */
+/* Journal des cartes */
+.game-log {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: log;
+}
+.game-log:empty { display: none; }
+.game-log li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 0 8px 28px;
+    position: relative;
+    border-bottom: 1px solid var(--line, rgba(20, 20, 18, .14));
+    font-size: .88rem;
+    line-height: 1.3;
+    counter-increment: log;
+}
+.game-log li::before {
+    content: counter(log, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 9px;
+    font-family: var(--font-mono, "Share Tech Mono", monospace);
+    font-size: .66rem;
+    color: var(--accent, #c8502a);
+}
+.game-log .mono { font-size: .62rem; color: var(--muted, #5f5b53); }
+
+/* ------------------------------------------------------------------
+   Boîte de dialogue (Mission : Recrutement)
+   ------------------------------------------------------------------ */
+.game-dialog {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+    max-height: calc(100% - 48px);
+    overflow: auto;
+    padding: 14px 16px 14px;
+    background: var(--paper, #f3efe6);
+    color: var(--ink, #141412);
+    border: 1.5px solid var(--ink, #141412);
+    box-shadow: 5px 5px 0 var(--ink, #141412);
+    animation: game-rise .25s cubic-bezier(.22, 1, .36, 1) both;
+}
+.game-dialog.is-top { top: 24px; bottom: auto; }
+
+.game-dialog-speaker {
+    display: inline-block;
+    font-size: .66rem;
+    padding: 3px 8px;
+    margin-bottom: 8px;
+    background: var(--ink, #141412);
+    color: var(--paper, #f3efe6);
+}
+.game-dialog-text { font-size: .98rem; line-height: 1.45; }
+.game-dialog-extra:empty { display: none; }
+.game-dialog-extra { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+.game-dialog-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+@keyframes game-rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+}
+
+.rc-list { list-style: none; margin: 0; padding: 0; }
+.rc-list li {
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--line, rgba(20, 20, 18, .14));
+    font-size: .9rem;
+    line-height: 1.35;
+}
+.rc-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.rc-tags li {
+    font-family: var(--font-mono, "Share Tech Mono", monospace);
+    font-size: .7rem;
+    letter-spacing: .04em;
+    padding: 4px 8px;
+    border: 1px solid var(--line-strong, rgba(20, 20, 18, .32));
+    border-radius: 2px;
+}
+.rc-links { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.rc-link {
+    font-family: var(--font-mono, "Share Tech Mono", monospace);
+    font-size: .76rem;
+    letter-spacing: .04em;
+    color: var(--ink, #141412);
+    text-decoration: underline;
+    text-decoration-color: var(--accent, #c8502a);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+}
+.rc-link:hover { color: var(--accent-ink, #ad4320); }
+
+.rc-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+.rc-chip,
+.rc-choice,
+.rc-next {
+    appearance: none;
+    font-family: var(--font-mono, "Share Tech Mono", monospace);
+    font-size: .74rem;
+    letter-spacing: .06em;
+    padding: 8px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid var(--ink, #141412);
+    background: transparent;
+    color: var(--ink, #141412);
+    min-height: 36px;
+}
+.rc-chip[aria-pressed="true"] { background: var(--ink, #141412); color: var(--paper, #f3efe6); }
+.rc-chip[aria-pressed="true"]::before { content: "+ "; color: var(--accent, #c8502a); }
+.rc-choice:hover,
+.rc-chip:hover { border-color: var(--accent, #c8502a); }
+.rc-next { background: var(--ink, #141412); color: var(--paper, #f3efe6); text-transform: uppercase; }
+.rc-next:hover { background: var(--accent-ink, #ad4320); border-color: var(--accent-ink, #ad4320); }
+.rc-next--ghost { background: transparent; color: var(--ink, #141412); border-color: var(--line-strong, rgba(20, 20, 18, .32)); }
+.rc-next--ghost:hover { background: transparent; color: var(--accent-ink, #ad4320); }
+
+/* Badges */
+.rc-badges {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+.rc-badges li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 8px 10px;
+    border: 1px dashed var(--line-strong, rgba(20, 20, 18, .32));
+    font-family: var(--font-sans, "Archivo", sans-serif);
+    font-stretch: 75%;
+    font-weight: 700;
+    font-size: .98rem;
+    text-transform: uppercase;
+    color: var(--muted, #5f5b53);
+}
+.rc-badge-mark { width: 10px; height: 10px; border: 1.5px solid currentColor; transform: rotate(45deg); flex: none; }
+.rc-badge-state { flex-basis: 100%; padding-left: 18px; font-size: .58rem; font-weight: 400; }
+.rc-badges li.is-got { border-style: solid; border-color: var(--ink, #141412); color: var(--ink, #141412); }
+.rc-badges li.is-got .rc-badge-mark { background: var(--accent, #c8502a); border-color: var(--accent, #c8502a); }
+.rc-badges li.is-got .rc-badge-state { color: var(--accent-ink, #ad4320); }
+
+/* ------------------------------------------------------------------
+   Commandes tactiles
+   ------------------------------------------------------------------ */
+.touch-row { display: none; align-items: center; justify-content: center; gap: 18px; }
+
+.touch-btn {
+    appearance: none;
+    min-width: 150px;
+    min-height: 60px;
+    padding: 0 22px;
+    border: 1px solid var(--ink, #141412);
+    border-radius: 3px;
+    background: var(--ink, #141412);
+    color: var(--paper, #f3efe6);
+    font-family: var(--font-mono, "Share Tech Mono", monospace);
+    font-size: .8rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.touch-btn:active { background: var(--accent-ink, #ad4320); border-color: var(--accent-ink, #ad4320); }
+.touch-row--rc .touch-btn { min-width: 110px; }
+
 .mobile-dpad {
     display: none;
     grid-template-columns: repeat(3, 52px);
     grid-template-rows: repeat(3, 52px);
     gap: 6px;
     justify-content: center;
-    margin-top: 4px;
 }
-
 .dpad-btn {
     display: flex;
     align-items: center;
@@ -163,56 +596,117 @@
     height: 52px;
     padding: 0;
     border: 1px solid var(--ink, #141412);
-    border-radius: 4px;
+    border-radius: 3px;
     background: var(--ink, #141412);
     color: var(--paper, #f3efe6);
-    font-size: 1rem;
     cursor: pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+    -webkit-user-select: none;
     transition: background-color .15s ease, border-color .15s ease;
 }
-
 .dpad-btn:hover,
-.dpad-btn:active {
-    background: var(--accent, #c8502a);
-    border-color: var(--accent, #c8502a);
-}
-
-.dpad-up     { grid-area: 1 / 2; }
-.dpad-left   { grid-area: 2 / 1; }
-.dpad-right  { grid-area: 2 / 3; }
-.dpad-down   { grid-area: 3 / 2; }
+.dpad-btn:active { background: var(--accent-ink, #ad4320); border-color: var(--accent-ink, #ad4320); }
+.dpad-up { grid-area: 1 / 2; }
+.dpad-left { grid-area: 2 / 1; }
+.dpad-right { grid-area: 2 / 3; }
+.dpad-down { grid-area: 3 / 2; }
 .dpad-center {
     grid-area: 2 / 2;
     background: transparent;
-    border: 1px dashed var(--line, rgba(20, 20, 18, .14));
+    border: 1px dashed var(--line-strong, rgba(20, 20, 18, .32));
     cursor: default;
 }
-.dpad-center:hover { background: transparent; border-color: var(--line, rgba(20, 20, 18, .14)); }
+.dpad-center:hover { background: transparent; border-color: var(--line-strong, rgba(20, 20, 18, .32)); }
+
+.chev { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: square; }
+.chev--down { transform: rotate(180deg); }
+.chev--left { transform: rotate(-90deg); }
+.chev--right { transform: rotate(90deg); }
 
 @media (hover: none), (max-width: 680px) {
+    .mobile-dpad,
+    .touch-row { display: flex; }
     .mobile-dpad { display: grid; }
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-@media (max-width: 520px) {
-    .game-hud {
-        flex-wrap: wrap;
-        row-gap: 12px;
-    }
-    .game-buttons {
-        width: 100%;
-        margin-left: 0;
-    }
-    .game-btn { flex: 1; }
-    .game-stage { padding: 10px; }
+/* ------------------------------------------------------------------
+   Notification de succès
+   ------------------------------------------------------------------ */
+.arcade-toast {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-width: min(340px, calc(100vw - 32px));
+    padding: 12px 16px 12px 14px;
+    background: var(--ink, #141412);
+    color: var(--paper, #f3efe6);
+    border-left: 4px solid var(--accent, #c8502a);
+    box-shadow: 4px 4px 0 rgba(20, 20, 18, .18);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity .3s ease, transform .3s cubic-bezier(.22, 1, .36, 1), visibility 0s linear .3s;
+    pointer-events: none;
+}
+.arcade-toast.is-on { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.arcade-toast:empty { display: none; }
+.arcade-toast-kicker { font-size: .62rem; color: var(--accent, #c8502a); }
+.arcade-toast strong {
+    font-family: var(--font-sans, "Archivo", sans-serif);
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: 1.3rem;
+    line-height: 1;
+    text-transform: uppercase;
+}
+.arcade-toast-desc { font-size: .82rem; color: rgba(243, 239, 230, .7); }
+
+/* ------------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------------ */
+@media (max-width: 1000px) {
+    .arcade-panel { grid-template-columns: minmax(0, 1fr); }
+    .arcade-side { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; align-items: start; }
+    .arcade-side > * { grid-column: 1 / -1; }
+    .arcade-side .arcade-side-title { display: none; }
+}
+
+@media (max-width: 640px) {
+    .arcade-top { flex-direction: column; }
+    .arcade-tabs { gap: 6px; }
+    .arcade-tab { padding: 10px; grid-template-columns: 1fr; grid-template-areas: "num" "title" "kind"; row-gap: 5px; }
+    .arcade-tab-title { font-size: .98rem; }
+    .arcade-tab-kind { display: none; }
+    .arcade-trophy-btn { flex-direction: row; align-items: baseline; justify-content: space-between; min-width: 0; padding: 10px 12px; }
+    .arcade-trophy-btn strong { font-size: 1.2rem; }
+    .arcade-trophy-list { grid-template-columns: 1fr; }
+    .arcade-trophies { padding: 14px; }
+    .arcade-trophies-head { flex-wrap: wrap; }
+    .game-stage { padding: 8px; }
+    .game-stage::before { left: 8px; }
+    #parcours-canvas { aspect-ratio: 4 / 3; }
+    #recrutement-canvas { aspect-ratio: 1; }
+    .game-card { padding: 14px; box-shadow: 4px 4px 0 var(--ink, #141412); width: calc(100% - 24px); }
+    .game-card.is-final { box-shadow: 4px 4px 0 var(--accent, #c8502a); }
+    .game-card-title { font-size: 1.5rem; }
+    .game-card-text { font-size: .85rem; margin-top: 8px; padding-top: 8px; }
+    .game-dialog { left: 12px; right: 12px; bottom: 12px; max-height: calc(100% - 24px); padding: 12px; box-shadow: 4px 4px 0 var(--ink, #141412); }
+    .game-dialog.is-top { top: 12px; bottom: auto; }
+    .game-dialog-text { font-size: .9rem; }
+    .game-hud { gap: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .game-btn,
-    .dpad-btn { transition: none; }
+    .dpad-btn,
+    .arcade-tab,
+    .arcade-toast { transition: none; }
+    .game-card,
+    .game-dialog { animation: none; }
 }

@@ -17,6 +17,10 @@
     const IMG_QUALITY = 0.82;
     const FILE_MAX_BYTES = 10 * 1024 * 1024;
     const KEYS = { token: 'pfadmin.token', cfg: 'pfadmin.cfg', draft: 'pfadmin.draft.' };
+    const CFG_RULES = { owner: /^[A-Za-z0-9-]+$/, repo: /^[A-Za-z0-9._-]+$/, branch: /^[A-Za-z0-9._\/-]+$/ };
+    // Sécurité des envois : fichiers non-image limités à ces extensions (contrôle du contenu réel ci-dessous)
+    const FILE_EXTS = ['pdf'];
+    const IMG_INPUT_MAX_BYTES = 40 * 1024 * 1024;
 
     /* ----------------------------------------------------------------------
        Stockage (toujours protégé : navigation privée, cookies bloqués...)
@@ -32,7 +36,8 @@
         try {
             const saved = JSON.parse(store.get('localStorage', KEYS.cfg) || 'null');
             if (saved && typeof saved === 'object') {
-                for (const k of ['owner', 'repo', 'branch']) if (typeof saved[k] === 'string' && saved[k].trim()) cfg[k] = saved[k].trim();
+                // Mêmes règles que saveSettings() : une valeur altérée est ignorée
+                for (const k of ['owner', 'repo', 'branch']) if (typeof saved[k] === 'string' && CFG_RULES[k].test(saved[k].trim())) cfg[k] = saved[k].trim();
             }
         } catch (e) { /* valeurs par défaut */ }
         return cfg;
@@ -617,6 +622,8 @@
             if (!fromStorage) saveToken(token, remember);
             setContent(data, sha);
             enterApp();
+            // Token « classic » : accès à tous les dépôts du compte. Préférer un fine-grained limité à ce dépôt.
+            if (!fromStorage && /^ghp_/.test(token)) toast('Attention : ce token « classic » donne accès à tous vos dépôts. Remplacez-le par un token fine-grained limité à ce dépôt (voir l\'aide).', 'error', 12000);
         } catch (e) {
             if (e.auth || !fromStorage) clearToken();
             else S.token = null;
@@ -1225,7 +1232,7 @@
         wrap.append(preview ? h('div', { class: 'input-row' }, preview, input) : input);
         if (f.type === 'md') wrap.append(h('p', { class: 'hint' }, 'Mise en forme : ', h('code', { text: '**gras**' }), ' et ', h('code', { text: '*italique*' }), '.'));
         if (f.type === 'icon') wrap.append(h('p', { class: 'hint' }, 'Nom d\'une icône Font Awesome (style solid), ex. ', h('code', { text: 'fa-server' }), '. ',
-            h('a', { href: 'https://fontawesome.com/search?o=r&m=free&s=solid', target: '_blank', rel: 'noopener' }, 'Chercher une icône')));
+            h('a', { href: 'https://fontawesome.com/search?o=r&m=free&s=solid', target: '_blank', rel: 'noopener noreferrer' }, 'Chercher une icône')));
         if (f.hint) wrap.append(h('p', { class: 'hint', text: f.hint }));
         wrap.append(err);
         if (value) check();
@@ -1430,7 +1437,7 @@
             if (!isImage) {
                 const url = previewUrl(v);
                 preview.replaceChildren(url
-                    ? h('a', { href: url, target: '_blank', rel: 'noopener', class: 'link' }, icon('fa-file-pdf'), ' Ouvrir le fichier')
+                    ? h('a', { href: url, target: '_blank', rel: 'noopener noreferrer', class: 'link' }, icon('fa-file-pdf'), ' Ouvrir le fichier')
                     : h('span', { text: 'Aucun fichier' }));
                 return;
             }
@@ -1473,6 +1480,9 @@
                 let blob, ext, info;
                 if (isImage) {
                     if (!/^image\//.test(file.type)) throw new Error('Ce fichier n\'est pas une image.');
+                    if (file.size > IMG_INPUT_MAX_BYTES) throw new Error(`Image trop lourde (${formatBytes(file.size)}). Maximum : ${formatBytes(IMG_INPUT_MAX_BYTES)}.`);
+                    // Le contenu est toujours ré-encodé en WebP/JPEG par le canvas : un SVG ou un faux
+                    // fichier image ne peut donc pas être envoyé tel quel.
                     progress.textContent = 'Compression de l\'image...';
                     const r = await compressImage(file);
                     blob = r.blob; ext = r.ext;
@@ -1482,6 +1492,10 @@
                     blob = file;
                     const m = /\.([a-z0-9]{1,5})$/i.exec(file.name);
                     ext = m ? m[1].toLowerCase() : 'pdf';
+                    // Liste blanche : jamais de .html, .svg, .js, .php... servis depuis le domaine du site
+                    if (!FILE_EXTS.includes(ext)) throw new Error(`Type de fichier refusé (.${ext}). Formats acceptés : ${FILE_EXTS.join(', ').toUpperCase()}.`);
+                    const head = new Uint8Array(await file.slice(0, 5).arrayBuffer());
+                    if (String.fromCharCode(...head) !== '%PDF-') throw new Error('Ce fichier n\'est pas un PDF valide.');
                     info = formatBytes(file.size);
                 }
                 const slugSrc = f.slug ? f.slug(ctx.item || obj) : f.k;
@@ -1639,9 +1653,9 @@
                     h('p', { text: `Enregistré sur GitHub : ${changed.map(sectionLabel).join(', ')}.` }),
                     h('p', { text: 'GitHub Pages met environ 1 minute à mettre le site à jour. Rechargez ensuite la page du site (Ctrl+F5 si l\'ancienne version s\'affiche encore).' }),
                     h('ul', null,
-                        h('li', null, h('a', { href: pagesUrl(), target: '_blank', rel: 'noopener' }, 'Voir le site')),
-                        h('li', null, h('a', { href: `${repoUrl()}/actions`, target: '_blank', rel: 'noopener' }, 'Suivre la mise en ligne (onglet Actions)')),
-                        commitUrl ? h('li', null, h('a', { href: commitUrl, target: '_blank', rel: 'noopener' }, 'Voir la modification sur GitHub')) : null)
+                        h('li', null, h('a', { href: pagesUrl(), target: '_blank', rel: 'noopener noreferrer' }, 'Voir le site')),
+                        h('li', null, h('a', { href: `${repoUrl()}/actions`, target: '_blank', rel: 'noopener noreferrer' }, 'Suivre la mise en ligne (onglet Actions)')),
+                        commitUrl ? h('li', null, h('a', { href: commitUrl, target: '_blank', rel: 'noopener noreferrer' }, 'Voir la modification sur GitHub')) : null)
                 ],
                 buttons: [{ label: 'Continuer', value: true, class: 'primary' }]
             });
@@ -1740,7 +1754,7 @@
         const owner = $('#set-owner').value.trim();
         const repo = $('#set-repo').value.trim();
         const branch = $('#set-branch').value.trim();
-        if (!/^[A-Za-z0-9-]+$/.test(owner) || !/^[A-Za-z0-9._-]+$/.test(repo) || !/^[A-Za-z0-9._\/-]+$/.test(branch)) {
+        if (!CFG_RULES.owner.test(owner) || !CFG_RULES.repo.test(repo) || !CFG_RULES.branch.test(branch)) {
             toast('Paramètres invalides : utilisez uniquement lettres, chiffres, tirets, points ou « _ ».', 'error');
             return;
         }
@@ -1837,6 +1851,12 @@
     }
 
     function boot() {
+        // Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) :
+        // le portail refuse de fonctionner dans un cadre.
+        if (window.top !== window.self) {
+            document.body.textContent = 'Le portail d\'administration ne peut pas être affiché dans un cadre.';
+            return;
+        }
         bindGlobal();
         if (location.hash === '#demo') { startDemo(); return; }
         const fromSession = store.get('sessionStorage', KEYS.token);

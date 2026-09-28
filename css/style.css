@@ -2189,3 +2189,6 @@ html.has-curtain .footer {
     .badge-ring { animation: none !important; }
     .stack-card { position: relative; top: auto; }
 }
+
+/* Le curseur décoratif s'efface au-dessus des jeux (sinon il inverse leurs couleurs) */
+body:has(.arcade canvas:hover) .cursor { opacity: 0; }

@@ -1,0 +1,53 @@
+# Déploiement automatique sur InfinityFree à chaque push sur main
+# (y compris les publications faites depuis le portail admin).
+# Les identifiants FTP sont des secrets chiffrés du dépôt :
+#   Settings → Secrets and variables → Actions → FTP_SERVER / FTP_USERNAME / FTP_PASSWORD
+name: Déploiement InfinityFree
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Un seul déploiement à la fois ; le plus récent attend la fin du précédent.
+concurrency:
+  group: deploy-infinityfree
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Envoi FTPS vers htdocs
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Récupérer le code
+        # actions/checkout v4.2.2 (épinglé par SHA)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Envoyer les fichiers modifiés
+        # SamKirkland/FTP-Deploy-Action v4.3.5 (épinglé par SHA)
+        uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          security: strict
+          port: 21
+          server-dir: htdocs/
+          # Seuls les fichiers modifiés sont envoyés (état gardé sur le serveur)
+          state-name: .ftp-deploy-sync-state.json
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            .vscode/**
+            **/node_modules/**
+            **/*.md
+            **/*.log
+          log-level: minimal
