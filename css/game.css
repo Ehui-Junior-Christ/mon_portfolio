@@ -1,6 +1,6 @@
 /* ==========================================================================
-   ARCADE — section #jeu : sélecteur, 3 mini-jeux, succès
-   (Chasseur de Tech, Le Parcours, Mission : Recrutement — js/games/)
+   ARCADE — section #jeu : sélecteur, 4 mini-jeux, succès
+   (Chasseur de Tech, Le Parcours, Mission : Recrutement, Pixel Quest — js/games/)
    ========================================================================== */
 .arcade {
     position: relative;
@@ -24,7 +24,7 @@
 .arcade-tabs {
     flex: 1;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
 }
 
@@ -297,6 +297,7 @@
 .rc-chip:focus-visible,
 .rc-next:focus-visible,
 .rc-link:focus-visible,
+.px-level:focus-visible,
 .arcade canvas:focus-visible {
     outline: 2px solid var(--accent, #c8502a);
     outline-offset: 3px;
@@ -355,6 +356,16 @@
     background: var(--paper, #f3efe6);
     cursor: pointer;
     box-shadow: 0 0 0 1px var(--ink, #141412);
+}
+
+#pixel-canvas {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #23201c;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px var(--ink, #141412);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
 
 /* Le défilement tactile n'est bloqué que pendant une partie */
@@ -555,6 +566,58 @@
 .rc-badges li.is-got .rc-badge-state { color: var(--accent-ink, #ad4320); }
 
 /* ------------------------------------------------------------------
+   Pixel Quest : objectif, liste des zones, bouton A
+   ------------------------------------------------------------------ */
+.px-goal {
+    font-size: .92rem;
+    line-height: 1.45;
+    padding-left: 12px;
+    border-left: 3px solid var(--accent, #c8502a);
+}
+.px-goal:empty { display: none; }
+.px-levels { list-style: none; margin: 0; padding: 0; }
+.px-level {
+    appearance: none;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2.2em 1fr auto;
+    align-items: baseline;
+    gap: 10px;
+    padding: 8px 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line, rgba(20, 20, 18, .14));
+    color: var(--ink, #141412);
+    text-align: left;
+    cursor: pointer;
+}
+.px-level-num { font-size: .66rem; color: var(--accent, #c8502a); }
+.px-level-name {
+    font-family: var(--font-sans, "Archivo", sans-serif);
+    font-stretch: 75%;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+.px-level-state { font-size: .6rem; color: var(--muted, #5f5b53); }
+.px-level:hover:not(:disabled) .px-level-name { color: var(--accent-ink, #ad4320); }
+.px-level[aria-current="true"] .px-level-name { text-decoration: underline; text-decoration-color: var(--accent, #c8502a); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.px-levels li.is-done .px-level-state { color: var(--accent-ink, #ad4320); }
+.px-level:disabled { cursor: default; color: var(--muted, #5f5b53); opacity: .6; }
+.touch-row--px .touch-btn.px-a-btn {
+    min-width: 76px;
+    width: 76px;
+    height: 76px;
+    padding: 0;
+    border-radius: 50%;
+    font-family: var(--font-sans, "Archivo", sans-serif);
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 0;
+}
+.px-card .game-card-text[hidden] { display: none; }
+
+/* ------------------------------------------------------------------
    Commandes tactiles
    ------------------------------------------------------------------ */
 .touch-row { display: none; align-items: center; justify-content: center; gap: 18px; }
@@ -692,6 +755,8 @@
     .game-stage::before { left: 8px; }
     #parcours-canvas { aspect-ratio: 4 / 3; }
     #recrutement-canvas { aspect-ratio: 1; }
+    #pixel-canvas { aspect-ratio: 1; }
+    .arcade-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .game-card { padding: 14px; box-shadow: 4px 4px 0 var(--ink, #141412); width: calc(100% - 24px); }
     .game-card.is-final { box-shadow: 4px 4px 0 var(--accent, #c8502a); }
     .game-card-title { font-size: 1.5rem; }

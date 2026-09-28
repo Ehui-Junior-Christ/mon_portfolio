@@ -148,5 +148,216 @@
     { "period": "2026", "title": "Stage développeur Android", "org": "CodeAlpha", "desc": "Développement d'une application Kotlin d'alertes pour étudiants." },
     { "period": "2026", "title": "Stage développeur full-stack", "org": "Prodigy InfoTech", "desc": "Cinq projets full-stack livrés, dont Prisme et PRODIGY Chat." },
     { "period": "2025", "title": "Bénévolat en entreprise", "org": "Expérience professionnelle", "desc": "Immersion en équipe et participation à des projets concrets." }
-  ]
+  ],
+  "games": {
+    "pixel": {
+      "title": "Pixel Quest",
+      "intro": "Mon parcours en pixel art, de **Gagnoa** à **Abidjan**. Parle aux habitants, ramasse les diplômes et les projets, puis passe la sortie.",
+      "levels": [
+        {
+          "id": "gagnoa",
+          "name": "Gagnoa",
+          "subtitle": "2004 — 2015 · L'enfance",
+          "theme": "village",
+          "goal": "Trouve le CEPE dans la cour de l'école, puis prends la route de l'est.",
+          "map": [
+            "##############################",
+            "#TT,,,,T,,,,,,~~,,,,,,,,TT,TT#",
+            "#T,,HHHH,,F,,,~~,,,HHHHHHH,,T#",
+            "#,,,HHHH,,,,,,~~,,,HHHHHHH,,,#",
+            "#,F,HHDH,,T,,,~~,,,HHHDHHH,F,#",
+            "#,,,,,=,,,,,,,~~,,,SSS=SSS,,,#",
+            "#P=================SSSSSSS,,,#",
+            "#,,,,,,,,=,,,,~~,,,SSSSSSS,,,#",
+            "#TT,,,,,,=,,,,~~,,,,,,=,,,,,,#",
+            "#T,,HHH,,=,,,,~~,,TT,,=,,,,,T#",
+            "#,,,HHH,,=,,,S~~S,,,,,=====,,#",
+            "#,F,HDH,,=,,SS~~SS,FF,,,,,=,,#",
+            "#,,,,=====,,,S~~S,,,,,,,,,===E",
+            "#,,,,,,,,,,,,,~~,,,T,,HHHH,,,#",
+            "#T,,,F,,,,T,,,~~,,,,,,HHHH,,T#",
+            "#TT,,,,,,,,,,,~~,,,T,,HHDH,,,#",
+            "#TTT,,,,F,,,,,~~,,,,,,,,=,,TT#",
+            "##############################"
+          ],
+          "npcs": [
+            {"x": 8, "y": 5, "name": "Une voisine", "sprite": "villageois", "dialogue": ["Bonjour petit ! Tu vas à l'école, ou tu vas encore regarder les grands jouer au ballon ?", "L'école. Bonne réponse. Passe par le pont, pas par la rivière, ta mère me l'a demandé."]},
+            {"x": 20, "y": 5, "name": "Le maître", "sprite": "enseignant", "dialogue": ["Le CEPE, c'est pour cette année. Les résultats sont affichés dans la cour.", "Et on ne court pas dans la cour. Enfin… pas trop vite."]},
+            {"x": 11, "y": 10, "name": "Un camarade", "sprite": "etudiant", "dialogue": ["Tu as vu mon ballon ? Il a roulé vers les fleurs, de l'autre côté de la rivière.", "Si tu le trouves, garde-le. Je te le reprendrai au prochain match."]},
+            {"x": 27, "y": 11, "name": "Le chat du quartier", "sprite": "chat", "dialogue": ["Miaou.", "(Il te fixe, puis regarde la route. On dirait qu'il sait déjà où tu vas.)"]}
+          ],
+          "items": [
+            {"x": 22, "y": 7, "label": "CEPE", "kind": "diplome", "text": "Certificat d'études primaires élémentaires, École Méthodiste de Gagnoa, 2014 — 2015. Le premier diplôme de la liste.", "link": "", "required": true},
+            {"x": 20, "y": 11, "label": "Ballon de basket", "kind": "souvenir", "text": "Le basket : encore aujourd'hui l'une de mes deux passions en dehors du code. L'autre, ce sont les jeux vidéo.", "link": "", "required": false},
+            {"x": 2, "y": 11, "label": "Manette", "kind": "souvenir", "text": "Les jeux vidéo, l'autre passion. L'informatique m'attire depuis l'enfance : souvent, ça commence par une manette.", "link": "", "required": false}
+          ]
+        },
+        {
+          "id": "college",
+          "name": "Le collège",
+          "subtitle": "BEPC 2019 · Baccalauréat 2023",
+          "theme": "ecole",
+          "goal": "Décroche le BEPC devant l'administration, puis le Bac dans la salle d'examen.",
+          "map": [
+            "################################",
+            "#P,,,,T,HHHHHHHHHH,,T,,,HHHHHH,#",
+            "#.,,,,,,HHHHHHHHHH,,,,,,HHHHHH,#",
+            "#.,F,,,,HHDHHHHDHH,,,F,,HHDHHH,#",
+            "#.........................,,,T,#",
+            "#,,,,..........................#",
+            "#,T,,..T....T....T...,SSSSSSSS,#",
+            "#,,,,..BB..BB..BB....,SSSSSSSS,#",
+            "#,F,,...............,SSSSSSSS,T#",
+            "#,,,,.....~~~~......,SSSSSSSS,,#",
+            "#,,,,.....~~~~......,,,,,,,,,,,#",
+            "#T,,,...............,,,,,T,,,,,#",
+            "#####D#####,,,,,,,,,,,,,,,,,T,,#",
+            "#.........#,,,T,,,,,,,,,,,,,,,,#",
+            "#.B.B.B.B.#,,,,,,,,HHHHHH,,,,,,#",
+            "#.........#,,F,,,,,HHHHHH,,,F,,#",
+            "#.B.B.B.B.#,,,,,,,,HHDHHH,,,,,,#",
+            "#.........#,,,,T,,,,,.,,,,,T,,,#",
+            "#.........#,,,,,,,,,,.........,E",
+            "################################"
+          ],
+          "npcs": [
+            {"x": 13, "y": 5, "name": "Le prof de maths", "sprite": "enseignant", "dialogue": ["Deux diplômes t'attendent dans cet établissement. Dans l'ordre, de préférence.", "Et si tu croises ma craie, rapporte-la. C'est la troisième cette semaine."]},
+            {"x": 7, "y": 11, "name": "Le surveillant", "sprite": "recruteur", "dialogue": ["Salle d'examen, juste là. Téléphones éteints, calculatrices autorisées, antisèches confisquées.", "Le Bac est au fond de la salle. Pas sous la table : j'ai vérifié."]},
+            {"x": 25, "y": 7, "name": "Une camarade", "sprite": "etudiant", "dialogue": ["Tu joues ? Il nous manque un meneur. Après les révisions, promis.", "Ceux qui disent que le basket n'a rien à voir avec les maths n'ont jamais raté un tir à trois points."]},
+            {"x": 29, "y": 17, "name": "Le chat", "sprite": "chat", "dialogue": ["Miaou ?", "(C'est le chat de Gagnoa. Il ne semble pas du tout surpris de te voir ici.)"]}
+          ],
+          "items": [
+            {"x": 26, "y": 4, "label": "BEPC", "kind": "diplome", "text": "Brevet d'études du premier cycle, Collège Catholique Roger Duquense, 2018 — 2019. Cap sur le lycée.", "link": "", "required": true},
+            {"x": 1, "y": 17, "label": "Baccalauréat", "kind": "diplome", "text": "Baccalauréat, Collège Catholique Roger Duquense, 2022 — 2023. La porte de l'université s'ouvre.", "link": "", "required": true},
+            {"x": 21, "y": 17, "label": "Word & PowerPoint", "kind": "competence", "text": "Les premiers outils, ceux des exposés. Word et PowerPoint sont toujours dans ma boîte à outils.", "link": "", "required": false}
+          ]
+        },
+        {
+          "id": "upb",
+          "name": "L'UPB",
+          "subtitle": "2023 — 2026 · Licence MIAGE",
+          "theme": "campus",
+          "goal": "Présente SimpleTaff au jury de la salle info, puis récupère ta Licence MIAGE.",
+          "map": [
+            "##################################",
+            "#P=,,,T,,,,HHHHHHHH,,,,,T,,HHHHHH#",
+            "#.=,,,,,,,,HHHHHHHH,,F,,,,,HHHHHH#",
+            "#.=,F,,T,,,HHHDHHHH,,,,,,,,HHDHHH#",
+            "#.=============.===========..=,,,#",
+            "#,,,,,,=,,,,,,,,,,,,,,,,=,,,,,,,,#",
+            "#,,,,,,=,,#########D####=,,,,,T,,#",
+            "#T,,,,,=,,#............#=,,,,,,,,#",
+            "#,,,,,,=,,#.BB..BB..BB.#=,,T,,F,,#",
+            "#,,F,,,=,,#............#=,,,,,,,,#",
+            "#,,,,,,=,,#.BB..BB..BB.#=,,,,,,,,#",
+            "#,,,,,,=,,#............#=,,F,,,,,#",
+            "#,,,,,,=,,##############=,,,T,,,,#",
+            "#,,T,,,=================S,,,,,,,,#",
+            "#,,,,,,,,,,,,,,,,,,,,,,,SS,,,,,,,#",
+            "#SSSSSSSSSSSSSS,,,,,,,,,,SSSSSSSS#",
+            "#SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSE#",
+            "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~SSSS#",
+            "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#",
+            "##################################"
+          ],
+          "npcs": [
+            {"x": 5, "y": 5, "name": "Un camarade de promo", "sprite": "etudiant", "dialogue": ["MIAGE : Méthodes Informatiques Appliquées à la Gestion des Entreprises. Oui, on finit tous par le réciter d'une traite.", "La salle info est au centre. Les places près des prises partent en premier."]},
+            {"x": 30, "y": 4, "name": "La bibliothécaire", "sprite": "villageois", "dialogue": ["Chut. Ici, on lit. On ne compile pas à voix haute.", "Les livres sur Spring Boot sont très demandés. Quelqu'un les a annotés au crayon, je ne dirai pas qui."]},
+            {"x": 18, "y": 7, "name": "Le jury", "sprite": "enseignant", "dialogue": ["Bienvenue à la soutenance. Vous avez vingt minutes. Le vidéoprojecteur, lui, en a cinq.", "SimpleTaff : agents, affectations, pointages, contrats. Et c'est conteneurisé avec Docker ? Bien.", "Le jury a délibéré. Votre diplôme est quelque part dans cette salle."]},
+            {"x": 28, "y": 14, "name": "Le chat du campus", "sprite": "chat", "dialogue": ["Miaou.", "(Encore lui. D'après le registre, il s'est inscrit en MIAGE.)"]}
+          ],
+          "items": [
+            {"x": 15, "y": 11, "label": "SimpleTaff", "kind": "projet", "text": "Projet de soutenance : gestion du personnel déployé sur le terrain. Agents, affectations, pointages, contrats. Spring Boot, Java, SQL, Docker.", "link": "https://github.com/Ehui-Junior-Christ/SimpleTaff", "required": true},
+            {"x": 22, "y": 7, "label": "Licence MIAGE", "kind": "diplome", "text": "Licence MIAGE, Université Polytechnique de Bingerville, 2023 — 2026. Diplômé.", "link": "", "required": true},
+            {"x": 12, "y": 9, "label": "Spring Boot", "kind": "competence", "text": "Le back-end de SimpleTaff, de Medibook, de Prisme et de PRODIGY Chat. À force, on se connaît bien.", "link": "", "required": false},
+            {"x": 31, "y": 8, "label": "Medibook", "kind": "projet", "text": "Carnet médical en ligne (2025) : historique, prescriptions et consultations au même endroit, avec un accès sécurisé.", "link": "https://github.com/Ehui-Junior-Christ/Medibook_projects", "required": false},
+            {"x": 3, "y": 16, "label": "Food-Command", "kind": "projet", "text": "Commande et livraison de repas en ligne (2025), avec un parcours simple entre clients et restaurateurs.", "link": "https://github.com/Ehui-Junior-Christ/Food-Command", "required": false}
+          ]
+        },
+        {
+          "id": "stages",
+          "name": "Les stages",
+          "subtitle": "2025 — 2026 · Stages et bénévolat",
+          "theme": "bureau",
+          "goal": "Récupère les trois projets de stage, puis sors par la porte du fond.",
+          "map": [
+            "##############################",
+            "#P....#T......T#T...........T#",
+            "#.....#........#.............#",
+            "#.....#.BB..BB.#..BB..BB..BB.#",
+            "#..T..#........#.............#",
+            "#.....#.BB..BB.#..BB..BB..BB.#",
+            "#.....#........#.............#",
+            "#.....####D#########D#########",
+            "#............................#",
+            "#............................#",
+            "#.....#####D#######D##########",
+            "#.....#.......#..............#",
+            "#.....#.BBBB..#.B...B...T....#",
+            "#..T..#.BBBB..#.B...B........#",
+            "#.....#.......#..............#",
+            "#.....#T.....T#T............T#",
+            "#.....#########.............E#",
+            "##############################"
+          ],
+          "npcs": [
+            {"x": 11, "y": 2, "name": "Le tuteur CodeAlpha", "sprite": "enseignant", "dialogue": ["Ta mission : une application Android d'alertes pour les étudiants. En Kotlin.", "Pense aux notifications. Et aux étudiants qui les ignorent."]},
+            {"x": 22, "y": 4, "name": "Une développeuse", "sprite": "dev", "dialogue": ["Chez Prodigy, c'est cinq projets full-stack. Tu en es à combien ?", "Prisme et PRODIGY Chat sont sur les postes de cette salle. Le reste est sur GitHub."]},
+            {"x": 3, "y": 8, "name": "Un stagiaire", "sprite": "etudiant", "dialogue": ["C'est mon premier jour. J'ai déjà poussé sur main.", "J'ai fait un revert. Personne n'a rien vu. Hein ?"]},
+            {"x": 22, "y": 13, "name": "La cheffe d'équipe", "sprite": "recruteur", "dialogue": ["Bienvenue. Ici, on fait des revues de code, pas des revues de presse.", "Le badge ouvre toutes les portes. Sauf celle du frigo commun."]},
+            {"x": 12, "y": 13, "name": "Le chat", "sprite": "chat", "dialogue": ["Miaou.", "(Personne ne sait qui l'a embauché. Il a pourtant un badge.)"]}
+          ],
+          "items": [
+            {"x": 13, "y": 6, "label": "College Alert", "kind": "projet", "text": "Stage CodeAlpha (2026) : application Android d'alertes pour les étudiants d'un établissement, écrite en Kotlin.", "link": "https://github.com/Ehui-Junior-Christ/CodeAlpha_TASK-1-College-Alert-Application", "required": true},
+            {"x": 27, "y": 2, "label": "Prisme", "kind": "projet", "text": "Réseau social full-stack : authentification, profils, publications et commentaires. React, API REST Spring Boot, déploiement sur Railway.", "link": "https://github.com/Ehui-Junior-Christ/PRODIGY_FS_05", "required": true},
+            {"x": 17, "y": 6, "label": "PRODIGY Chat", "kind": "projet", "text": "Messagerie web développée pendant le stage Prodigy InfoTech : interface React, back-end Spring Boot, déploiement continu.", "link": "https://github.com/Ehui-Junior-Christ/PRODIGY_FS_04", "required": true},
+            {"x": 8, "y": 14, "label": "Bénévolat", "kind": "souvenir", "text": "2025 : bénévolat en entreprise. Immersion en équipe et participation à des projets concrets.", "link": "", "required": false},
+            {"x": 27, "y": 12, "label": "Git & GitHub", "kind": "competence", "text": "Tous les projets finissent ici, versionnés. Même ceux commités la veille du rendu.", "link": "https://github.com/Ehui-Junior-Christ", "required": false}
+          ]
+        },
+        {
+          "id": "abidjan",
+          "name": "Abidjan",
+          "subtitle": "Aujourd'hui · Yopougon, Abidjan",
+          "theme": "ville",
+          "goal": "Retrouve Aurora et FestiConnect, puis ramasse la clé sur la plage.",
+          "map": [
+            "####################################",
+            "#P=,,T,,HHHH,,T,,HHHHHH,,T,,HHHH,,T#",
+            "#.=,,,,,HHHH,,,,,HHHHHH,,,,,HHHH,,,#",
+            "#.=,F,,,HHDH,,F,,HHHDHH,,F,,HDHH,,,#",
+            "#.============================....,#",
+            "#.=,,,,,,,=,,,,,,,,,,,,,,,,,=,,,,,,#",
+            "#.=,HHHHH,=,T,T,T,,,HHHHH,,,=,HHHH,#",
+            "#.=,HHHHH,=,,,,,,,,,HHHHH,,,=,HHHH,#",
+            "#.=,HHDHH,=,F,F,F,,,HHDHH,,,=,HDHH,#",
+            "#.=,,,=,,,=,,,,,,,,,,,=,,,,,=,,=,,,#",
+            "#.=================================#",
+            "#,,,,,,,,,=,,,,,,T,,,,,,,,,,=,,,,,,#",
+            "#,T,HHHH,,=,,,,,,,,,,HHHHHH,=,,T,,,#",
+            "#,,,HHHH,,=,,FF,,,,,,HHHHHH,=,,,,,,#",
+            "#,,,HDHH,,=,,,,,,,T,,HHHDHH,=,,,,,,#",
+            "#,,,,=,,,,=,,,,,,,,,,,,,=,,,=,,,,,,#",
+            "#SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSE",
+            "#SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS#",
+            "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#",
+            "####################################"
+          ],
+          "npcs": [
+            {"x": 3, "y": 5, "name": "Un passant", "sprite": "villageois", "dialogue": ["Yopougon ? Tu y es presque. Enfin, avec la circulation, « presque » peut durer une heure.", "Si tu cherches les projets, regarde du côté du parc. Il y a toujours quelqu'un avec un ordinateur là-bas."]},
+            {"x": 13, "y": 9, "name": "Un développeur", "sprite": "dev", "dialogue": ["Aurora tourne sur le web, sur Android et sur Windows ? Avec la même base de code ?", "Next.js, Capacitor, Electron. Respect. Moi, je me bats encore avec ma config."]},
+            {"x": 24, "y": 9, "name": "Une organisatrice", "sprite": "etudiant", "dialogue": ["Mon concert affiche complet sur la billetterie. J'espère que la salle est au courant.", "Billets, boutique, espace organisateur : tout passe par FestiConnect. Il est au bout de la rue."]},
+            {"x": 31, "y": 15, "name": "Une recruteuse", "sprite": "recruteur", "dialogue": ["Un portfolio avec un jeu dedans ? D'accord, vous avez mon attention.", "Il y a un moyen de vous joindre, à part un chat qui vous suit depuis Gagnoa ?"]},
+            {"x": 17, "y": 13, "name": "Le chat", "sprite": "chat", "dialogue": ["Miaou.", "(Le chat de Gagnoa, à Abidjan. Il ne dira jamais comment il a fait le trajet.)"]}
+          ],
+          "items": [
+            {"x": 14, "y": 8, "label": "Aurora", "kind": "projet", "text": "Lecteur de musique offline-first : fichiers locaux, fonds WebGL qui réagissent au son, paroles synchronisées. Web, Android et Windows.", "link": "https://github.com/Ehui-Junior-Christ/aurora", "required": true},
+            {"x": 31, "y": 9, "label": "FestiConnect", "kind": "projet", "text": "Billetterie et boutique pour les événements en Côte d'Ivoire : recherche, panier, paiement, espaces client, organisateur et administrateur.", "link": "https://github.com/Ehui-Junior-Christ/FestiConnect", "required": true},
+            {"x": 18, "y": 17, "label": "Ouvert aux opportunités", "kind": "cle", "text": "Diplômé, basé à Yopougon, Abidjan, et ouvert aux opportunités. Le formulaire de contact est juste en dessous.", "link": "#contact", "required": true},
+            {"x": 5, "y": 16, "label": "Next.js & React", "kind": "competence", "text": "Le front d'Aurora et de Prisme : des interfaces réactives, du premier croquis à la mise en production.", "link": "", "required": false}
+          ]
+        }
+      ]
+    }
+  }
 }

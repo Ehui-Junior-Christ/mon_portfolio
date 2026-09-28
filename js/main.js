@@ -228,6 +228,7 @@
         }
 
         panel.setAttribute('inert', '');
+        menu.setOpen = setOpen;
         burger.addEventListener('click', () => setOpen(!menu.open));
         panel.addEventListener('click', (e) => {
             if (e.target.closest('a')) setOpen(false, { restoreFocus: false });
@@ -252,6 +253,7 @@
     /* ------------------------------------------------------------------
        05. Lien actif de la navigation
        ------------------------------------------------------------------ */
+    const sectionSubs = [];
     function initActiveNav() {
         const ids = ['apropos', 'parcours', 'projets', 'jeu'];
         const sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
@@ -273,6 +275,7 @@
             }
             if (id === current) return;
             current = id;
+            sectionSubs.forEach((fn) => fn(id));
             links.forEach((a) => {
                 const on = !!id && a.getAttribute('href') === `#${id}`;
                 a.classList.toggle('active', on);
@@ -328,8 +331,10 @@
 
             if (!pre || !MOTION || alreadySeen()) { finish(true); return; }
 
-            const safety = setTimeout(() => finish(false), 2600);
-            const DURATION = 950;
+            // Premier passage : ~0,65 s de compteur puis passage de relais immédiat :
+            // le rideau se lève PENDANT que le nom du hero monte (plus d'attente en série).
+            const safety = setTimeout(() => finish(false), 2200);
+            const DURATION = 650;
             const t0 = performance.now();
             const tick = (now) => {
                 if (finished) return;
@@ -340,7 +345,7 @@
                 if (t < 1) { requestAnimationFrame(tick); return; }
                 ready.then(() => {
                     pre.classList.add('is-leaving');
-                    setTimeout(() => { clearTimeout(safety); finish(false); }, 260);
+                    setTimeout(() => { clearTimeout(safety); finish(false); }, 120);
                 });
             };
             requestAnimationFrame(tick);
@@ -518,16 +523,17 @@
         };
         if (!MOTION) { showAll(); return; }
 
-        const delay = skipped ? .05 : .2;
+        const delay = skipped ? .05 : .12;
 
         if (HAS_GSAP) {
             const tl = gsap.timeline({ delay, defaults: { ease: 'expo.out' } });
             if (chars.length) {
-                tl.fromTo(chars, { yPercent: 105 }, {
-                    yPercent: 0, duration: 1.15, stagger: .022,
+                tl.fromTo(chars, { y: 0, yPercent: 105 }, {
+                    y: 0, yPercent: 0, duration: 1.1, stagger: .018,
                     onComplete: () => {
                         if (name) name.classList.add('is-in');
                         gsap.set(chars, { clearProps: 'transform' });
+                        document.dispatchEvent(new CustomEvent('hero:named'));
                     },
                 }, 0);
             } else if (name) name.classList.add('is-in');
@@ -556,6 +562,7 @@
         setTimeout(() => {
             fades.forEach((el, i) => el.style.setProperty('--d', `${.45 + i * .1}s`));
             showAll();
+            setTimeout(() => document.dispatchEvent(new CustomEvent('hero:named')), 1300);
         }, delay * 1000);
     }
 
@@ -659,9 +666,21 @@
         if (!MOTION) { titles.forEach((t) => t.classList.add('is-in')); return; }
         titles.forEach((title) => {
             const chars = splitTitle(title);
+            // « Dépliage » : la fonte variable (Archivo, axes wdth/wght) passe de
+            // condensée-légère à l'état final pendant l'entrée du titre (lié au scroll).
+            // Le max-width en ch suit la largeur : pas de saut de ligne.
+            let lastE = -1;
+            scrollLinked(title, 1, .5, (p) => {
+                const e = Math.round((1 - Math.pow(1 - p, 3)) * 200) / 200;
+                if (e === lastE) return;
+                lastE = e;
+                if (e >= 1) { title.style.fontStretch = ''; title.style.fontWeight = ''; return; }
+                title.style.fontStretch = `${(62 + 13 * e).toFixed(2)}%`;
+                title.style.fontWeight = String(Math.round(340 + 460 * e));
+            });
             if (!chars.length) { title.classList.add('is-in'); return; }
             if (HAS_GSAP) {
-                gsap.set(chars, { yPercent: 110 });
+                gsap.set(chars, { y: 0, yPercent: 110 });
                 ScrollTrigger.create({
                     trigger: title,
                     start: 'top 88%',
@@ -760,10 +779,9 @@
         const sec = $('#projets');
         if (!sec) return;
         root.classList.add('bg-driven');
-        const meta = $('meta[name="theme-color"]');
         const set = (on) => {
             root.classList.toggle('is-ink', on);
-            if (meta) meta.setAttribute('content', on ? '#141412' : '#f3efe6');
+            syncThemeColor();
         };
         if (HAS_GSAP) {
             const st = ScrollTrigger.create({
@@ -819,6 +837,8 @@
     /* ------------------------------------------------------------------
        15. Projets : défilement horizontal épinglé (desktop)
        ------------------------------------------------------------------ */
+    const casesPin = { st: null, track: null };
+
     function initCases() {
         const cases = $('#cases');
         const track = $('#casesTrack');
@@ -850,18 +870,39 @@
                     },
                 },
             });
-            items.forEach((item) => {
+            casesPin.st = tween.scrollTrigger;
+            casesPin.track = track;
+            items.forEach((item, i) => {
                 const inner = $$('.gcover-art, .media-img', item);
-                if (!inner.length) return;
-                gsap.fromTo(inner, { xPercent: -5 }, {
-                    xPercent: 5,
-                    ease: 'none',
-                    scrollTrigger: { trigger: item, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true },
-                });
+                if (inner.length) {
+                    gsap.fromTo(inner, { xPercent: -5 }, {
+                        xPercent: 5,
+                        ease: 'none',
+                        scrollTrigger: { trigger: item, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true },
+                    });
+                }
+                if (i === 0) return; // le premier est déjà à l'écran
+                // Entrée : l'image s'ouvre depuis la droite, le texte suit en décalé.
+                const media = $('.case-media', item);
+                const info = $$('.case-info > *', item);
+                const st = { trigger: item, containerAnimation: tween, start: 'left 98%', end: 'left 40%', scrub: true };
+                if (media) {
+                    gsap.fromTo(media, { clipPath: 'inset(6% 0% 6% 55% round 4px)' }, {
+                        clipPath: 'inset(0% 0% 0% 0% round 4px)', ease: 'none', scrollTrigger: st,
+                    });
+                }
+                if (info.length) {
+                    gsap.fromTo(info, { x: 90, opacity: 0 }, {
+                        x: 0, opacity: 1, ease: 'power2.out', stagger: .06,
+                        scrollTrigger: { ...st, start: 'left 90%', end: 'left 35%' },
+                    });
+                }
             });
             return () => {
+                casesPin.st = null;
                 cases.classList.remove('is-horizontal');
                 gsap.set(track, { clearProps: 'transform' });
+                gsap.set($$('.case-media, .case-info > *', track), { clearProps: 'clipPath,transform,opacity' });
             };
         });
     }
@@ -884,6 +925,15 @@
         const cases = $('#cases');
         if (cases && !cases.classList.contains('is-horizontal')) {
             $$('.case-media', cases).forEach((media) => {
+                // Ouverture de la carte au scroll (mobile / tablette) : le cadre
+                // s'ouvre depuis le bas et les côtés, lié au défilement.
+                let lastE = -1;
+                scrollLinked(media, 1, .72, (p) => {
+                    const e = Math.round((1 - Math.pow(1 - clamp(p * 1.25, 0, 1), 3)) * 400) / 400;
+                    if (e === lastE) return;
+                    lastE = e;
+                    media.style.clipPath = e >= 1 ? '' : `inset(${((1 - e) * 22).toFixed(2)}% ${((1 - e) * 9).toFixed(2)}% 0% ${((1 - e) * 9).toFixed(2)}% round 4px)`;
+                });
                 const layers = $$('.gcover-art, .media-img', media);
                 if (!layers.length) return;
                 scrollLinked(media, 1, 0, (p) => {
@@ -933,7 +983,7 @@
                 trigger: main,
                 start: 'bottom 55%',
                 once: true,
-                onEnter: () => gsap.fromTo(chars, { yPercent: 105 }, {
+                onEnter: () => gsap.fromTo(chars, { y: 0, yPercent: 105 }, {
                     yPercent: 0, duration: 1.2, ease: 'expo.out', stagger: .025,
                     onComplete: () => { title.classList.add('is-in'); gsap.set(chars, { clearProps: 'transform' }); },
                 }),
@@ -1102,7 +1152,15 @@
                 prev.classList.remove('is-visible');
             });
         });
-        window.addEventListener('pointermove', () => { if (active) kick(); }, { passive: true });
+        let lx = 0, lt = 0;
+        window.addEventListener('pointermove', (e) => {
+            if (!active) return;
+            kick();
+            const now = performance.now();
+            const v = Math.abs(e.clientX - lx) / Math.max(8, now - lt);
+            lx = e.clientX; lt = now;
+            ink.pulse(prev, v * 16);
+        }, { passive: true });
         // Le contenu défile sous le pointeur : on masque si plus aucune ligne n'est survolée.
         onScroll(() => {
             if (!active) return;
@@ -1240,7 +1298,711 @@
     }
 
     /* ------------------------------------------------------------------
-       22. Démarrage
+       22. Typographie vivante : le nom (et le titre du footer) réagit
+           au curseur, au toucher et à la vitesse de défilement.
+           Archivo est variable (wdth 62–125, wght 100–900) : chaque lettre
+           proche du pointeur s'élargit et s'affine, comme une loupe d'encre.
+           La ligne est recompressée (scaleX) pour ne jamais déborder.
+       ------------------------------------------------------------------ */
+    function makeLivingType(el, zone, { sweepOn = '', waveGain = 1 } = {}) {
+        const chars = $$('.char', el);
+        if (!el || !zone || !chars.length) return;
+        const REST_W = 800;
+        const REST_S = 75;
+        const st = chars.map(() => ({ x: 0, y: 0, w: REST_W, s: REST_S, ww: -1, ws: -1 }));
+        const row = $('.fit-row', el);
+        const words = $$('.fit-w', el);
+        const ptr = { x: 0, y: 0, on: false };
+        const ripples = [];
+        let wave = 0;
+        let measured = false;
+        let paused = false;
+        let visible = true;
+        let raf = 0;
+        let avail = 0;
+        let lastScaleKey = '';
+
+        const clearStyles = () => {
+            chars.forEach((c, i) => { c.style.fontWeight = ''; c.style.fontStretch = ''; st[i].ww = -1; st[i].ws = -1; st[i].w = REST_W; st[i].s = REST_S; });
+            if (row) row.style.transform = '';
+            words.forEach((w) => { w.style.transform = ''; });
+            lastScaleKey = '';
+        };
+        const measure = () => {
+            if (!el.classList.contains('is-in')) return false;
+            clearStyles();
+            const r = el.getBoundingClientRect();
+            const cs = getComputedStyle(el);
+            avail = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+            chars.forEach((c, i) => {
+                const cr = c.getBoundingClientRect();
+                st[i].x = cr.left + cr.width / 2 - r.left;
+                st[i].y = cr.top + cr.height / 2 - r.top;
+            });
+            measured = true;
+            return true;
+        };
+
+        const frame = (now) => {
+            raf = 0;
+            if (paused || !visible) return;
+            if (!measured && !measure()) return;
+            const r = el.getBoundingClientRect();
+            const stacked = el.classList.contains('is-stacked');
+            const fs = parseFloat(el.style.fontSize) || 100;
+            const R = Math.max(70, fs * (stacked ? .55 : .75));
+            const t = now / 1000;
+            wave *= .93;
+            for (let k = ripples.length - 1; k >= 0; k--) {
+                if ((now - ripples[k].t0) / 1000 > ripples[k].life) ripples.splice(k, 1);
+            }
+            let moving = false;
+            for (let i = 0; i < chars.length; i++) {
+                const s = st[i];
+                const cx = r.left + s.x;
+                const cy = r.top + s.y;
+                let f = 0;
+                if (ptr.on) {
+                    const dx = ptr.x - cx;
+                    const dy = (ptr.y - cy) * 1.3;
+                    f = Math.exp(-(dx * dx + dy * dy) / (R * R));
+                }
+                for (let k = 0; k < ripples.length; k++) {
+                    const rp = ripples[k];
+                    const age = (now - rp.t0) / 1000;
+                    const d = Math.hypot(cx - rp.x, cy - rp.y);
+                    const band = (d - Math.max(0, age) * rp.v) / R;
+                    f = Math.max(f, Math.exp(-band * band) * (1 - age / rp.life));
+                }
+                if (wave > .01) f = Math.max(f, wave * (.5 + .5 * Math.sin(t * 7 - i * .75)));
+                const tw = REST_W - 560 * f;
+                const ts = REST_S + 38 * f;
+                // Attaque rapide, relâchement doux : l'onde se lit même quand elle passe vite.
+                const k = tw < s.w ? .45 : .14;
+                s.w += (tw - s.w) * k;
+                s.s += (ts - s.s) * k;
+                if (Math.abs(tw - s.w) > .6 || Math.abs(ts - s.s) > .05) moving = true;
+                else { s.w = tw; s.s = ts; }
+                const w = Math.round(s.w / 4) * 4;
+                const sv = Math.round(s.s * 4) / 4;
+                if (w !== s.ww) { chars[i].style.fontWeight = w >= REST_W ? '' : String(w); s.ww = w; }
+                if (sv !== s.ws) { chars[i].style.fontStretch = sv <= REST_S ? '' : `${sv}%`; s.ws = sv; }
+            }
+            // Compensation : la ligne (ou chaque mot empilé) ne dépasse jamais la largeur.
+            const parts = stacked ? words : (row ? [row] : []);
+            const scales = parts.map((p) => {
+                const w = p.offsetWidth;
+                return w > avail && avail > 0 ? avail / w : 1;
+            });
+            const key = scales.map((k) => k.toFixed(4)).join();
+            if (key !== lastScaleKey) {
+                parts.forEach((p, i) => { p.style.transform = scales[i] < 1 ? `scaleX(${scales[i].toFixed(4)})` : ''; });
+                lastScaleKey = key;
+            }
+            if (ptr.on || ripples.length || wave > .01 || moving) raf = requestAnimationFrame(frame);
+        };
+        const kick = () => { if (!raf && visible && !paused) raf = requestAnimationFrame(frame); };
+
+        const ripple = (x, y, v, life) => {
+            if (ripples.length > 4) ripples.shift();
+            ripples.push({ x, y, v, life, t0: performance.now() });
+            kick();
+        };
+
+        zone.addEventListener('pointermove', (e) => {
+            if (e.pointerType !== 'mouse') return;
+            ptr.x = e.clientX; ptr.y = e.clientY; ptr.on = true;
+            kick();
+        }, { passive: true });
+        zone.addEventListener('pointerleave', () => { ptr.on = false; kick(); });
+        el.addEventListener('pointerdown', (e) => {
+            ripple(e.clientX, e.clientY, Math.max(380, window.innerWidth * .55), 1.6);
+        });
+        // Doigt qui glisse sur le nom (la page défile quand même)
+        el.addEventListener('touchmove', (e) => {
+            const tch = e.touches[0];
+            if (!tch) return;
+            ptr.x = tch.clientX; ptr.y = tch.clientY; ptr.on = true;
+            kick();
+        }, { passive: true });
+        el.addEventListener('touchend', () => { ptr.on = false; kick(); }, { passive: true });
+
+        // Vitesse de défilement -> vague qui traverse les lettres
+        let lastY = scroll.y;
+        let lastT = performance.now();
+        onScroll((y) => {
+            const now = performance.now();
+            const dt = Math.max(16, now - lastT);
+            const v = Math.abs(y - lastY) / dt; // px/ms
+            lastY = y; lastT = now;
+            if (!visible || !measured) return;
+            const a = clamp((v - .25) / 3.2, 0, 1) * waveGain;
+            if (a > wave) { wave = a; kick(); }
+        });
+
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver((entries) => {
+                visible = entries[0].isIntersecting;
+                if (visible) kick();
+            }, { rootMargin: '10% 0px' }).observe(el);
+        }
+        window.addEventListener('resize', () => {
+            paused = true;
+            measured = false;
+            clearStyles();
+            clearTimeout(el._livingT);
+            el._livingT = setTimeout(() => { paused = false; }, 400);
+        }, { passive: true });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measured = false; }).catch(() => {});
+
+        // Moment signature : une vague traverse le nom juste après son apparition.
+        if (sweepOn) {
+            document.addEventListener(sweepOn, () => {
+                measured = false;
+                requestAnimationFrame(() => {
+                    const r = el.getBoundingClientRect();
+                    ripple(r.left - r.width * .05, r.top + r.height * .5, Math.max(700, r.width * .95), 1.7);
+                });
+            }, { once: true });
+        } else {
+            new MutationObserver((list, obs) => {
+                if (el.classList.contains('is-in')) { measured = false; obs.disconnect(); }
+            }).observe(el, { attributes: true, attributeFilter: ['class'] });
+        }
+    }
+
+    function initLivingType() {
+        if (!MOTION) return;
+        makeLivingType($('#heroName'), $('.hero'), { sweepOn: 'hero:named', waveGain: TOUCH ? 1 : .55 });
+        makeLivingType($('#footerTitle'), $('#contact'), { waveGain: .5 });
+    }
+
+    /* ------------------------------------------------------------------
+       23. Encre : distorsion SVG (feDisplacementMap) au survol des projets
+           et sur l'aperçu flottant. Intensité = vitesse du pointeur.
+       ------------------------------------------------------------------ */
+    const ink = { pulse: () => {} };
+
+    function initInk() {
+        if (!MOTION || !FINE_POINTER) return;
+        const map = document.getElementById('fxInkMap');
+        if (!map) return;
+        let current = null;
+        let scale = 0;
+        let target = 0;
+        let raf = 0;
+        const frame = () => {
+            raf = 0;
+            target *= .88;
+            scale += (target - scale) * .22;
+            map.setAttribute('scale', scale.toFixed(1));
+            if (scale < .3 && target < .3) {
+                map.setAttribute('scale', '0');
+                if (current) current.classList.remove('is-inking');
+                current = null;
+                return;
+            }
+            raf = requestAnimationFrame(frame);
+        };
+        ink.pulse = (el, amount) => {
+            if (!el) return;
+            if (current !== el) {
+                if (current) current.classList.remove('is-inking');
+                current = el;
+                el.classList.add('is-inking');
+            }
+            target = Math.min(64, Math.max(target, amount));
+            if (!raf) raf = requestAnimationFrame(frame);
+        };
+        $$('.case-media').forEach((media) => {
+            const inner = $('.case-media-inner', media) || media;
+            let lx = 0, ly = 0, lt = 0;
+            media.addEventListener('pointerenter', (e) => {
+                if (e.pointerType !== 'mouse') return;
+                lx = e.clientX; ly = e.clientY; lt = performance.now();
+                ink.pulse(inner, 26);
+            });
+            media.addEventListener('pointermove', (e) => {
+                if (e.pointerType !== 'mouse') return;
+                const now = performance.now();
+                const v = Math.hypot(e.clientX - lx, e.clientY - ly) / Math.max(8, now - lt);
+                lx = e.clientX; ly = e.clientY; lt = now;
+                ink.pulse(inner, v * 22);
+            });
+        });
+    }
+
+    /* ------------------------------------------------------------------
+       24. Thème clair / sombre (mémorisé ; sinon prefers-color-scheme)
+       ------------------------------------------------------------------ */
+    const THEME_KEY = 'ejc-theme';
+    const darkMQ = (() => { try { return window.matchMedia('(prefers-color-scheme: dark)'); } catch (e) { return null; } })();
+    const systemTheme = () => (darkMQ && darkMQ.matches ? 'dark' : 'light');
+    const currentTheme = () => root.getAttribute('data-theme') || systemTheme();
+
+    function syncThemeColor() {
+        const meta = $('meta[name="theme-color"]');
+        if (!meta) return;
+        const dark = currentTheme() === 'dark' || root.classList.contains('is-ink');
+        meta.setAttribute('content', dark ? '#141412' : '#f3efe6');
+    }
+
+    const themeSubs = [];
+    function setTheme(next, origin) {
+        const apply = () => {
+            if (next === 'system') {
+                root.setAttribute('data-theme-auto', '');
+                root.setAttribute('data-theme', systemTheme());
+                try { localStorage.removeItem(THEME_KEY); } catch (e) { /* noop */ }
+            } else {
+                root.removeAttribute('data-theme-auto');
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* noop */ }
+            }
+            syncThemeColor();
+            themeSubs.forEach((fn) => fn(currentTheme()));
+        };
+        const before = currentTheme();
+        const after = next === 'system' ? systemTheme() : next;
+        if (!MOTION || typeof document.startViewTransition !== 'function' || before === after) { apply(); return; }
+        const x = origin ? origin.x : window.innerWidth - 40;
+        const y = origin ? origin.y : 40;
+        root.classList.add('theme-switching');
+        let vt;
+        try { vt = document.startViewTransition(apply); } catch (e) { apply(); root.classList.remove('theme-switching'); return; }
+        vt.ready.then(() => {
+            const r = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+            root.animate(
+                { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${Math.ceil(r)}px at ${x}px ${y}px)`] },
+                { duration: 760, easing: 'cubic-bezier(.65, 0, .35, 1)', pseudoElement: '::view-transition-new(root)' },
+            );
+        }).catch(() => {});
+        vt.finished.then(() => root.classList.remove('theme-switching'), () => root.classList.remove('theme-switching'));
+    }
+
+    function initTheme() {
+        syncThemeColor();
+        if (darkMQ && typeof darkMQ.addEventListener === 'function') {
+            darkMQ.addEventListener('change', () => {
+                if (!root.hasAttribute('data-theme-auto')) return;
+                root.setAttribute('data-theme', systemTheme());
+                syncThemeColor();
+                themeSubs.forEach((fn) => fn(currentTheme()));
+            });
+        }
+    }
+
+    /* ------------------------------------------------------------------
+       25. Petits outils : copie, annonce (toast), focus de destination
+       ------------------------------------------------------------------ */
+    function copyText(text) {
+        const legacy = () => {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+            document.body.removeChild(ta);
+            return ok;
+        };
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text).then(() => true, () => legacy());
+        }
+        return Promise.resolve(legacy());
+    }
+
+    let toastEl = null;
+    let toastTimer = 0;
+    function toast(message) {
+        if (!toastEl) {
+            toastEl = document.createElement('div');
+            toastEl.className = 'toast mono';
+            toastEl.setAttribute('role', 'status');
+            toastEl.setAttribute('aria-live', 'polite');
+            document.body.appendChild(toastEl);
+        }
+        toastEl.textContent = message;
+        toastEl.classList.add('is-on');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toastEl.classList.remove('is-on'), 2400);
+    }
+
+    /** Déplace le focus clavier sur la destination (sans re-défiler). */
+    function focusTarget(el) {
+        if (!el) return;
+        const heading = el.matches('h1, h2, h3') ? el : $('h2, h3, .case-title', el) || el;
+        if (!heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1');
+        heading.classList.add('focus-target');
+        try { heading.focus({ preventScroll: true }); } catch (e) { heading.focus(); }
+    }
+
+    function getEmail() {
+        const btn = $('#copyEmail');
+        return (btn && btn.dataset.email) || '';
+    }
+
+    /* Projets épinglés : position de défilement d'une étude de cas donnée */
+    function caseScrollY(item) {
+        const st = casesPin.st;
+        const track = casesPin.track;
+        if (!st || !track) return item.getBoundingClientRect().top + window.scrollY;
+        const items = $$('.case', track);
+        const first = items[0];
+        const dist = Math.max(1, track.scrollWidth - window.innerWidth);
+        const p = clamp((item.offsetLeft - first.offsetLeft) / dist, 0, 1);
+        return st.start + (st.end - st.start) * p + 2;
+    }
+
+    function scrollToY(y, fast) {
+        if (lenis) lenis.scrollTo(y, { duration: fast ? .6 : 1.4, easing: (t) => 1 - Math.pow(1 - t, 4) });
+        else window.scrollTo({ top: y, behavior: REDUCED || fast ? 'auto' : 'smooth' });
+    }
+
+    /* Clavier dans le défilement horizontal : un lien focalisé hors écran
+       fait défiler la page jusqu'à son étude de cas (et pas le conteneur). */
+    function initCaseFocus() {
+        const cases = $('#cases');
+        if (!cases) return;
+        cases.addEventListener('scroll', () => { if (cases.scrollLeft) cases.scrollLeft = 0; }, { passive: true });
+        cases.addEventListener('focusin', (e) => {
+            if (!casesPin.st) return;
+            const item = e.target.closest('.case');
+            if (!item) return;
+            cases.scrollLeft = 0;
+            const y = caseScrollY(item);
+            if (Math.abs(window.scrollY - y) > 4) scrollToY(y, true);
+        });
+    }
+
+    /* ------------------------------------------------------------------
+       26. Palette de commandes (Ctrl/⌘ + K) — <dialog> modal natif :
+           piège de focus, Échap et restauration du focus fournis par le
+           navigateur ; combobox + listbox (aria-activedescendant).
+       ------------------------------------------------------------------ */
+    const IS_MAC = /Mac|iPhone|iPad|iPod/i.test((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '');
+    const KBD = IS_MAC ? '⌘ K' : 'Ctrl K';
+    const palette = { open: () => {}, isOpen: () => false };
+
+    const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    const textOf = (el) => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '');
+
+    function buildCommands() {
+        const cmds = [];
+        const add = (group, label, hint, run, keywords = '') => cmds.push({ group, label, hint, run, hay: norm(`${label} ${hint} ${keywords} ${group}`) });
+
+        // Sections
+        const goSection = (id) => () => {
+            const target = document.getElementById(id);
+            if (!target) return;
+            scrollToTarget(target);
+            setTimeout(() => focusTarget(id === 'accueil' ? $('#heroName') : ($('.section-title, .footer-title', target) || target)), lenis ? 900 : 350);
+        };
+        add('Sections', 'Accueil', '00', goSection('accueil'), 'hero haut debut');
+        $$('.nav-links a').forEach((a) => {
+            const id = (a.getAttribute('href') || '').slice(1);
+            if (!id || !document.getElementById(id)) return;
+            const label = textOf($('.visually-hidden', a)) || textOf(a);
+            add('Sections', label, textOf($('.nav-num', a)), goSection(id));
+        });
+
+        // Projets
+        $$('#cases .case').forEach((item) => {
+            const title = textOf($('.case-title', item));
+            if (!title) return;
+            add('Projets', title, textOf($('.case-kind', item)), () => {
+                scrollToY(caseScrollY(item));
+                setTimeout(() => focusTarget($('.case-title', item)), lenis ? 900 : 350);
+            }, $$('.tags li', item).map(textOf).join(' '));
+        });
+        $$('.archive-row').forEach((row) => {
+            const title = textOf($('.archive-name', row));
+            if (!title) return;
+            add('Projets', title, textOf($('.archive-kind', row)), () => {
+                scrollToTarget(row);
+                const link = $('a.archive-link', row);
+                setTimeout(() => { if (link) link.focus({ preventScroll: true }); else focusTarget(row); }, lenis ? 900 : 350);
+            }, textOf($('.archive-tags', row)));
+        });
+
+        // Arcade (les onglets sont lus dans le DOM : un nouveau jeu apparaît seul)
+        $$('.arcade-tab').forEach((tab) => {
+            const title = textOf($('.arcade-tab-title', tab)) || textOf(tab);
+            add('Arcade', `Jouer : ${title}`, textOf($('.arcade-tab-kind', tab)), () => {
+                const sec = $('#jeu');
+                if (sec) scrollToTarget(sec);
+                setTimeout(() => {
+                    tab.click();
+                    try { tab.focus({ preventScroll: true }); } catch (e) { tab.focus(); }
+                }, lenis ? 950 : 350);
+            }, 'jeu game');
+        });
+
+        // Actions
+        const email = getEmail();
+        if (email) {
+            add('Actions', 'Copier l’adresse e-mail', email, () => {
+                copyText(email).then((ok) => toast(ok ? `Adresse copiée : ${email}` : email));
+            }, 'mail contact courriel');
+            add('Actions', 'Écrire un e-mail', email, () => { window.location.href = `mailto:${email}`; }, 'mail contact courriel');
+        }
+        const dark = currentTheme() === 'dark';
+        add('Actions', dark ? 'Passer au thème clair' : 'Passer au thème sombre', 'Thème', () => setTheme(dark ? 'light' : 'dark'), 'dark light mode nuit jour couleur');
+        if (!root.hasAttribute('data-theme-auto')) add('Actions', 'Thème : suivre le système', 'Thème', () => setTheme('system'), 'auto systeme');
+        add('Actions', 'Revenir en haut de page', '↑', () => { scrollToTarget(document.body); setTimeout(() => focusTarget($('#heroName')), lenis ? 900 : 350); }, 'top debut');
+        const cv = $('.about-cta a');
+        if (cv) add('Liens', 'Télécharger le CV', 'PDF', () => { window.open(cv.href, '_blank', 'noopener'); }, 'curriculum resume');
+        $$('[data-c="social-links"] a').forEach((a) => {
+            const label = textOf($('.visually-hidden', a)) || textOf(a);
+            const href = a.getAttribute('href');
+            if (!label || !href) return;
+            add('Liens', label, 'Nouvel onglet', () => { window.open(href, '_blank', 'noopener'); }, 'reseau social profil');
+        });
+        return cmds;
+    }
+
+    function search(cmds, query) {
+        const q = norm(query).trim();
+        if (!q) return cmds;
+        const words = q.split(/\s+/);
+        return cmds
+            .map((c, i) => {
+                if (!words.every((w) => c.hay.includes(w))) return null;
+                const l = norm(c.label);
+                const score = (l.startsWith(q) ? 0 : l.includes(q) ? 1 : 2) * 1000 + i;
+                return { c, score };
+            })
+            .filter(Boolean)
+            .sort((a, b) => a.score - b.score)
+            .map((x) => x.c);
+    }
+
+    function initPalette() {
+        if (typeof HTMLDialogElement !== 'function') return;
+        const dlg = document.createElement('dialog');
+        dlg.className = 'cmdk';
+        dlg.id = 'cmdk';
+        dlg.setAttribute('aria-labelledby', 'cmdkTitle');
+        dlg.innerHTML = '<div class="cmdk-box">'
+            + '<div class="cmdk-head"><label id="cmdkTitle" class="mono" for="cmdkInput">Navigation rapide</label>'
+            + '<button type="button" class="cmdk-close mono" aria-label="Fermer la navigation rapide">Échap</button></div>'
+            + '<div class="cmdk-field"><svg class="cmdk-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>'
+            + '<input id="cmdkInput" class="cmdk-input" type="text" role="combobox" aria-expanded="true" aria-controls="cmdkList" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Section, projet, jeu, action…"></div>'
+            + '<div class="cmdk-list" id="cmdkList" role="listbox" aria-label="Résultats" data-lenis-prevent></div>'
+            + '<p class="cmdk-empty" hidden>Aucun résultat. Essayez « projets », « thème » ou « email ».</p>'
+            + '<div class="cmdk-foot mono" aria-hidden="true"><span><kbd>↑</kbd><kbd>↓</kbd> naviguer</span><span><kbd>↵</kbd> ouvrir</span><span><kbd>Échap</kbd> fermer</span></div>'
+            + '<p class="visually-hidden" id="cmdkStatus" aria-live="polite"></p>'
+            + '</div>';
+        document.body.appendChild(dlg);
+        const input = $('#cmdkInput', dlg);
+        const list = $('#cmdkList', dlg);
+        const empty = $('.cmdk-empty', dlg);
+        const status = $('#cmdkStatus', dlg);
+        let cmds = [];
+        let shown = [];
+        let active = 0;
+        let returnFocus = null;
+
+        const setActive = (i, scrollIt = true) => {
+            if (!shown.length) { input.removeAttribute('aria-activedescendant'); return; }
+            active = (i + shown.length) % shown.length;
+            $$('[role="option"]', list).forEach((o) => {
+                const on = +o.dataset.i === active;
+                o.setAttribute('aria-selected', String(on));
+                if (on) {
+                    input.setAttribute('aria-activedescendant', o.id);
+                    if (scrollIt) o.scrollIntoView({ block: 'nearest' });
+                }
+            });
+        };
+        const render = () => {
+            shown = search(cmds, input.value);
+            const groups = [];
+            shown.forEach((c, i) => {
+                let g = groups.find((x) => x.name === c.group);
+                if (!g) { g = { name: c.group, items: [] }; groups.push(g); }
+                g.items.push({ c, i });
+            });
+            // Ordre d'affichage = ordre des groupes ; on renumérote pour les flèches.
+            let n = 0;
+            const order = [];
+            list.innerHTML = groups.map((g, gi) => {
+                const head = `<div class="cmdk-group mono" id="cmdkG${gi}" role="presentation">${escapeHTML(g.name)}</div>`;
+                const opts = g.items.map(({ c }) => {
+                    const idx = n++;
+                    order.push(c);
+                    return `<div class="cmdk-item" role="option" id="cmdkO${idx}" data-i="${idx}" aria-selected="false">`
+                        + `<span class="cmdk-item-label">${escapeHTML(c.label)}</span>`
+                        + (c.hint ? `<span class="cmdk-item-hint mono">${escapeHTML(c.hint)}</span>` : '')
+                        + '</div>';
+                }).join('');
+                return `<div role="group" aria-labelledby="cmdkG${gi}">${head}${opts}</div>`;
+            }).join('');
+            shown = order;
+            empty.hidden = shown.length > 0;
+            status.textContent = shown.length ? `${shown.length} résultat${shown.length > 1 ? 's' : ''}` : 'Aucun résultat';
+            setActive(0, false);
+            list.scrollTop = 0;
+        };
+        const close = () => { if (dlg.open) dlg.close(); };
+        const run = (i) => {
+            const c = shown[i];
+            if (!c) return;
+            close();
+            // Laisse le dialog se fermer (focus restauré) avant d'agir.
+            setTimeout(() => { try { c.run(); } catch (e) { if (window.console) console.warn('[palette]', e); } }, 30);
+        };
+        const open = () => {
+            if (dlg.open) { input.focus(); input.select(); return; }
+            if (menu.open && menu.setOpen) menu.setOpen(false, { restoreFocus: false });
+            returnFocus = document.activeElement;
+            cmds = buildCommands();
+            input.value = '';
+            render();
+            dlg.showModal();
+            root.classList.add('cmdk-open');
+            if (lenis) lenis.stop();
+            input.focus();
+        };
+        palette.open = open;
+        palette.isOpen = () => dlg.open;
+
+        dlg.addEventListener('close', () => {
+            root.classList.remove('cmdk-open');
+            if (lenis) lenis.start();
+            if (returnFocus && document.contains(returnFocus) && document.activeElement !== returnFocus) {
+                try { returnFocus.focus({ preventScroll: true }); } catch (e) { /* noop */ }
+            }
+        });
+        dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
+        $('.cmdk-close', dlg).addEventListener('click', close);
+        input.addEventListener('input', render);
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
+            else if (e.key === 'PageDown') { e.preventDefault(); setActive(Math.min(shown.length - 1, active + 5)); }
+            else if (e.key === 'PageUp') { e.preventDefault(); setActive(Math.max(0, active - 5)); }
+            else if (e.key === 'Enter') { e.preventDefault(); run(active); }
+        });
+        list.addEventListener('pointermove', (e) => {
+            const o = e.target.closest('[role="option"]');
+            if (o && +o.dataset.i !== active) setActive(+o.dataset.i, false);
+        });
+        list.addEventListener('click', (e) => {
+            const o = e.target.closest('[role="option"]');
+            if (o) run(+o.dataset.i);
+        });
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && (e.key === 'k' || e.key === 'K')) {
+                e.preventDefault();
+                if (dlg.open) close(); else open();
+            }
+        });
+    }
+
+    function escapeHTML(s) {
+        return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    /* Boutons du header : thème + navigation rapide (créés en JS : sans JS, rien d'inutile) */
+    function initHeaderTools() {
+        const right = $('.nav-right');
+        const burger = $('#hamburger');
+        if (!right) return;
+        const theme = document.createElement('button');
+        theme.type = 'button';
+        theme.className = 'hdr-btn theme-btn';
+        theme.setAttribute('aria-label', 'Thème sombre');
+        theme.innerHTML = '<span class="theme-ico" aria-hidden="true"></span>';
+        const sync = (t) => theme.setAttribute('aria-pressed', String(t === 'dark'));
+        sync(currentTheme());
+        themeSubs.push(sync);
+        theme.addEventListener('click', () => {
+            const r = theme.getBoundingClientRect();
+            setTheme(currentTheme() === 'dark' ? 'light' : 'dark', { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+        });
+
+        const nodes = [theme];
+        if (typeof HTMLDialogElement === 'function') {
+            const cmd = document.createElement('button');
+            cmd.type = 'button';
+            cmd.className = 'hdr-btn cmdk-btn';
+            cmd.setAttribute('aria-haspopup', 'dialog');
+            cmd.setAttribute('aria-keyshortcuts', 'Control+K Meta+K');
+            cmd.setAttribute('aria-label', `Navigation rapide (${IS_MAC ? 'Cmd' : 'Ctrl'} + K)`);
+            cmd.innerHTML = '<svg class="cmdk-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>'
+                + `<span class="cmdk-btn-label" aria-hidden="true">Aller à</span><kbd class="mono" aria-hidden="true">${KBD}</kbd>`;
+            cmd.addEventListener('click', () => palette.open());
+            nodes.push(cmd);
+        }
+        nodes.forEach((n) => right.insertBefore(n, burger || null));
+    }
+
+    /* ------------------------------------------------------------------
+       27. Dock : section courante (ouvre la palette) + retour en haut
+           avec anneau de progression.
+       ------------------------------------------------------------------ */
+    function initDock() {
+        const labels = { '': ['00', 'Accueil'] };
+        $$('.nav-links a').forEach((a) => {
+            const id = (a.getAttribute('href') || '').slice(1);
+            labels[id] = [textOf($('.nav-num', a)), textOf($('.visually-hidden', a)) || textOf(a)];
+        });
+        const dock = document.createElement('div');
+        dock.className = 'dock';
+        dock.innerHTML = '<button type="button" class="dock-where" aria-haspopup="dialog">'
+            + '<span class="dock-num mono">00</span><span class="dock-name-wrap"><span class="dock-name">Accueil</span></span>'
+            + `<kbd class="dock-kbd mono" aria-hidden="true">${KBD}</kbd></button>`
+            + '<button type="button" class="dock-top" aria-label="Revenir en haut de page">'
+            + '<svg class="dock-ring" viewBox="0 0 48 48" aria-hidden="true"><circle class="dock-ring-bg" cx="24" cy="24" r="21"/><circle class="dock-ring-fg" cx="24" cy="24" r="21" pathLength="1"/></svg>'
+            + '<svg class="dock-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/></svg>'
+            + '</button>';
+        document.body.appendChild(dock);
+        const where = $('.dock-where', dock);
+        const num = $('.dock-num', dock);
+        const name = $('.dock-name', dock);
+        const top = $('.dock-top', dock);
+        let current = '';
+        const setLabel = (id) => {
+            const [n, l] = labels[id] || labels[''];
+            where.setAttribute('aria-label', `Navigation rapide, section actuelle : ${l}`);
+            if (name.textContent === l) return;
+            num.textContent = n;
+            name.textContent = l;
+            if (MOTION && typeof name.animate === 'function') {
+                name.animate([{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }], { duration: 520, easing: 'cubic-bezier(.22, 1, .36, 1)' });
+            }
+        };
+        setLabel('');
+        if (typeof HTMLDialogElement === 'function') where.addEventListener('click', () => palette.open());
+        else where.hidden = true;
+        top.addEventListener('click', () => {
+            scrollToTarget(document.body);
+            setTimeout(() => focusTarget($('#heroName')), lenis ? 900 : 350);
+        });
+        let shown = null;
+        const update = () => {
+            const show = scroll.y > scroll.vh * .7 && current !== 'contact' && current !== 'jeu';
+            if (show !== shown) {
+                shown = show;
+                dock.classList.toggle('is-on', show);
+                if (!show && dock.contains(document.activeElement)) document.activeElement.blur();
+            }
+        };
+        sectionSubs.push((id) => { current = id; setLabel(id); update(); });
+        let lastP = -1;
+        onScroll((y) => {
+            const p = Math.round(clamp(y / scroll.max, 0, 1) * 500) / 500;
+            if (p !== lastP) { dock.style.setProperty('--p', p); lastP = p; }
+            update();
+        });
+    }
+
+    /* ------------------------------------------------------------------
+       28. Démarrage
        ------------------------------------------------------------------ */
     // Le contenu (content.js) — attendu au plus 2,5 s.
     const contentSignal = (window.contentReady && typeof window.contentReady.then === 'function')
@@ -1294,11 +2056,18 @@
         safe(initBgSwitch);
         safe(initParallax);
         safe(initCurtain);
+        safe(initCaseFocus);
         safe(initMarquee);
         safe(initMagnetic);
         safe(initPreview);
         safe(initHeroPointer);
         safe(initProgress);
+        safe(initLivingType);
+        safe(initInk);
+        safe(initTheme);
+        safe(initHeaderTools);
+        safe(initPalette);
+        safe(initDock);
 
         if (!HAS_GSAP && linked.length) onScroll(updateLinked);
         requestScrollTick();

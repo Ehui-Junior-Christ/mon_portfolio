@@ -1,3 +1,6 @@
 Thumbs.db
 .DS_Store
 node_modules/
+
+# Notes privées (jamais publiées)
+*.local.md

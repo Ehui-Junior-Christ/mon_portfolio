@@ -66,13 +66,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Gochi+Hand&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Icônes : chargées sans bloquer le rendu (media="print" -> "all" dans js/boot.js ; <noscript> sans JS) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" data-async-css>
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/motion.css">
     <link rel="stylesheet" href="css/game.css">
 
     <script>document.documentElement.classList.add('js');</script>
+    <script src="js/boot.js"></script>
 </head>
 <body>
 
@@ -93,6 +96,13 @@
 
     <!-- Couches globales -->
     <div class="grain" aria-hidden="true"></div>
+    <!-- Filtre « encre » (survol des projets) : bruit + déplacement, piloté par main.js -->
+    <svg class="fx-defs" width="0" height="0" aria-hidden="true" focusable="false">
+        <filter id="fxInk" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+            <feTurbulence id="fxInkNoise" type="fractalNoise" baseFrequency="0.008 0.022" numOctaves="2" seed="7" result="n"/>
+            <feDisplacementMap id="fxInkMap" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+    </svg>
     <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
     <div class="cursor" id="cursor" aria-hidden="true"><span class="cursor-label" id="cursorLabel"></span></div>
     <div class="preview" id="preview" aria-hidden="true"><div class="preview-inner" id="previewInner"></div></div>
@@ -157,7 +167,7 @@
             <div class="hero-body">
                 <div class="hero-lead">
                     <p class="hero-greeting mono" data-anim="fade">Salut, moi c'est Junior —</p>
-                    <p class="hero-tagline" data-anim="fade" data-c="tagline">Développeur web <strong>full-stack</strong>, diplômé d'une <strong>Licence MIAGE</strong> à l'UPB. Je conçois des interfaces soignées et des back-ends solides.</p>
+                    <p class="hero-tagline" data-anim="fade" data-c="tagline">Diplômé d'une <strong>Licence MIAGE</strong> à l'UPB. Je conçois des interfaces soignées et des back-ends solides, du croquis à la mise en production.</p>
                     <div class="hero-cta" data-anim="fade">
                         <a href="#projets" class="btn btn-primary magnetic" data-cursor="Voir">
                             <span>Voir mes projets</span><i class="fas fa-arrow-down" aria-hidden="true"></i>
@@ -280,12 +290,12 @@
             <div data-c="projects"></div>
         </section>
 
-        <!-- ==================== ARCADE (3 mini-jeux, js/games/) ==================== -->
+        <!-- ==================== ARCADE (4 mini-jeux, js/games/) ==================== -->
         <section class="game t-light-2" id="jeu" aria-labelledby="jeuTitle">
             <header class="section-head">
                 <span class="section-num mono">04</span>
                 <h2 class="section-title" id="jeuTitle" data-anim="title">Arcade</h2>
-                <p class="section-sub">Trois cartouches pour faire une pause, et découvrir mon parcours autrement. Les succès se débloquent au fil des parties.</p>
+                <p class="section-sub">Quatre cartouches pour faire une pause, et découvrir mon parcours autrement. Les succès se débloquent au fil des parties.</p>
             </header>
 
             <div class="arcade" id="arcade" data-anim="reveal">
@@ -306,15 +316,20 @@
                             <span class="arcade-tab-title">Mission&nbsp;: Recrutement</span>
                             <span class="arcade-tab-kind mono">Exploration · énigmes</span>
                         </button>
+                        <button class="arcade-tab" type="button" role="tab" id="tab-pixel" aria-selected="false" aria-controls="panel-pixel" data-game="pixel" tabindex="-1">
+                            <span class="arcade-tab-num mono">04</span>
+                            <span class="arcade-tab-title">Pixel Quest</span>
+                            <span class="arcade-tab-kind mono">Aventure · pixel art</span>
+                        </button>
                     </div>
                     <button class="arcade-trophy-btn" type="button" id="trophyBtn" aria-expanded="false" aria-controls="trophyPanel">
-                        <span class="mono">Succès</span> <strong data-trophy-count>0/14</strong>
+                        <span class="mono">Succès</span> <strong data-trophy-count>0/18</strong>
                     </button>
                 </div>
 
                 <div class="arcade-trophies" id="trophyPanel" hidden>
                     <div class="arcade-trophies-head">
-                        <p class="mono">Succès débloqués <strong data-trophy-count>0/14</strong></p>
+                        <p class="mono">Succès débloqués <strong data-trophy-count>0/18</strong></p>
                         <button class="game-btn game-btn--ghost game-btn--small" type="button" id="trophyReset">Effacer la progression</button>
                     </div>
                     <ol class="arcade-trophy-list" id="trophyList"></ol>
@@ -430,6 +445,49 @@
                     </div>
                 </div>
 
+                <!-- 04 — Pixel Quest (niveaux éditables : content.json → games.pixel) -->
+                <div class="arcade-panel" role="tabpanel" id="panel-pixel" aria-labelledby="tab-pixel" data-game="pixel" hidden>
+                    <div class="arcade-screen">
+                        <div class="game-stage game-stage--pixel" data-fig="fig. 04d — pixel.quest">
+                            <canvas id="pixel-canvas" width="480" height="300" tabindex="0" role="img" aria-label="Pixel Quest : aventure en pixel art à travers le parcours d'Ehui, de Gagnoa à Abidjan" aria-describedby="pxDesc"></canvas>
+                            <div class="game-card px-card" id="pxCard" role="dialog" aria-labelledby="pxCardTitle" hidden>
+                                <p class="game-card-kicker mono" id="pxCardKicker"></p>
+                                <h4 class="game-card-title" id="pxCardTitle"></h4>
+                                <p class="game-card-sub mono" id="pxCardSub"></p>
+                                <p class="game-card-text" id="pxCardText"></p>
+                                <div class="game-card-actions" id="pxCardActions"></div>
+                            </div>
+                        </div>
+                        <div class="touch-row touch-row--px">
+                            <div class="mobile-dpad mobile-dpad--px" role="group" aria-label="Croix directionnelle">
+                                <button class="dpad-btn dpad-up" type="button" data-px-dir="up" aria-label="Haut"><svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                                <button class="dpad-btn dpad-left" type="button" data-px-dir="left" aria-label="Gauche"><svg class="chev chev--left" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                                <span class="dpad-btn dpad-center" aria-hidden="true"></span>
+                                <button class="dpad-btn dpad-right" type="button" data-px-dir="right" aria-label="Droite"><svg class="chev chev--right" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                                <button class="dpad-btn dpad-down" type="button" data-px-dir="down" aria-label="Bas"><svg class="chev chev--down" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 8 5.5l5 5"/></svg></button>
+                            </div>
+                            <button class="touch-btn px-a-btn" id="pxAct" type="button" aria-label="Action : parler, ramasser, valider">A</button>
+                        </div>
+                    </div>
+                    <div class="arcade-side">
+                        <h3 class="arcade-side-title">Pixel Quest</h3>
+                        <p class="arcade-desc" id="pxDesc">Une petite aventure en pixel art, de Gagnoa à Abidjan. Parle aux habitants, ramasse les diplômes et les projets, puis passe la sortie pour rejoindre la zone suivante.</p>
+                        <dl class="arcade-hud">
+                            <div><dt class="mono">Niveau</dt><dd id="pxLevel">1/5 · Gagnoa</dd></div>
+                            <div><dt class="mono">Objets</dt><dd id="pxItems">0/0</dd></div>
+                        </dl>
+                        <p class="px-goal" id="pxGoal"></p>
+                        <div class="game-buttons">
+                            <button class="game-btn" id="pxStart" type="button">Démarrer</button>
+                            <button class="game-btn game-btn--ghost" id="pxMapBtn" type="button">Carte</button>
+                            <button class="game-btn game-btn--ghost" id="pxReset" type="button">Recommencer</button>
+                        </div>
+                        <ol class="px-levels" id="pxLevels" aria-label="Zones de Pixel Quest"></ol>
+                        <p class="arcade-keys mono">Flèches, ZQSD ou WASD : marcher · E, Espace ou Entrée : parler, ramasser · M : carte · Échap : fermer / pause · Mobile : croix + A, ou toucher une case</p>
+                        <p class="visually-hidden" id="pxStatus" aria-live="polite"></p>
+                    </div>
+                </div>
+
                 <div class="arcade-toast" id="arcadeToast" role="status" aria-live="polite" aria-atomic="true"></div>
             </div>
         </section>
@@ -496,5 +554,6 @@
     <script src="js/games/snake.js" defer></script>
     <script src="js/games/parcours.js" defer></script>
     <script src="js/games/recrutement.js" defer></script>
+    <script src="js/games/pixel.js" defer></script>
 </body>
 </html>

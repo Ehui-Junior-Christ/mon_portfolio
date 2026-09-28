@@ -135,7 +135,9 @@
             skills: pick('skills').filter((g) => g && arr(g.items).length),
             certifications: arr(d.certifications),
             projects: pick('projects').filter((p) => p && plain(p.title)),
-            experience: arr(d.experience)
+            experience: arr(d.experience),
+            // Contenu propre aux jeux (ex. niveaux de Pixel Quest) : validé par chaque jeu
+            games: d.games && typeof d.games === 'object' && !Array.isArray(d.games) ? d.games : null
         };
     }
 
@@ -153,7 +155,7 @@
     // ------------------------------------------------------------------
     const ACHIEVEMENTS = [
         { id: 'joueur-1', title: 'Joueur 1', desc: 'Lancer une première partie.' },
-        { id: 'touche-a-tout', title: 'Touche-à-tout', desc: 'Essayer les trois jeux.' },
+        { id: 'touche-a-tout', title: 'Touche-à-tout', desc: "Essayer tous les jeux de l'Arcade." },
         { id: 'serpent-affame', title: 'Serpent affamé', desc: 'Attraper 10 technos dans une partie de Snake.' },
         { id: 'anaconda', title: 'Anaconda', desc: 'Attraper 25 technos dans une partie de Snake.' },
         { id: 'cepe', title: 'Premier diplôme', desc: 'Décrocher le CEPE dans Le Parcours.' },
@@ -165,7 +167,11 @@
         { id: 'explorateur', title: 'Explorateur', desc: 'Visiter les quatre salles du bureau.' },
         { id: 'full-stack', title: 'Full-stack', desc: 'Reconstituer la stack d\'un projet.' },
         { id: 'detective', title: 'Détective', desc: 'Examiner tous les objets du bureau.' },
-        { id: 'recrute', title: 'Recrutement validé', desc: 'Réunir les quatre badges et ouvrir le dossier.' }
+        { id: 'recrute', title: 'Recrutement validé', desc: 'Réunir les quatre badges et ouvrir le dossier.' },
+        { id: 'pixel-pionnier', title: 'Pixel pionnier', desc: 'Terminer le premier niveau de Pixel Quest.' },
+        { id: 'pixel-bavard', title: 'Bavard', desc: 'Parler à tous les personnages de Pixel Quest.' },
+        { id: 'pixel-collection', title: 'Collectionneur pixel', desc: 'Ramasser tous les objets de Pixel Quest.' },
+        { id: 'pixel-zones', title: 'Toutes les zones', desc: 'Terminer le dernier niveau de Pixel Quest.' }
     ];
     const STORE_KEY = 'arcade.succes.v1';
     const unlocked = new Set();
@@ -338,7 +344,7 @@
             tried.add(id);
             try { localStorage.setItem('arcade.essais.v1', JSON.stringify(Array.from(tried))); } catch (e) { /* ignore */ }
         }
-        if (['snake', 'parcours', 'recrutement'].every((g) => tried.has(g))) unlock('touche-a-tout');
+        if (games.length && games.every((g) => tried.has(g.id))) unlock('touche-a-tout');
     }
 
     function register(game) {
